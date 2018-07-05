@@ -1,12 +1,12 @@
 # On-RAMP's API Documentation
 
-Base and fork from [Slate](https://github.com/lord/slate)
+Base and fork from [Slate](https://github.com/slatedocs/slate)
 
 ## Modify Documentation
 
 In order to modify documentation everything is under `source` folder. In particular the main file to be modify is `index.html.md` which is in Markdown file. 
 
-Please check [Slate Documentation](https://github.com/lord/slate/wiki) to know about:
+Please check [Slate Documentation](https://github.com/slatedocs/slate/wiki) to know about:
 
 - Markdown support
 - Includes files

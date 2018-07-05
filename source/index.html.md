@@ -14,6 +14,8 @@ includes:
   - egress
 
 search: true
+
+code_clipboard: true
 ---
 
 # ON/RAMP merchant integration.
