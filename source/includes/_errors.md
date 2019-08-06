@@ -1,6 +1,6 @@
 # Errors
 
-**On-RAMP**'s uses the following error codes:
+**ON/RAMP**'s uses the following error codes:
 
 
 Error Code | Error Description | Meaning

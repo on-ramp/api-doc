@@ -40,16 +40,16 @@ Field | Type | Description
 user | String | **USR**'s account
 fiat_amount | Number | The amount **USR** wants to buy
 fiat_currency | String | Currency. Could be EUR|USD|... 
-payment_ack_url | String | URL **On-RAMP**'s will call when process finishes 
+payment_ack_url | String | URL **ON/RAMP**'s will call when process finishes 
 user_redirect_url | String | URL to redirect the **USR** when process finishes successfully
-valid_timeout | Number | Amount on seconds that this process could take and allow **On-RAMP** system to cached the creation of the invoice. If the time expires the invoice should become invalid. 
+valid_timeout | Number | Amount on seconds that this process could take and allow **ON/RAMP** system to cached the creation of the invoice. If the time expires the invoice should become invalid. 
 
 
 ### Response JSON Fields
 
 Field | Type | Description
 --------- | ------- | -----------
-invoice_url | String | Internal **On-RAMP**'s URL Invoice Reference for that **USR**
+invoice_url | String | Internal **ON/RAMP**'s URL Invoice Reference for that **USR**
 
 
 ## Callback Egress Invoice
