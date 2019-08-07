@@ -2,6 +2,17 @@
 
 Base and fork from [Slate](https://github.com/lord/slate)
 
+## Modify Documentation
+
+In order to modify documentation everything is under `source` folder. In particular the main file to be modify is `index.html.md` which is in Markdown file. 
+
+Please check [Slate Documentation](https://github.com/lord/slate/wiki) to know about:
+
+- Markdown support
+- Includes files
+- Change images and logos
+
+
 ## Prerequisites 
 
 This projects builds and runs with Ruby 2.3.1, but it is not mandatory for you to have Ruby installed because it can also be built and run with Docker.
@@ -39,20 +50,8 @@ This projects builds and runs with Ruby 2.3.1, but it is not mandatory for you t
 
 If you want to browse in your local machine go to `http://localhost:4567`
 
-## Publishing
-
-### Docker
-
-- After building 
-
-`git checkout gh-pages`
-
-- Copy all under `/build` directory into root directory
-
-- Commit and push changes to `gh-pages` branch
-
-
-### Ruby
+## Publishing Github Pages
 
 `./deploy.sh`
+
 
