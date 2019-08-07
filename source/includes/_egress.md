@@ -29,7 +29,8 @@ curl -X POST "https://api.onramp.com/api/v1/egress/invoice" \
 
 ```json
 {
-  "invoice_url": "https://api.onramp.com/egress/62b570e8-9723-4287-a5a8-e825c2ffced2"
+   "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2", 
+   "invoice_url": "https://api.onramp.com/egress/62b570e8-9723-4287-a5a8-e825c2ffced2"
 }
 ```
 
@@ -49,14 +50,21 @@ valid_timeout | Number | Amount on seconds that this process could take and allo
 
 Field | Type | Description
 --------- | ------- | -----------
+invoice_id | String | Internal **ON/RAMP**'s Invoide Identifier
 invoice_url | String | Internal **ON/RAMP**'s URL Invoice Reference for that **USR**
 
 
 ## Callback Egress Invoice
 
+Callback Egress Invoice, is the callback **ON/RAMP** system is going to call back once the Egress has been successfully completed.
+
+Callback Egress Invoice, is the callback **ON/RAMP** system is going to call back to the **URL** set in [Create Egress Invoice](#create-egress-invoice) endpoint on the field `payment_ack_url`, once the Egress has been successfully completed.
+
+**URL** in **cURL** tab is an example and is the same put it as an example in field ``payment_ack_url` on [Create Egress Invoice](#create-egress-invoice) section.
+
+
 ```shell
 curl -X POST "https://callback.url/ack_webhook" \
--H "Authorization: Bearer AUTH_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{"acks":["62b570e8-9723-4287-a5a8-e825c2ffced2","fd6151e2-83f3-418c-93aa-91987a02f538","eaa703e3-b3e3-4656-adbe-b590eaf3d5de"]}'
 ```
@@ -79,6 +87,6 @@ curl -X POST "https://callback.url/ack_webhook" \
 
 Field | Type | Description
 --------- | ------- | -----------
-acks | Array | **USR**'s ack invoices
+acks | Array | **USR**'s ack invoices' ids returned in [Create Egress Invoice](#create-egress-invoice) endpoint
 
 
