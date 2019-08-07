@@ -393,6 +393,7 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <p>Response JSON</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.com/ingress/62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='request-json-fields'>Request JSON Fields</h3>
@@ -443,13 +444,23 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 </tr>
 </thead><tbody>
 <tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s Invoide Identifier</td>
+</tr>
+<tr>
 <td>invoice_url</td>
 <td>String</td>
 <td>Internal <strong>ON/RAMP</strong>&#39;s URL Invoice Reference for that <strong>USR</strong></td>
 </tr>
 </tbody></table>
-<h2 id='callback-ingress-invoice'>Callback Ingress Invoice</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://callback.url/ack_webhook"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: Bearer AUTH_TOKEN"</span> <span class="se">\</span>
+<h2 id='callback-ingress-invoice'>Callback Ingress Invoice</h2>
+<p>Callback Ingress Invoice, is the callback <strong>ON/RAMP</strong> system is going to call back once the Ingress has been successfully completed.</p>
+
+<p>Callback Ingress Invoice, is the callback <strong>ON/RAMP</strong> system is going to call back to the <strong>URL</strong> set in <a href="#create-ingress-invoice">Create Ingress Invoice</a> endpoint on the field <code>payment_ack_url</code>, once the Ingress has been successfully completed.</p>
+
+<p><strong>URL</strong> in <strong>cURL</strong> tab is an example and is the same put it as an example in field `<code>payment_ack_url</code> on <a href="#create-ingress-invoice">Create Ingress Invoice</a> section.</p>
+<pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://callback.url/ack_webhook"</span> <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -d <span class="s1">'{"acks":["62b570e8-9723-4287-a5a8-e825c2ffced2","fd6151e2-83f3-418c-93aa-91987a02f538","eaa703e3-b3e3-4656-adbe-b590eaf3d5de"]}'</span>
 </code></pre><h3 id='http-request-2'>HTTP Request</h3>
@@ -475,7 +486,7 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <tr>
 <td>acks</td>
 <td>Array</td>
-<td><strong>USR</strong>&#39;s ack invoices</td>
+<td><strong>USR</strong>&#39;s ack invoices&#39; ids returned in <a href="#create-ingress-invoice">Create Ingress Invoice</a> endpoint</td>
 </tr>
 </tbody></table>
 <h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice'>Create Egress Invoice</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://api.onramp.com/api/v1/egress/invoice"</span> <span class="se">\</span>
@@ -501,7 +512,8 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <p>Response JSON</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.com/egress/62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
+   </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w"> 
+   </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.com/egress/62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
@@ -551,13 +563,23 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 </tr>
 </thead><tbody>
 <tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s Invoide Identifier</td>
+</tr>
+<tr>
 <td>invoice_url</td>
 <td>String</td>
 <td>Internal <strong>ON/RAMP</strong>&#39;s URL Invoice Reference for that <strong>USR</strong></td>
 </tr>
 </tbody></table>
-<h2 id='callback-egress-invoice'>Callback Egress Invoice</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://callback.url/ack_webhook"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: Bearer AUTH_TOKEN"</span> <span class="se">\</span>
+<h2 id='callback-egress-invoice'>Callback Egress Invoice</h2>
+<p>Callback Egress Invoice, is the callback <strong>ON/RAMP</strong> system is going to call back once the Egress has been successfully completed.</p>
+
+<p>Callback Egress Invoice, is the callback <strong>ON/RAMP</strong> system is going to call back to the <strong>URL</strong> set in <a href="#create-egress-invoice">Create Egress Invoice</a> endpoint on the field <code>payment_ack_url</code>, once the Egress has been successfully completed.</p>
+
+<p><strong>URL</strong> in <strong>cURL</strong> tab is an example and is the same put it as an example in field `<code>payment_ack_url</code> on <a href="#create-egress-invoice">Create Egress Invoice</a> section.</p>
+<pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://callback.url/ack_webhook"</span> <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -d <span class="s1">'{"acks":["62b570e8-9723-4287-a5a8-e825c2ffced2","fd6151e2-83f3-418c-93aa-91987a02f538","eaa703e3-b3e3-4656-adbe-b590eaf3d5de"]}'</span>
 </code></pre><h3 id='http-request-2'>HTTP Request</h3>
@@ -583,7 +605,7 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <tr>
 <td>acks</td>
 <td>Array</td>
-<td><strong>USR</strong>&#39;s ack invoices</td>
+<td><strong>USR</strong>&#39;s ack invoices&#39; ids returned in <a href="#create-egress-invoice">Create Egress Invoice</a> endpoint</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
