@@ -244,11 +244,6 @@
           </li>
           <li>
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#something-new" class="toc-h2 toc-link" data-title="Something new">Something new</a>
-                  </li>
-              </ul>
           </li>
           <li>
             <a href="#ingress-api" class="toc-h1 toc-link" data-title="Ingress API">Ingress API</a>
@@ -375,7 +370,7 @@ curl <span class="s2">"https://api.onramp.io/api/v1/ingress/invoice"</span> -H <
 <aside class="notice">
 You must replace <code>AUTH_TOKEN</code> with your personal API key.
 </aside>
-<h2 id='something-new'>Something new</h2><h1 id='ingress-api'>Ingress API</h1><h2 id='create-ingress-invoice'>Create Ingress Invoice</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://api.onramp.com/api/v1/ingress/invoice"</span> <span class="se">\</span>
+<h1 id='ingress-api'>Ingress API</h1><h2 id='create-ingress-invoice'>Create Ingress Invoice</h2><pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://api.onramp.com/api/v1/ingress/invoice"</span> <span class="se">\</span>
 -H <span class="s2">"Authorization: Bearer AUTH_TOKEN"</span> <span class="se">\</span>
 -H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
 -d <span class="s1">'{"user":"user@domain.com","fiat_amount":10000,"fiat_currency":"EUR","payment_ack_url":"www.example.com/ack_webhook","user_redirect_url":"www.example.com/user/continues/here","valid_timeout":30000}'</span>
