@@ -226,13 +226,7 @@
                     <a href="#terminology-and-acronyms" class="toc-h2 toc-link" data-title="Terminology and Acronyms">Terminology and Acronyms</a>
                   </li>
                   <li>
-                    <a href="#suggested-flow" class="toc-h2 toc-link" data-title="Suggested flow">Suggested flow</a>
-                  </li>
-                  <li>
-                    <a href="#questions" class="toc-h2 toc-link" data-title="Questions">Questions</a>
-                  </li>
-                  <li>
-                    <a href="#suggested-offline-extension-for-ingress-egress" class="toc-h2 toc-link" data-title="Suggested offline extension for ingress/egress">Suggested offline extension for ingress/egress</a>
+                    <a href="#api-flow" class="toc-h2 toc-link" data-title="API flow">API flow</a>
                   </li>
               </ul>
           </li>
@@ -295,7 +289,7 @@ In this first section there is a general description of the Flow between an Exte
 <li>Client Service (<strong>CIS</strong>): The service using <strong>ON/RAMP</strong> as payment processor</li>
 <li>User (<strong>USR</strong>): CIS&#39;s users.</li>
 </ul>
-<h2 id='suggested-flow'>Suggested flow</h2><h3 id='ingress-flow'>Ingress flow</h3>
+<h2 id='api-flow'>API flow</h2><h3 id='ingress-flow'>Ingress flow</h3>
 <ul>
 <li><p><strong>CIS</strong> dynamically generate an invoice for the <strong>USR</strong> calling the <strong>ON/RAMP</strong> endpoint <a href="#create-ingress-invoice">Create Ingress Invoice</a>.</p>
 
@@ -337,24 +331,6 @@ In this first section there is a general description of the Flow between an Exte
 <li>Anything else: <strong>ON/RAMP</strong> will retry the callback with exponential decay.</li>
 </ul></li>
 </ul>
-<h2 id='questions'>Questions</h2>
-<ul>
-<li><p>What metadata will be offer to enhance the <strong>USR</strong> info about the payment? Such images, text description, links to click, etc...</p></li>
-<li><p>Extra requirement for us? Such queries about <strong>USR</strong>s, due balances or payment statuses?</p></li>
-<li><p>Allow <strong>USR</strong>s to ingress offline? (Meaning doing so directly through <strong>ON/RAMP</strong>, without the user interacting with the <strong>CIS</strong>).</p></li>
-<li><p>Allow <strong>USR</strong>s to egress offline?</p></li>
-</ul>
-<h2 id='suggested-offline-extension-for-ingress-egress'>Suggested offline extension for ingress/egress</h2><h3 id='offline-ingress-flow'>Offline Ingress flow</h3>
-<ul>
-<li><p>When <strong>CIS</strong> creates an online ingress-invoice, it will add the following parameters:</p>
-
-<ul>
-<li>refresh_invoice_url: a callback to <strong>CIS</strong> with any require reference. If specified and not null, once the invoice is no longer valid (the <strong>USR</strong> already used it or it was timeout) <strong>ON/RAMP</strong> will call it to generate a new invoice.The expected return payload for this callback is the same as the payload the <strong>CIS</strong> would use to create a new invoice, and the result would be the same.</li>
-<li>invoice_display_key: if set to null or not specified, the ingress-invoice won&#39;t be display on the <strong>USR</strong> <strong>ON/RAMP</strong> app. If set to something else, the <strong>ON/RAMP</strong> will display the invoice, allowing the user to click on it at any time to initiate an ingress without directly interacting with <strong>CIS</strong>. If the <strong>ON/RAMP</strong> app gets 2 invoices from the same <strong>CIS</strong> with the same invoice_display_key, the first one will be discarded (this is a mechanism such <strong>CIS</strong> is able to update the invoice, such changing its description**.</li>
-</ul></li>
-</ul>
-<h3 id='offline-egress-flow'>Offline Egress flow</h3>
-<p>Similar to offline ingress, we&#39;ll add the parameters refresh_invoice_url and invoice_display_key to create_egress_invoice.</p>
 <h1 id='api-reference'>API Reference</h1>
 <p>This API is built in REST API style. In this sense it has resource-oriented URLs, accepts <a href="http://www.json.org/">JSON</a> request bodies, returns <a href="http://www.json.org/">JSON-encoded</a> responses, and uses standard HTTP response codes, authentication, and verbs.</p>
 
