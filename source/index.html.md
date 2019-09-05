@@ -27,7 +27,7 @@ In this first section there is a general description of the Flow between an Exte
 - Client Service (**CIS**): The service using **ON/RAMP** as payment processor
 - User (**USR**): CIS's users.
 
-## Suggested flow
+## API flow
 
 ### Ingress flow
 
@@ -78,30 +78,6 @@ In this first section there is a general description of the Flow between an Exte
   - **HTTP Status Code 200** with payload {success: false, redirect: <err-url\>}. **ON/RAMP** will consider the withdrawal cancel, the egress-invoice invalidated, and will redirect the **USR** to <err-url\> which could be a page where the **CIS** explains the reason it was cancel (i.e, temporally down, not enough funds \... etc).
 
   - Anything else: **ON/RAMP** will retry the callback with exponential decay.
-
-## Questions
-
-- What metadata will be offer to enhance the **USR** info about the payment? Such images, text description, links to click, etc...
-
-- Extra requirement for us? Such queries about **USR**s, due balances or payment statuses?
-
-- Allow **USR**s to ingress offline? (Meaning doing so directly through **ON/RAMP**, without the user interacting with the **CIS**).
-
-- Allow **USR**s to egress offline?
-
-## Suggested offline extension for ingress/egress
-
-### Offline Ingress flow
-
-- When **CIS** creates an online ingress-invoice, it will add the following parameters:
-
-  - refresh\_invoice\_url: a callback to **CIS** with any require reference. If specified and not null, once the invoice is no longer valid (the **USR** already used it or it was timeout) **ON/RAMP** will call it to generate a new invoice.The expected return payload for this callback is the same as the payload the **CIS** would use to create a new invoice, and the result would be the same.
-
-  - invoice\_display\_key: if set to null or not specified, the ingress-invoice won't be display on the **USR** **ON/RAMP** app. If set to something else, the **ON/RAMP** will display the invoice, allowing the user to click on it at any time to initiate an ingress without directly interacting with **CIS**. If the **ON/RAMP** app gets 2 invoices from the same **CIS** with the same invoice\_display\_key, the first one will be discarded (this is a mechanism such **CIS** is able to update the invoice, such changing its description**.
-
-### Offline Egress flow
-
-Similar to offline ingress, we'll add the parameters refresh\_invoice\_url and invoice\_display\_key to create\_egress\_invoice.
 
 # API Reference
 
