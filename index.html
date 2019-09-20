@@ -379,12 +379,15 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <p>Request JSON Body</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@domain.com"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
   </span><span class="s2">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://callback.user/user/continues/here"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"valid_timeout"</span><span class="p">:</span><span class="w"> </span><span class="mi">30000</span><span class="w">
+  </span><span class="s2">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">30000</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"metadata"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"someuser@domain.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"other_data"</span><span class="p">:</span><span class="w"> </span><span class="s2">"some_other_data"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
@@ -401,38 +404,52 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <tr>
 <th>Field</th>
 <th>Type</th>
-<th>Description</th>
+<th>Required</th>
+<th> Default Value</th>
+<th> Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>user</td>
-<td>String</td>
-<td><strong>USR</strong>&#39;s account</td>
-</tr>
-<tr>
 <td>fiat_amount</td>
 <td>Number</td>
+<td>Yes</td>
+<td> -</td>
 <td>The amount <strong>USR</strong> wants to buy</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
 <td> String</td>
+<td>Yes</td>
+<td>-</td>
 <td>Currency. Could be EUR</td>
 </tr>
 <tr>
 <td>payment_ack_url</td>
 <td> String</td>
+<td>Yes</td>
+<td> -</td>
 <td>URL <strong>ON/RAMP</strong>&#39;s will call when process finishes. This URL can contain any number of query parameters whose <strong>ON/RAMP</strong> is going to maintain in the <a href="#callback-ingress-invoice">Callback Process</a>.</td>
 </tr>
 <tr>
 <td>user_redirect_url</td>
 <td> String</td>
+<td>Yes</td>
+<td> -</td>
 <td>URL to redirect the <strong>USR</strong> when process finishes successfully</td>
 </tr>
 <tr>
-<td>valid_timeout</td>
+<td>timeout_in_sec</td>
 <td>Number</td>
-<td>Amount on seconds that this process could take and allow <strong>ON/RAMP</strong> system to cached the creation of the invoice. If the time expires the invoice should become invalid.</td>
+<td>No</td>
+<td> 30000</td>
+<td> Amount on seconds that this process could take and allow <strong>ON/RAMP</strong> system to cached the creation of the invoice. If the time expires the invoice should become invalid.</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>Json</td>
+<td> No</td>
+<td> {}</td>
+<td>Any json value with any extra information it is consider useful.</td>
 </tr>
 </tbody></table>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
@@ -458,7 +475,7 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <blockquote>
 <p>Example Callback </p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2&amp;user=user@domain.com&amp;invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&amp;issued_at=1565184896401"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2&amp;invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&amp;issued_at=1565184896401"</span>
 </code></pre>
 <blockquote>
 <p>Response should be 200, otherwise system will retry with exponential decay 5 times</p>
@@ -477,11 +494,6 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <th>Description</th>
 </tr>
 </thead><tbody>
-<tr>
-<td>user</td>
-<td>String</td>
-<td> <strong>USR</strong>&#39;s account sent in <a href="#create-ingress-invoice">Create Ingress Invoice</a> endpoint</td>
-</tr>
 <tr>
 <td>invoice_id</td>
 <td>String</td>
@@ -561,12 +573,11 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <p>Request JSON Body</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"user"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@domain.com"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
   </span><span class="s2">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2"</span><span class="p">,</span><span class="w">
   </span><span class="s2">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://callback.user/user/continues/here"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"valid_timeout"</span><span class="p">:</span><span class="w"> </span><span class="mi">30000</span><span class="w">
+  </span><span class="s2">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">30000</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <blockquote>
@@ -612,7 +623,7 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <td>URL to redirect the <strong>USR</strong> when process finishes successfully</td>
 </tr>
 <tr>
-<td>valid_timeout</td>
+<td>timeout_in_sec</td>
 <td>Number</td>
 <td>Amount on seconds that this process could take and allow <strong>ON/RAMP</strong> system to cached the creation of the invoice. If the time expires the invoice should become invalid.</td>
 </tr>
@@ -640,7 +651,7 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <blockquote>
 <p>Example Callback </p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2&amp;user=user@domain.com&amp;invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&amp;issued_at=1565184896401"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2&amp;invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&amp;issued_at=1565184896401"</span>
 </code></pre>
 <blockquote>
 <p>Response should be 200, otherwise system will retry with exponential decay 5 times</p>
@@ -659,11 +670,6 @@ You must replace <code>AUTH_TOKEN</code> with your personal API key.
 <th>Description</th>
 </tr>
 </thead><tbody>
-<tr>
-<td>user</td>
-<td>String</td>
-<td> <strong>USR</strong>&#39;s account sent in <a href="#create-egress-invoice">Create Egress Invoice</a> endpoint</td>
-</tr>
 <tr>
 <td>invoice_id</td>
 <td>String</td>
