@@ -15,12 +15,15 @@ curl -X POST "https://api.onramp.com/v1/ingress/invoice" \
 
 ```json
 {
-  "user": "user@domain.com",
   "fiat_amount": 10000,
   "fiat_currency": "EUR",
   "payment_ack_url": "https://callback.url/ack_webhook?param1=value1&param2=value2",
   "user_redirect_url": "https://callback.user/user/continues/here",
-  "valid_timeout": 30000
+  "timeout_in_sec": 30000,
+  "metadata": {
+    "email": "someuser@domain.com",
+    "other_data": "some_other_data"
+  }
 }
 ```
 
@@ -39,15 +42,14 @@ curl -X POST "https://api.onramp.com/v1/ingress/invoice" \
 
 ### Request JSON Fields
 
-Field | Type | Description
---------- | ------- | -----------
-user | String | **USR**'s account
-fiat_amount | Number | The amount **USR** wants to buy
-fiat_currency | String | Currency. Could be EUR|USD|... 
-payment_ack_url | String | URL **ON/RAMP**'s will call when process finishes. This URL can contain any number of query parameters whose **ON/RAMP** is going to maintain in the [Callback Process](#callback-ingress-invoice).
-user_redirect_url | String | URL to redirect the **USR** when process finishes successfully
-valid_timeout | Number | Amount on seconds that this process could take and allow **ON/RAMP** system to cached the creation of the invoice. If the time expires the invoice should become invalid. 
-
+Field | Type | Required | Default Value | Description 
+--------- | ------- | ----- | ----------- | ---------
+fiat_amount | Number | Yes  | - | The amount **USR** wants to buy
+fiat_currency | String | Yes | - | Currency. Could be EUR|USD|... 
+payment_ack_url | String | Yes | - | URL **ON/RAMP**'s will call when process finishes. This URL can contain any number of query parameters whose **ON/RAMP** is going to maintain in the [Callback Process](#callback-ingress-invoice).
+user_redirect_url | String | Yes | - | URL to redirect the **USR** when process finishes successfully
+timeout_in_sec | Number | No | 30000 | Amount on seconds that this process could take and allow **ON/RAMP** system to cached the creation of the invoice. If the time expires the invoice should become invalid. 
+metadata | Json | No | {} | Any json value with any extra information it is consider useful.
 
 ### Response JSON Fields
 
@@ -62,7 +64,7 @@ invoice_url | String | Internal **ON/RAMP**'s URL Invoice Reference for that **U
 > Example Callback 
 
 ```shell
-curl "https://callback.url/ack_webhook?param1=value1&param2=value2&user=user@domain.com&invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&issued_at=1565184896401"
+curl "https://callback.url/ack_webhook?param1=value1&param2=value2&invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&issued_at=1565184896401"
 ```
 
 > Response should be 200, otherwise system will retry with exponential decay 5 times
@@ -78,7 +80,6 @@ Additionally with your `payment_ack_url`, **ON/RAMP** will add some **Query Para
 
 Parameter | Type | Description
 --------- | ------- | -----------
-user | String | **USR**'s account sent in [Create Ingress Invoice](#create-ingress-invoice) endpoint
 invoice_id | String | **USR**'s invoice id returned in [Create Ingress Invoice](#create-ingress-invoice) endpoint
 issued_at | Number | Invoice completion Timestamp
 
