@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.0.0</title>
+    <title>ON/RAMP payment API v0.0</title>
 
     <style>
       .highlight table td { padding: 5px; }
@@ -210,7 +210,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo.png" class="logo" alt="Logo" />
-        <span class="toc-link">API v1.0</span>
+        <span class="toc-link">API v0.0</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -220,7 +220,7 @@
         <ul class="search-results"></ul>
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#on-ramp-payment-api" class="toc-h1 toc-link" data-title="ON/RAMP payment API">ON/RAMP payment API</a>
+            <a href="#on-ramp-merchant-integration" class="toc-h1 toc-link" data-title="ON/RAMP merchant integration.">ON/RAMP merchant integration.</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#terminology-and-acronyms" class="toc-h2 toc-link" data-title="Terminology and Acronyms">Terminology and Acronyms</a>
@@ -231,16 +231,10 @@
               </ul>
           </li>
           <li>
-            <a href="#api-reference" class="toc-h1 toc-link" data-title="API Reference">API Reference</a>
+            <a href="#calling-on-ramp-api-endpoints" class="toc-h1 toc-link" data-title="Calling ON/RAMP API endpoints.">Calling <strong>ON/RAMP</strong> API endpoints.</a>
           </li>
           <li>
-            <a href="#base-url" class="toc-h1 toc-link" data-title="Base URL">Base URL</a>
-          </li>
-          <li>
-            <a href="#client-caching" class="toc-h1 toc-link" data-title="Client Caching">Client Caching</a>
-          </li>
-          <li>
-            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+            <a href="#invoice-expiration" class="toc-h1 toc-link" data-title="Invoice expiration">Invoice expiration</a>
           </li>
           <li>
             <a href="#ingress-api" class="toc-h1 toc-link" data-title="Ingress API">Ingress API</a>
@@ -274,98 +268,103 @@
             <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
           </li>
       </ul>
-        <ul class="toc-footer">
-            <li><a href='https://coinweb.io' target='_blank' rel='noopener'>Sign Up for a Developer Key</a></li>
-        </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='on-ramp-payment-api'>ON/RAMP payment API</h1>
-<p>In this documentation it is described how the integration with <strong>ON/RAMP</strong> payment System should be done.
-In this first section there is a general description of the Flow between an External System that wants to integrate with <strong>ON/RAMP</strong>&#39;s API**</p>
-<h2 id='terminology-and-acronyms'>Terminology and Acronyms</h2>
+        <h1 id='on-ramp-merchant-integration'>ON/RAMP merchant integration.</h1><h2 id='terminology-and-acronyms'>Terminology and Acronyms</h2>
 <ul>
-<li>Client Service (<strong>CIS</strong>): The service using <strong>ON/RAMP</strong> as payment processor.</li>
-<li>User (<strong>USR</strong>): CIS&#39;s users.</li>
+<li>Merchant: The service using <strong>ON/RAMP</strong> as payment processor.</li>
+<li>User: The physical person who sends or receives funds to/from the merchant through <strong>ON/RAMP</strong>.</li>
 </ul>
 <h2 id='api-flow'>API flow</h2><h3 id='ingress-flow'>Ingress flow</h3>
-<ul>
-<li><p><strong>CIS</strong> dynamically generate an invoice for the <strong>USR</strong> calling the <strong>ON/RAMP</strong> endpoint <a href="#create-ingress-invoice">Create Ingress Invoice</a>.</p>
+<ol>
+<li>Merchant <a href="#create-ingress-invoice">creates an ingress invoice url</a>.</li>
+<li>Merchant redirects user to the ingress invoice url.</li>
+<li><strong>ON/RAMP</strong> handles the payment.</li>
+<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-ingress-invoice">call back the merchant to either confirm the ingress transaction or to abort it</a>. If
+merchants confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
+<li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
+</ol>
 
-<ul>
-<li>These invoices can be cached, but once paid, they will become <strong>invalid</strong>.</li>
-<li>If cached for too long, they&#39;d became invalid. The expiration date for each invoice is specified as an argument when creating the invoice.</li>
-<li>Invoices are <strong>ON/RAMP</strong> url for a specific <strong>USR</strong>; the same invoice should not be reused among different users.</li>
-</ul></li>
-<li><p><strong>CIS</strong> shows the invoice to the <strong>USR</strong> as a link to click and/or QR to scan.</p></li>
-<li><p><strong>ON/RAMP</strong> process the payment. This could long anything between the instant the invoice is created to the expiration date is reached. For example, the <strong>USR</strong> could start the payment, stops in the middle, then resume next day.</p></li>
-<li><p><strong>ON/RAMP</strong> <a href="#callback-ingress-invoice">callback the <strong>CIS</strong></a> to inform the payment had been successfully completed. This callback will include any reference included as a parameter when creating the invoice.</p>
+<!--
+- **CIS** dynamically generate an invoice for the **USR** calling the **ON/RAMP** endpoint [Create Ingress Invoice](#create-ingress-invoice).
 
-<ul>
-<li>The <strong>CIS</strong> should return a <strong>HTTP Status Code 200</strong> after this callback.</li>
-<li>If the <strong>CIS</strong> does not return a <strong>HTTP Status Code 200</strong> after the callback, either the callback will be retried with exponential decay until <strong>HTTP Status Code 200</strong> is returned, or until <strong>some number N</strong> of tries has been reached.</li>
-</ul></li>
-<li><p><strong>ON/RAMP</strong> will inform the <strong>USR</strong> the payment was a success.</p></li>
-<li><p><strong>ON/RAMP</strong> will redirect the <strong>USR</strong> to the url specified as a parameter when the invoice was created; or it will redirect the <strong>USR</strong> back to where it was if not specified.</p></li>
-</ul>
+  - These invoices can be cached, but once paid, they will become **invalid**.
+
+  - If cached for too long, they'd became invalid. The expiration date for each invoice is specified as an argument when creating the invoice.
+
+  - Invoices are **ON/RAMP** url for a specific **USR**; the same invoice should not be reused among different users.
+
+- **CIS** shows the invoice to the **USR** as a link to click and/or QR to scan.
+
+- **ON/RAMP** process the payment. This could long anything between the instant the invoice is created to the expiration date is reached. For example, the **USR** could start the payment, stops in the middle, then resume next day.
+
+- **ON/RAMP** [callback the **CIS**](#callback-ingress-invoice) to inform the payment had been successfully completed. This callback will include any reference included as a parameter when creating the invoice.
+
+  - The **CIS** should return a **HTTP Status Code 200** after this callback.
+
+  - If the **CIS** does not return a **HTTP Status Code 200** after the callback, either the callback will be retried with exponential decay until **HTTP Status Code 200** is returned, or until **some number N** of tries has been reached.
+
+- **ON/RAMP** will inform the **USR** the payment was a success.
+
+- **ON/RAMP** will redirect the **USR** to the url specified as a parameter when the invoice was created; or it will redirect the **USR** back to where it was if not specified. -->
 <h3 id='egress-flow'>Egress flow</h3>
-<p><strong>Analogous to the ingress flow</strong></p>
+<ol>
+<li>Merchant <a href="#create-egress-invoice">creates an egress invoice url</a>.</li>
+<li>Merchant redirects user to the egress invoice url.</li>
+<li><strong>ON/RAMP</strong> handles the payment.</li>
+<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant to either confirm the egress transaction or to abort it</a>. If
+merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
+<li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
+</ol>
+
+<!--
+- The **CIS** dynamically [Create Egress Invoices](#create-egress-invoice)
+
+  - It is possible but not required for the **CIS** to cache this invoices.
+
+  - Each withdrawal associated with one of these invoices would be executed at most once.
+
+- The **CIS** shows the **USR** the invoice as a URL or QR.
+
+- After the **USR** clicks/scan it.
+
+- **ON/RAMP** [callbacks the **CIS**](#callback-egress-invoice) to confirm the withdrawal.
+
+- As with the ingress callback, this callback will contain any specified when the invoice was created reference.
+
+- According to what the **CIS** returns:
+
+  - **HTTP Status Code 200** with payload {success: true}. **ON/RAMP** considers the withdrawal confirm, and continue to send funds back to the **USR**. Then redirect the user back to where specified, or kept them on the **ON/RAMP** app if not specified.
+
+  - **HTTP Status Code 200** with payload {success: false, redirect: <err-url\>}. **ON/RAMP** will consider the withdrawal cancel, the egress-invoice invalidated, and will redirect the **USR** to <err-url\> which could be a page where the **CIS** explains the reason it was cancel (i.e, temporally down, not enough funds \... etc).
+
+  - Anything else: **ON/RAMP** will retry the callback with exponential decay. -->
+<h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
+<p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
+Each call shall include the headers:</p>
 
 <ul>
-<li><p>The <strong>CIS</strong> dynamically <a href="#create-egress-invoice">Create Egress Invoices</a></p>
-
-<ul>
-<li>It is possible but not required for the <strong>CIS</strong> to cache this invoices.</li>
-<li>Each withdrawal associated with one of these invoices would be executed at most once.</li>
-</ul></li>
-<li><p>The <strong>CIS</strong> shows the <strong>USR</strong> the invoice as a URL or QR.</p></li>
-<li><p>After the <strong>USR</strong> clicks/scan it.</p></li>
-<li><p><strong>ON/RAMP</strong> <a href="#callback-egress-invoice">callbacks the <strong>CIS</strong></a> to confirm the withdrawal.</p></li>
-<li><p>As with the ingress callback, this callback will contain any specified when the invoice was created reference.</p></li>
-<li><p>According to what the <strong>CIS</strong> returns:</p>
-
-<ul>
-<li><strong>HTTP Status Code 200</strong> with payload {success: true}. <strong>ON/RAMP</strong> considers the withdrawal confirm, and continue to send funds back to the <strong>USR</strong>. Then redirect the user back to where specified, or kept them on the <strong>ON/RAMP</strong> app if not specified.</li>
-<li><strong>HTTP Status Code 200</strong> with payload {success: false, redirect: <err-url\>}. <strong>ON/RAMP</strong> will consider the withdrawal cancel, the egress-invoice invalidated, and will redirect the <strong>USR</strong> to <err-url\> which could be a page where the <strong>CIS</strong> explains the reason it was cancel (i.e, temporally down, not enough funds ... etc).</li>
-<li>Anything else: <strong>ON/RAMP</strong> will retry the callback with exponential decay.</li>
-</ul></li>
+<li><p><code>Content-Type: application/json</code></p></li>
+<li><p><code>x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750</code></p></li>
 </ul>
-<h1 id='api-reference'>API Reference</h1>
-<p>This API is built in REST API style. In this sense it has resource-oriented URLs, accepts <a href="http://www.json.org/">JSON</a> request bodies, returns <a href="http://www.json.org/">JSON-encoded</a> responses, and uses standard HTTP response codes, authentication, and verbs.</p>
-
-<ul>
-<li><a href="#create-ingress-invoice"><code>POST /v1/ingress/invoice</code></a></li>
-<li><a href="#query-ingress-invoice"><code>GET /v1/ingress/invoice/:id</code></a></li>
-<li><a href="#create-egress-invoice"><code>POST /v1/egress/invoice</code></a></li>
-<li><a href="#query-egress-invoice"><code>GET /v1/egress/invoice/:id</code></a></li>
-</ul>
-<h1 id='base-url'>Base URL</h1>
-<p><strong>(TO BE DEFINED - Example)</strong></p>
-
-<p><strong>https://api.onramp.com</strong></p>
-<h1 id='client-caching'>Client Caching</h1>
-<p><strong>Every time</strong> a client request either <a href="#create-ingress-invoice">Create Ingress Invoice</a> or [Create Egress Invoice](#create-egress-invoice*<em>, a completely new invoice will be generated by **ON/RAMP</em>*. In that sense it is not recommended to cache this calls if the consumer wants to create a new Invoice.</p>
-<h1 id='authentication'>Authentication</h1>
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"https://api.onramp.io/api/v1/ingress/invoice"</span> -H <span class="s2">"Authorization: Bearer AUTH_TOKEN"</span>
-</code></pre>
-<blockquote>
-<p>Make sure to replace <code>AUTH_TOKEN</code> with your API key.</p>
-</blockquote>
-
-<p><strong>ON/RAMP</strong> uses API keys to allow access to the API. You can register a new API key at our <a href="https://onramp.com/developers">developer portal</a>.</p>
-
-<p><strong>ON/RAMP</strong> expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code>Authorization: Bearer AUTH_TOKEN</code></p>
-
-<aside class="notice">
-You must replace <code>AUTH_TOKEN</code> with your personal API key.
-</aside>
+<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd//rpc/create_ingress_invoice                         <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"</span>         <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span>                                           <span class="se">\</span>
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 1234                                     \
+              , "fiat_currency"      : "EUR"                                    \
+              , "payment_ack_url"    : "wwww.example.com"                       \
+              , "user_redirect_url"  : "www.example.com?user_redirected"        \
+              , "timeout_in_sec"     : 3600                                     \
+              , "offer_skin"         : {}                                       \
+              , "invoice_id"         : "a3076265-138d-4be6-89fb-d50427adaf4e"   \
+              }'</span>                                                                <span class="se">\</span>
+</code></pre><h1 id='invoice-expiration'>Invoice expiration</h1>
+<p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
+twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
+create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
+get redirected back to the merchant.</p>
 <h1 id='ingress-api'>Ingress API</h1><h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
 <blockquote>
 <p>Example Call</p>
