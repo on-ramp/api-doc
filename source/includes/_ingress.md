@@ -5,118 +5,74 @@
 > Example Call
 
 ```shell
-curl -X POST "https://api.onramp.com/v1/ingress/invoice" \
--H "Authorization: Bearer AUTH_TOKEN" \
--H "Content-Type: application/json" \
--d '{"user":"user@domain.com","fiat_amount":10000,"fiat_currency":"EUR","payment_ack_url":"www.example.com/ack_webhook","user_redirect_url":"www.example.com/user/continues/here","valid_timeout":30000}'
+curl https://api.onramp.ltd/rpc/create_ingress_invoice                          \
+  -H "x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"         \
+  -H "Content-Type: application/json"                                           \
+  -X POST -d '{ "fiat_amount"        : 3000                                     \
+              , "fiat_currency"      : "EUR"                                    \
+              , "payment_ack_url"    : "wwww.example.com"                       \
+              , "user_redirect_url"  : "www.example.com?user_redirected"        \
+              , "timeout_in_sec"     : 3600                                     \
+              , "offer_skin"         : {}                                       \
+              }'
 ```
 
 > Request JSON Body
 
 ```json
-{
-  "fiat_amount": 10000,
-  "fiat_currency": "EUR",
-  "payment_ack_url": "https://callback.url/ack_webhook?param1=value1&param2=value2",
-  "user_redirect_url": "https://callback.user/user/continues/here",
-  "timeout_in_sec": 30000,
-  "metadata": {
-    "email": "someuser@domain.com",
-    "other_data": "some_other_data"
-  }
+{ "fiat_amount"        : 3000
+, "fiat_currency"      : "EUR"
+, "payment_ack_url"    : "wwww.example.com"
+, "user_redirect_url"  : "www.example.com?user_redirected"
+, "timeout_in_sec"     : 3600
+, "offer_skin"         : {}
 }
+
 ```
 
 > Response JSON
 
 ```json
-{
-  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
-  "invoice_url": "https://api.onramp.com/ingress/62b570e8-9723-4287-a5a8-e825c2ffced2"
+{ "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2"
+, "invoice_url": "https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"
 }
 ```
 
+
+
 ### HTTP Request
 
-<aside class="success"><b><code>POST /v1/ingress/invoice</code></b></aside>
+<aside class="success"><b><code> POST /rpc/create_ingress_invoice </code></b></aside>
 
 ### Request JSON Fields
 
-Field | Type | Required | Default Value | Description 
---------- | ------- | ----- | ----------- | ---------
-fiat_amount | Number | Yes  | - | The amount **USR** wants to buy
-fiat_currency | String | Yes | - | Currency. Could be EUR|USD|... 
-payment_ack_url | String | Yes | - | URL **ON/RAMP**'s will call when process finishes. This URL can contain any number of query parameters whose **ON/RAMP** is going to maintain in the [Callback Process](#callback-ingress-invoice).
-user_redirect_url | String | Yes | - | URL to redirect the **USR** when process finishes successfully
-timeout_in_sec | Number | No | 30000 | Amount on seconds that this process could take and allow **ON/RAMP** system to cached the creation of the invoice. If the time expires the invoice should become invalid. 
-metadata | Json | No | {} | Any json value with any extra information it is consider useful.
+Field             |   Type       | Description
+----------------- | ------------ | ---------
+fiat_amount       | Integer      | Eur amount to be paid denominated in cents .
+fiat_currency     | String       | The constant `"EUR"`.
+payment_ack_url   | String       | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.
+user_redirect_url | String       | Where to redirect the user after a successful payment. It should be a complete, well formed, url.
+timeout_in_sec    | Integer      | When to expire the link if unused.
+offer_skin        | Ingress Skin | Specify how the offer should be displayed to the user.
+
+### Ingress Skin
+
+Field             |   Type      | Description
+----------------- | ----------- | ---------
+
+
+### Callback Ingress Invoice
+
+Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point
+when the user transaction should be consider done and credited at merchant's side**. If the merchant was able to
+credit the user, then it should answer the callback with an http 200 error code; if the merchant was unable to
+credit the user, it should answer with an http 204 error code (this will cancel the user payment, expiring his
+invoice link). **Any other error code** but 200 or 204 **will be treated as an internal error from the merchant side**,
+pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
 
 ### Response JSON Fields
 
-Field | Type | Description
---------- | ------- | -----------
-invoice_id | String | Internal **ON/RAMP**'s Invoide Identifier
-invoice_url | String | Internal **ON/RAMP**'s URL Invoice Reference for that **USR**
-
-
-## Callback Ingress Invoice
-
-> Example Callback 
-
-```shell
-curl "https://callback.url/ack_webhook?param1=value1&param2=value2&invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&issued_at=1565184896401"
-```
-
-> Response should be 200, otherwise system will retry with exponential decay 5 times
-
-Callback Ingress Invoice, is the callback **ON/RAMP** system is going to call back to the **URL** set in [Create Ingress Invoice](#create-ingress-invoice) endpoint on the field `payment_ack_url`, once the Ingress has been successfully completed. This callback will be done with exactly the same **URL** setup in `payment_ack_url`. This means that if `payment_ack_url** contains Query Parameters in the URL it will be maintain.
-
-Additionally with your `payment_ack_url`, **ON/RAMP** will add some **Query Parameters** that will overwrite original `payment_ack_url` query parameters if they are the same. This **ON/RAMP** query parameters are like *reserved word* parameters keys with information about the invoice which is being callback from.
-
-**URL** in **cURL** tab is an example and is the same put it as an example in field ``payment_ack_url` on [Create Ingress Invoice](#create-ingress-invoice) section.
-
-
-### Reserved Query Parameters
-
-Parameter | Type | Description
---------- | ------- | -----------
-invoice_id | String | **USR**'s invoice id returned in [Create Ingress Invoice](#create-ingress-invoice) endpoint
-issued_at | Number | Invoice completion Timestamp
-
-
-## Query Ingress Invoice
-
-> Example Call
-
-```shell
-curl "https://api.onramp.com/v1/ingress/invoice/62b570e8-9723-4287-a5a8-e825c2ffced2" \
--H "Authorization: Bearer AUTH_TOKEN" 
-```
-
-> Response JSON
-
-```json
-{
-  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
-  "invoice_url": "https://api.onramp.com/ingress/62b570e8-9723-4287-a5a8-e825c2ffced2",
-  "status": "processing"
-}
-```
-
-### HTTP Request
-
-<aside class="success"><b><code>GET /v1/ingress/invoice/:id</code></b></aside>
-
-### Query Parameter Path
-
-Field | Type | Description
---------- | ------- | -----------
-id | String | **USR**'s invoice id returned in [Create Ingress Invoice](#create-ingress-invoice) call
-
-### Response JSON Fields
-
-Field | Type | Description
---------- | ------- | -----------
-invoice_id | String | Internal **ON/RAMP**'s Invoide Identifier
-invoice_url | String | Internal **ON/RAMP**'s URL Invoice Reference for that **USR**
-status | String | Status of current Invoice. Can be: <code>invalid&#124;processing&#124;rejected&#124;complete</code>
+Field       | Type    | Description
+----------- | ------- | -----------
+invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
+invoice_url | String  | Url where to redirect user.
