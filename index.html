@@ -250,12 +250,6 @@
                   <li>
                     <a href="#create-egress-invoice" class="toc-h2 toc-link" data-title="Create Egress Invoice">Create Egress Invoice</a>
                   </li>
-                  <li>
-                    <a href="#callback-egress-invoice" class="toc-h2 toc-link" data-title="Callback Egress Invoice">Callback Egress Invoice</a>
-                  </li>
-                  <li>
-                    <a href="#query-egress-invoice" class="toc-h2 toc-link" data-title="Query Egress Invoice">Query Egress Invoice</a>
-                  </li>
               </ul>
           </li>
       </ul>
@@ -368,7 +362,7 @@ get redirected back to the merchant.</p>
               , "user_redirect_url"  : "www.example.com?user_redirected"        \
               , "timeout_in_sec"     : 3600                                     \
               , "offer_skin"         : {}                                       \
-              }'</span>                                                                <span class="se">\</span>
+              }'</span>
 </code></pre>
 <blockquote>
 <p>Request JSON Body</p>
@@ -386,7 +380,7 @@ get redirected back to the merchant.</p>
 <p>Response JSON</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.com/ingress/62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_ingress_invoice </code></b></aside>
@@ -411,18 +405,25 @@ get redirected back to the merchant.</p>
 <tr>
 <td>payment_ack_url</td>
 <td>String</td>
-<td>Merchant callback endpoint to confirm ingress transaction.</td>
+<td>Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.</td>
+</tr>
+<tr>
+<td>user_redirect_url</td>
+<td>String</td>
+<td>Where to redirect the user after a successful payment. It should be a complete, well formed, url.</td>
+</tr>
+<tr>
+<td>timeout_in_sec</td>
+<td>Integer</td>
+<td>When to expire the link if unused.</td>
+</tr>
+<tr>
+<td>offer_skin</td>
+<td>Ingress Skin</td>
+<td>Specify how the offer should be displayed to the user.</td>
 </tr>
 </tbody></table>
-
-<p>It should be a complete, well formed, url.
-user_redirect_url | String       | Where to redirect the user after a successful payment.
-                                   It should be a complete, well formed, url.
-timeout_in_sec    | Integer      |
-offer_skin        | Ingress Skin | Specify how the offer should be displayed to the user.</p>
-<h4 id='ingress-skin'>Ingress Skin</h4>
-<p>Coming soon.</p>
-
+<h3 id='ingress-skin'>Ingress Skin</h3>
 <table><thead>
 <tr>
 <th>Field</th>
@@ -431,7 +432,7 @@ offer_skin        | Ingress Skin | Specify how the offer should be displayed to 
 </tr>
 </thead><tbody>
 </tbody></table>
-<h4 id='callback-ingress-invoice'>Callback Ingress Invoice</h4>
+<h3 id='callback-ingress-invoice'>Callback Ingress Invoice</h3>
 <p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
 when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to
 credit the user, then it should answer the callback with an http 200 error code; if the merchant was unable to
@@ -467,64 +468,94 @@ pausing the user payment and prompting manual intervention, potentially delaying
 -d <span class="s1">'{"user":"user@domain.com","fiat_amount":10000,"fiat_currency":"EUR","payment_ack_url":"www.example.com/ack_webhook","user_redirect_url":"www.example.com/user/continues/here","valid_timeout":30000}'</span>
 </code></pre>
 <blockquote>
+<p>Example Call</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_egress_invoice                     <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"</span>   <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                               \
+              , "fiat_currency"      : "EUR"                              \
+              , "payment_ack_url"    : "wwww.example.com"                 \
+              , "user_redirect_url"  : "www.example.com?user_redirected"  \
+              , "timeout_in_sec"     : 3600                               \
+              , "offer_skin"         : {}                                 \
+              }'</span>                                                          <span class="se">\</span>
+</code></pre>
+<blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://callback.user/user/continues/here"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">30000</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
 </span><span class="p">}</span><span class="w">
+
 </span></code></pre>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-   </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w"> 
-   </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.com/egress/62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='http-request'>HTTP Request</h3>
-<aside class="success"><b><code>POST /v1/egress/invoice</code></b></aside>
+<aside class="success"><b><code> POST /rpc/create_egress_invoice </code></b></aside>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
 <tr>
 <th>Field</th>
 <th>Type</th>
-<th>Description</th>
+<th> Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>user</td>
-<td>String</td>
-<td><strong>USR</strong>&#39;s account</td>
-</tr>
-<tr>
 <td>fiat_amount</td>
-<td>Number</td>
-<td>The amount <strong>USR</strong> wants to buy</td>
+<td>Integer</td>
+<td>Eur amount to be paid denominated in cents .</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
-<td> String</td>
-<td>Currency. Could be EUR</td>
+<td>String</td>
+<td>The constant <code>&quot;EUR&quot;</code>.</td>
 </tr>
 <tr>
 <td>payment_ack_url</td>
-<td> String</td>
-<td>URL <strong>ON/RAMP</strong>&#39;s will call when process finishes. This URL can contain any number of query parameters whose <strong>ON/RAMP</strong> is going to maintain in the <a href="#callback-egress-invoice">Callback Process</a>.</td>
+<td>String</td>
+<td>Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.</td>
 </tr>
 <tr>
 <td>user_redirect_url</td>
-<td> String</td>
-<td>URL to redirect the <strong>USR</strong> when process finishes successfully</td>
+<td>String</td>
+<td>Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.</td>
 </tr>
 <tr>
 <td>timeout_in_sec</td>
-<td>Number</td>
-<td>Amount on seconds that this process could take and allow <strong>ON/RAMP</strong> system to cached the creation of the invoice. If the time expires the invoice should become invalid.</td>
+<td>Integer</td>
+<td>When to expire the link if unused.</td>
+</tr>
+<tr>
+<td>offer_skin</td>
+<td>Ingress Skin</td>
+<td>Specify how the offer should be displayed to the user.</td>
 </tr>
 </tbody></table>
+<h3 id='ingress-skin'>Ingress Skin</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+</tr>
+</thead><tbody>
+</tbody></table>
+<h3 id='callback-egress-invoice'>Callback Egress Invoice</h3>
+<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
+when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to
+debit the user, then it should answer the callback with an http 200 error code; if the merchant was unable to
+debit the user, it should answer with an http 204 error code (this will cancel the user payment, expiring his
+invoice link). <strong>Any other error code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
+pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
@@ -536,101 +567,12 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <td>invoice_id</td>
 <td>String</td>
-<td>Internal <strong>ON/RAMP</strong>&#39;s Invoide Identifier</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s Invoice Identifier.</td>
 </tr>
 <tr>
 <td>invoice_url</td>
 <td>String</td>
-<td>Internal <strong>ON/RAMP</strong>&#39;s URL Invoice Reference for that <strong>USR</strong></td>
-</tr>
-</tbody></table>
-<h2 id='callback-egress-invoice'>Callback Egress Invoice</h2>
-<blockquote>
-<p>Example Callback </p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://callback.url/ack_webhook?param1=value1&amp;param2=value2&amp;invoice_id=62b570e8-9723-4287-a5a8-e825c2ffced2&amp;issued_at=1565184896401"</span>
-</code></pre>
-<blockquote>
-<p>Response should be 200, otherwise system will retry with exponential decay 5 times</p>
-</blockquote>
-
-<p>Callback Egress Invoice, is the callback <strong>ON/RAMP</strong> system is going to call back to the <strong>URL</strong> set in <a href="#create-egress-invoice">Create Egress Invoice</a> endpoint on the field <code>payment_ack_url</code>, once the Egress has been successfully completed. This callback will be done with exactly the same <strong>URL</strong> setup in <code>payment_ack_url</code>. This means that if `payment_ack_url** contains Query Parameters in the URL it will be maintain.</p>
-
-<p>Additionally with your <code>payment_ack_url</code>, <strong>ON/RAMP</strong> will add some <strong>Query Parameters</strong> that will overwrite original <code>payment_ack_url</code> query parameters if they are the same. This <strong>ON/RAMP</strong> query parameters are like <em>reserved word</em> parameters keys with information about the invoice which is being callback from.</p>
-
-<p><strong>URL</strong> in <strong>cURL</strong> tab is an example and is the same put it as an example in field `<code>payment_ack_url</code> on <a href="#create-egress-invoice">Create Egress Invoice</a> section.</p>
-<h3 id='reserved-query-parameters'>Reserved Query Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>invoice_id</td>
-<td>String</td>
-<td><strong>USR</strong>&#39;s invoice id returned in <a href="#create-egress-invoice">Create Egress Invoice</a> endpoint</td>
-</tr>
-<tr>
-<td>issued_at</td>
-<td>Number</td>
-<td>Invoice completion Timestamp</td>
-</tr>
-</tbody></table>
-<h2 id='query-egress-invoice'>Query Egress Invoice</h2>
-<blockquote>
-<p>Example Call</p>
-</blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://api.onramp.com/v1/egress/invoice/62b570e8-9723-4287-a5a8-e825c2ffced2"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: Bearer AUTH_TOKEN"</span> 
-</code></pre>
-<blockquote>
-<p>Response JSON</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.com/egress/62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"processing"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='http-request-2'>HTTP Request</h3>
-<aside class="success"><b><code>GET /v1/egress/invoice/:id</code></b></aside>
-<h3 id='query-parameter-path'>Query Parameter Path</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>id</td>
-<td>String</td>
-<td><strong>USR</strong>&#39;s invoice id returned in <a href="#create-egress-invoice">Create Egress Invoice</a> call</td>
-</tr>
-</tbody></table>
-<h3 id='response-json-fields-2'>Response JSON Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>invoice_id</td>
-<td>String</td>
-<td>Internal <strong>ON/RAMP</strong>&#39;s Invoide Identifier</td>
-</tr>
-<tr>
-<td>invoice_url</td>
-<td>String</td>
-<td>Internal <strong>ON/RAMP</strong>&#39;s URL Invoice Reference for that <strong>USR</strong></td>
-</tr>
-<tr>
-<td>status</td>
-<td>String</td>
-<td>Status of current Invoice. Can be: <code>invalid&#124;processing&#124;rejected&#124;complete</code></td>
+<td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
 
