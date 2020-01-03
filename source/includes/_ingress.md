@@ -6,7 +6,7 @@
 
 ```shell
 curl https://api.onramp.ltd/rpc/create_ingress_invoice                          \
-  -H "x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"         \
+  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"         \
   -H "Content-Type: application/json"                                           \
   -X POST -d '{ "fiat_amount"        : 3000                                     \
               , "fiat_currency"      : "EUR"                                    \

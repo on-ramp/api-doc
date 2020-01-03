@@ -2,21 +2,12 @@
 
 ## Create Egress Invoice
 
-> Example Call
-
-```shell
-curl -X POST "https://api.onramp.com/v1/egress/invoice" \
--H "Authorization: Bearer AUTH_TOKEN" \
--H "Content-Type: application/json" \
--d '{"user":"user@domain.com","fiat_amount":10000,"fiat_currency":"EUR","payment_ack_url":"www.example.com/ack_webhook","user_redirect_url":"www.example.com/user/continues/here","valid_timeout":30000}'
-```
-
 
 > Example Call
 
 ```shell
 curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
-  -H "x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"   \
+  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"   \
   -H "Content-Type: application/json"                                     \
   -X POST -d '{ "fiat_amount"        : 3000                               \
               , "fiat_currency"      : "EUR"                              \
@@ -61,9 +52,9 @@ fiat_currency     | String       | The constant `"EUR"`.
 payment_ack_url   | String       | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
 user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
 timeout_in_sec    | Integer      | When to expire the link if unused.
-offer_skin        | Ingress Skin | Specify how the offer should be displayed to the user.
+offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user.
 
-### Ingress Skin
+### Egress Skin
 
 Field             |   Type      | Description
 ----------------- | ----------- | ---------
