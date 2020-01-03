@@ -271,29 +271,6 @@
 merchants confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
 <li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
 </ol>
-
-<!--
-- **CIS** dynamically generate an invoice for the **USR** calling the **ON/RAMP** endpoint [Create Ingress Invoice](#create-ingress-invoice).
-
-  - These invoices can be cached, but once paid, they will become **invalid**.
-
-  - If cached for too long, they'd became invalid. The expiration date for each invoice is specified as an argument when creating the invoice.
-
-  - Invoices are **ON/RAMP** url for a specific **USR**; the same invoice should not be reused among different users.
-
-- **CIS** shows the invoice to the **USR** as a link to click and/or QR to scan.
-
-- **ON/RAMP** process the payment. This could long anything between the instant the invoice is created to the expiration date is reached. For example, the **USR** could start the payment, stops in the middle, then resume next day.
-
-- **ON/RAMP** [callback the **CIS**](#callback-ingress-invoice) to inform the payment had been successfully completed. This callback will include any reference included as a parameter when creating the invoice.
-
-  - The **CIS** should return a **HTTP Status Code 200** after this callback.
-
-  - If the **CIS** does not return a **HTTP Status Code 200** after the callback, either the callback will be retried with exponential decay until **HTTP Status Code 200** is returned, or until **some number N** of tries has been reached.
-
-- **ON/RAMP** will inform the **USR** the payment was a success.
-
-- **ON/RAMP** will redirect the **USR** to the url specified as a parameter when the invoice was created; or it will redirect the **USR** back to where it was if not specified. -->
 <h3 id='egress-flow'>Egress flow</h3>
 <ol>
 <li>Merchant <a href="#create-egress-invoice">creates an egress invoice url</a>.</li>
@@ -304,38 +281,17 @@ merchants confirms, the egress payment will be considered fulfilled, otherwise, 
 <li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
 </ol>
 
-<!--
-- The **CIS** dynamically [Create Egress Invoices](#create-egress-invoice)
-
-  - It is possible but not required for the **CIS** to cache this invoices.
-
-  - Each withdrawal associated with one of these invoices would be executed at most once.
-
-- The **CIS** shows the **USR** the invoice as a URL or QR.
-
-- After the **USR** clicks/scan it.
-
-- **ON/RAMP** [callbacks the **CIS**](#callback-egress-invoice) to confirm the withdrawal.
-
-- As with the ingress callback, this callback will contain any specified when the invoice was created reference.
-
-- According to what the **CIS** returns:
-
-  - **HTTP Status Code 200** with payload {success: true}. **ON/RAMP** considers the withdrawal confirm, and continue to send funds back to the **USR**. Then redirect the user back to where specified, or kept them on the **ON/RAMP** app if not specified.
-
-  - **HTTP Status Code 200** with payload {success: false, redirect: <err-url\>}. **ON/RAMP** will consider the withdrawal cancel, the egress-invoice invalidated, and will redirect the **USR** to <err-url\> which could be a page where the **CIS** explains the reason it was cancel (i.e, temporally down, not enough funds \... etc).
-
-  - Anything else: **ON/RAMP** will retry the callback with exponential decay. -->
+<p>Z</p>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
 <p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
 Each call shall include the headers:</p>
 
 <ul>
 <li><p><code>Content-Type: application/json</code></p></li>
-<li><p><code>x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750</code></p></li>
+<li><p><code>x-xco-authorization: Bearer AUTH_TOKEN</code></p></li>
 </ul>
 <pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                          <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"</span>         <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer </span><span class="nv">$AUTH_TOKEN</span><span class="s2">"</span>                                  <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span>                                           <span class="se">\</span>
   -X POST -d <span class="s1">'{ "fiat_amount"        : 1234                                     \
               , "fiat_currency"      : "EUR"                                    \
@@ -344,7 +300,9 @@ Each call shall include the headers:</p>
               , "timeout_in_sec"     : 3600                                     \
               , "offer_skin"         : {}                                       \
               }'</span>                                                                <span class="se">\</span>
-</code></pre><h1 id='invoice-expiration'>Invoice expiration</h1>
+</code></pre>
+<p>Where <code>AUTH_TOKEN</code> is replaced with merchant&#39;s API key.</p>
+<h1 id='invoice-expiration'>Invoice expiration</h1>
 <p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
 twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
 create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
@@ -354,7 +312,7 @@ get redirected back to the merchant.</p>
 <p>Example Call</p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                          <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"</span>         <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>         <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span>                                           <span class="se">\</span>
   -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                                     \
               , "fiat_currency"      : "EUR"                                    \
@@ -462,16 +420,8 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl -X POST <span class="s2">"https://api.onramp.com/v1/egress/invoice"</span> <span class="se">\</span>
--H <span class="s2">"Authorization: Bearer AUTH_TOKEN"</span> <span class="se">\</span>
--H <span class="s2">"Content-Type: application/json"</span> <span class="se">\</span>
--d <span class="s1">'{"user":"user@domain.com","fiat_amount":10000,"fiat_currency":"EUR","payment_ack_url":"www.example.com/ack_webhook","user_redirect_url":"www.example.com/user/continues/here","valid_timeout":30000}'</span>
-</code></pre>
-<blockquote>
-<p>Example Call</p>
-</blockquote>
 <pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_egress_invoice                     <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 4386870c-8d10-4156-be11-2bb4635c7750"</span>   <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>   <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
   -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                               \
               , "fiat_currency"      : "EUR"                              \
@@ -536,11 +486,11 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </tr>
 <tr>
 <td>offer_skin</td>
-<td>Ingress Skin</td>
+<td>Egress Skin</td>
 <td>Specify how the offer should be displayed to the user.</td>
 </tr>
 </tbody></table>
-<h3 id='ingress-skin'>Ingress Skin</h3>
+<h3 id='egress-skin'>Egress Skin</h3>
 <table><thead>
 <tr>
 <th>Field</th>
