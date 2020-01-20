@@ -319,6 +319,7 @@ get redirected back to the merchant.</p>
               , "payment_ack_url"    : "wwww.example.com"                       \
               , "user_redirect_url"  : "www.example.com?user_redirected"        \
               , "timeout_in_sec"     : 3600                                     \
+              , "offer_skin"         :                                          \
                   { "title" : "The Nice merchant"                               \
                   , "image" : "https:static.example.com/merchant-logo"          \
                   , "description": "Awesome green Pluff with handler"           \
@@ -333,7 +334,11 @@ get redirected back to the merchant.</p>
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre>
@@ -461,7 +466,11 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre>
