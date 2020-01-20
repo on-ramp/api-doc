@@ -14,8 +14,12 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
               , "payment_ack_url"    : "wwww.example.com"                 \
               , "user_redirect_url"  : "www.example.com?user_redirected"  \
               , "timeout_in_sec"     : 3600                               \
-              , "offer_skin"         : {}                                 \
-              }'                                                          \
+              , "offer_skin"         :                                    \
+                  { "title" : "The Nice merchant"                         \
+                  , "image" : "https:static.example.com/merchant-logo"    \
+                  , "description": "¥‎435.22 redemption from your account" \
+                  }                                                       \
+              }'
 ```
 
 > Request JSON Body
@@ -58,6 +62,9 @@ offer_skin        | Egress Skin  | Specify how the offer should be displayed to 
 
 Field             |   Type      | Description
 ----------------- | ----------- | ---------
+title             | string      | Short string containing merchant's or redemption's name.
+image             | url         | image to stylized the offer.
+description       | string      | A text explaining what the user is redeeming.
 
 
 ### Callback Egress Invoice

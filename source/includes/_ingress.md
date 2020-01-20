@@ -13,7 +13,10 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
               , "payment_ack_url"    : "wwww.example.com"                       \
               , "user_redirect_url"  : "www.example.com?user_redirected"        \
               , "timeout_in_sec"     : 3600                                     \
-              , "offer_skin"         : {}                                       \
+                  { "title" : "The Nice merchant"                               \
+                  , "image" : "https:static.example.com/merchant-logo"          \
+                  , "description": "Awesome green Pluff with handler"           \
+                  }                                                             \
               }'
 ```
 
@@ -59,6 +62,9 @@ offer_skin        | Ingress Skin | Specify how the offer should be displayed to 
 
 Field             |   Type      | Description
 ----------------- | ----------- | ---------
+title             | string      | Short string containing merchant's or product's name.
+image             | url         | image to stylized the offer.
+description       | string      | A text explaining what the user is purchasing.
 
 
 ### Callback Ingress Invoice
