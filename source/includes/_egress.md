@@ -30,7 +30,11 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 , "payment_ack_url"    : "wwww.example.com"
 , "user_redirect_url"  : "www.example.com?user_redirected"
 , "timeout_in_sec"     : 3600
-, "offer_skin"         : {}
+, "offer_skin"         :     
+    { "title"      : "The Nice merchant"
+    , "image"      : "https:static.example.com/merchant-logo"
+    , "description": "¥‎435.22 redemption from your account"
+    }
 }
 
 ```
@@ -71,9 +75,9 @@ description       | string      | A text explaining what the user is redeeming.
 
 Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point
 when the user transaction should be consider done and be debited at merchant's side**. If the merchant was able to
-debit the user, then it should answer the callback with an http 200 error code; if the merchant was unable to
-debit the user, it should answer with an http 204 error code (this will cancel the user payment, expiring his
-invoice link). **Any other error code** but 200 or 204 **will be treated as an internal error from the merchant side**,
+debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). **Any other status code** but 200 or 204 **will be treated as an internal error from the merchant side**,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
 
 ### Response JSON Fields
