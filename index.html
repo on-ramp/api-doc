@@ -319,7 +319,10 @@ get redirected back to the merchant.</p>
               , "payment_ack_url"    : "wwww.example.com"                       \
               , "user_redirect_url"  : "www.example.com?user_redirected"        \
               , "timeout_in_sec"     : 3600                                     \
-              , "offer_skin"         : {}                                       \
+                  { "title" : "The Nice merchant"                               \
+                  , "image" : "https:static.example.com/merchant-logo"          \
+                  , "description": "Awesome green Pluff with handler"           \
+                  }                                                             \
               }'</span>
 </code></pre>
 <blockquote>
@@ -389,13 +392,28 @@ get redirected back to the merchant.</p>
 <th> Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Short string containing merchant&#39;s or product&#39;s name.</td>
+</tr>
+<tr>
+<td>image</td>
+<td>url</td>
+<td>image to stylized the offer.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>A text explaining what the user is purchasing.</td>
+</tr>
 </tbody></table>
 <h3 id='callback-ingress-invoice'>Callback Ingress Invoice</h3>
 <p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
 when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to
-credit the user, then it should answer the callback with an http 200 error code; if the merchant was unable to
-credit the user, it should answer with an http 204 error code (this will cancel the user payment, expiring his
-invoice link). <strong>Any other error code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
+credit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
@@ -428,8 +446,12 @@ pausing the user payment and prompting manual intervention, potentially delaying
               , "payment_ack_url"    : "wwww.example.com"                 \
               , "user_redirect_url"  : "www.example.com?user_redirected"  \
               , "timeout_in_sec"     : 3600                               \
-              , "offer_skin"         : {}                                 \
-              }'</span>                                                          <span class="se">\</span>
+              , "offer_skin"         :                                    \
+                  { "title" : "The Nice merchant"                         \
+                  , "image" : "https:static.example.com/merchant-logo"    \
+                  , "description": "¥‎435.22 redemption from your account" \
+                  }                                                       \
+              }'</span>
 </code></pre>
 <blockquote>
 <p>Request JSON Body</p>
@@ -498,13 +520,28 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <th> Description</th>
 </tr>
 </thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Short string containing merchant&#39;s or redemption&#39;s name.</td>
+</tr>
+<tr>
+<td>image</td>
+<td>url</td>
+<td>image to stylized the offer.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>A text explaining what the user is redeeming.</td>
+</tr>
 </tbody></table>
 <h3 id='callback-egress-invoice'>Callback Egress Invoice</h3>
 <p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
 when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to
-debit the user, then it should answer the callback with an http 200 error code; if the merchant was unable to
-debit the user, it should answer with an http 204 error code (this will cancel the user payment, expiring his
-invoice link). <strong>Any other error code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
+debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
