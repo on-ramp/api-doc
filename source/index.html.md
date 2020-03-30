@@ -110,10 +110,10 @@ This API is built in REST API style. In this sense it has resource-oriented URLs
 # Base URL 
 
 Production:
-**https://api.onramp.com/api/v1**
+**https://api.onramp.ltd/api/v1**
 
 Test: 
-**https://stage-api.onramp.com/api/v1**
+**https://stage-api.onramp.ltd/api/v1**
 
 
 # Authentication
