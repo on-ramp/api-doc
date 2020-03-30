@@ -122,12 +122,12 @@ Test:
 
 ```shell
 # With shell, you can just pass the correct header with each request
-curl "https://api.onramp.io/api/v1/ingress/invoice" -H "Authorization: Bearer AUTH_TOKEN"
+curl "https://api.onramp.ltd/api/v1/ingress/invoice" -H "Authorization: Bearer AUTH_TOKEN"
 ```
 
 > Make sure to replace `AUTH_TOKEN` with your API key.
 
-**On-RAMP** uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](https://onramp.com/developers).
+**On-RAMP** uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](https://onramp.ltd/developers).
 
 **On-RAMP** expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
