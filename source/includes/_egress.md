@@ -1,6 +1,6 @@
 # Egress API
 
-## Create Egress Invoice
+## Create Egress Invoice (Automatic flow)
 
 
 > Example Call
@@ -55,7 +55,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 Field             |   Type       | Description
 ----------------- | ------------ | ---------
-fiat_amount       | Integer      | Eur amount to be paid denominated in cents .
+fiat_amount       | Integer      | Eur amount to be paid denominated in cents.
 fiat_currency     | String       | The constant `"EUR"`.
 payment_ack_url   | String       | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
 user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
@@ -86,3 +86,117 @@ Field       | Type    | Description
 ----------- | ------- | -----------
 invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
 invoice_url | String  | Url where to redirect user.
+
+
+#### Manual flow
+
+## Create Manual Egress Invoice (Manual flow)
+
+
+> Example Call
+
+```shell
+curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
+  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"       \
+  -H "Content-Type: application/json"                                         \
+  -X POST -d '{ "fiat_amount"        : 3000                                   \
+              , "fiat_currency"      : "EUR"                                  \
+              , "user_redirect_url"  : "www.example.com?user_redirected"      \
+              , "offer_skin"         :                                        \
+                  { "title" : "The Nice merchant"                             \
+                  , "image" : "https:static.example.com/merchant-logo"        \
+                  , "description": "¥435.22 redemption from your account"     \
+                  }                                                           \
+              , "onramp_user_email"  : "user@example.com"                     \
+              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540" \
+              }'
+```
+
+> Request JSON Body
+
+```json
+{ "fiat_amount"        : 3000
+, "fiat_currency"      : "EUR"
+, "user_redirect_url"  : "www.example.com?user_redirected"
+, "offer_skin"         :     
+    { "title"      : "The Nice merchant"
+    , "image"      : "https:static.example.com/merchant-logo"
+    , "description": "¥‎435.22 redemption from your account"
+    }
+, "onramp_user_email"  : "user@example.com"
+, "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+}
+
+```
+
+> Response JSON
+
+```json
+{ "invoice_id" : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+, "description": {}
+}
+```
+
+### HTTP Request
+
+<aside class="success"><b><code> POST /rpc/send_funds_to_email </code></b></aside>
+
+### Request JSON Fields
+
+Field             |   Type       | Description
+----------------- | ------------ | ---------
+fiat_amount       | Integer      | Eur amount to be paid denominated in cents.
+fiat_currency     | String       | The constant `"EUR"`.
+user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
+offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user (It might not be shown in this flow).
+onramp_user_email | String       | The email the user has registered with ON/RAMP.
+invoice_id        | String       | An identifier of the process for the merchant (for possible further use).
+
+### Egress Skin
+
+Field             |   Type      | Description
+----------------- | ----------- | ---------
+title             | string      | Short string containing merchant's or redemption's name.
+image             | url         | image to stylized the offer.
+description       | string      | A text explaining what the user is redeeming.
+
+
+## Approve or Reject Manual Egress Invoice (Manual flow)
+
+
+> Example Call
+
+```shell
+curl https://api.onramp.ltd/rpc/mark_operation                           \
+  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"  \
+  -H "Content-Type: application/json"                                    \
+  -X POST -d '{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"        \
+              , "accept" : true                                          \
+              }'
+```
+
+> Request JSON Body
+
+```json
+{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+, "accept" : true
+}
+
+```
+
+> Response JSON
+
+```json
+""
+```
+
+### HTTP Request
+
+<aside class="success"><b><code> POST /rpc/mark_operation </code></b></aside>
+
+### Request JSON Fields
+
+Field             |   Type       | Description
+----------------- | ------------ | ---------
+op_id             | String       | UUID reference that was returned from the `send_funds_to_email` endpoint.
+accept            | Boolean      | Either if the merchant wants to approve (true) or reject (false) the process.
