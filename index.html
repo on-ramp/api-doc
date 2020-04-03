@@ -226,6 +226,9 @@
                     <a href="#terminology-and-acronyms" class="toc-h2 toc-link" data-title="Terminology and Acronyms">Terminology and Acronyms</a>
                   </li>
                   <li>
+                    <a href="#base-url" class="toc-h2 toc-link" data-title="Base URL">Base URL</a>
+                  </li>
+                  <li>
                     <a href="#api-flow" class="toc-h2 toc-link" data-title="API flow">API flow</a>
                   </li>
               </ul>
@@ -248,7 +251,13 @@
             <a href="#egress-api" class="toc-h1 toc-link" data-title="Egress API">Egress API</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#create-egress-invoice" class="toc-h2 toc-link" data-title="Create Egress Invoice">Create Egress Invoice</a>
+                    <a href="#create-egress-invoice-automatic-flow" class="toc-h2 toc-link" data-title="Create Egress Invoice (Automatic flow)">Create Egress Invoice (Automatic flow)</a>
+                  </li>
+                  <li>
+                    <a href="#create-manual-egress-invoice-manual-flow" class="toc-h2 toc-link" data-title="Create Manual Egress Invoice (Manual flow)">Create Manual Egress Invoice (Manual flow)</a>
+                  </li>
+                  <li>
+                    <a href="#approve-or-reject-manual-egress-invoice-manual-flow" class="toc-h2 toc-link" data-title="Approve or Reject Manual Egress Invoice (Manual flow)">Approve or Reject Manual Egress Invoice (Manual flow)</a>
                   </li>
               </ul>
           </li>
@@ -262,6 +271,12 @@
 <li>Merchant: The service using <strong>ON/RAMP</strong> as payment processor.</li>
 <li>User: The physical person who sends or receives funds to/from the merchant through <strong>ON/RAMP</strong>.</li>
 </ul>
+<h2 id='base-url'>Base URL</h2>
+<p>Production:
+<strong><a href="https://api.onramp.ltd">https://api.onramp.ltd</a></strong></p>
+
+<p>Test: 
+<strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd</a></strong></p>
 <h2 id='api-flow'>API flow</h2><h3 id='ingress-flow'>Ingress flow</h3>
 <ol>
 <li>Merchant <a href="#create-ingress-invoice">creates an ingress invoice url</a>.</li>
@@ -272,16 +287,24 @@ merchants confirms, the ingress payment will be considered fulfilled, otherwise,
 <li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
 </ol>
 <h3 id='egress-flow'>Egress flow</h3>
+<p>There are currently two different supported flows for egress:</p>
+<h4 id='automatic-flow'>Automatic flow</h4>
 <ol>
 <li>Merchant <a href="#create-egress-invoice">creates an egress invoice url</a>.</li>
 <li>Merchant redirects user to the egress invoice url.</li>
 <li><strong>ON/RAMP</strong> handles the payment.</li>
 <li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant to either confirm the egress transaction or to abort it</a>. If
 merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
-<li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
+<li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
 </ol>
-
-<p>Z</p>
+<h4 id='manual-flow'>Manual flow</h4>
+<ol>
+<li>Prerequisite: User will need to have an account in <strong>ON/RAMP</strong> with KYC verified.</li>
+<li>Merchant <a href="#create-manual-egress-invoice">creates a manual egress invoice</a>.</li>
+<li><strong>ON/RAMP</strong> prepares the payment and returns a reference of it for the merchant to later approve it or reject it.</li>
+<li>Before the <a href="#invoice-expiration">invoice expires</a>, whenever merchants want to, they can <a href="#approve-or-reject-manual-egress-invoice">approve or reject the process</a>. At that moment, <strong>ON/RAMP</strong> will finish the process, move the funds to users balance if needed and return a success or failure.</li>
+<li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
+</ol>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
 <p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
 Each call shall include the headers:</p>
@@ -439,7 +462,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
-<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice'>Create Egress Invoice</h2>
+<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-automatic-flow'>Create Egress Invoice (Automatic flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
@@ -493,7 +516,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>Eur amount to be paid denominated in cents .</td>
+<td>Eur amount to be paid denominated in cents.</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
@@ -569,6 +592,156 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>invoice_url</td>
 <td>String</td>
 <td>Url where to redirect user.</td>
+</tr>
+</tbody></table>
+<h4 id='manual-flow'>Manual flow</h4><h2 id='create-manual-egress-invoice-manual-flow'>Create Manual Egress Invoice (Manual flow)</h2>
+<blockquote>
+<p>Example Call</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/send_funds_to_email                           <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>       <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span>                                         <span class="se">\</span>
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                                   \
+              , "fiat_currency"      : "EUR"                                  \
+              , "user_redirect_url"  : "www.example.com?user_redirected"      \
+              , "offer_skin"         :                                        \
+                  { "title" : "The Nice merchant"                             \
+                  , "image" : "https:static.example.com/merchant-logo"        \
+                  , "description": "¥435.22 redemption from your account"     \
+                  }                                                           \
+              , "onramp_user_email"  : "user@example.com"                     \
+              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540" \
+              }'</span>
+</code></pre>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"onramp_user_email"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h3 id='http-request-2'>HTTP Request</h3>
+<aside class="success"><b><code> POST /rpc/send_funds_to_email </code></b></aside>
+<h3 id='request-json-fields-2'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Eur amount to be paid denominated in cents.</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>The constant <code>&quot;EUR&quot;</code>.</td>
+</tr>
+<tr>
+<td>user_redirect_url</td>
+<td>String</td>
+<td>Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.</td>
+</tr>
+<tr>
+<td>offer_skin</td>
+<td>Egress Skin</td>
+<td>Specify how the offer should be displayed to the user (It might not be shown in this flow).</td>
+</tr>
+<tr>
+<td>onramp_user_email</td>
+<td>String</td>
+<td>The email the user has registered with ON/RAMP.</td>
+</tr>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>An identifier of the process for the merchant (for possible further use).</td>
+</tr>
+</tbody></table>
+<h3 id='egress-skin-2'>Egress Skin</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>string</td>
+<td>Short string containing merchant&#39;s or redemption&#39;s name.</td>
+</tr>
+<tr>
+<td>image</td>
+<td>url</td>
+<td>image to stylized the offer.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>A text explaining what the user is redeeming.</td>
+</tr>
+</tbody></table>
+<h2 id='approve-or-reject-manual-egress-invoice-manual-flow'>Approve or Reject Manual Egress Invoice (Manual flow)</h2>
+<blockquote>
+<p>Example Call</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/mark_operation                           <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>  <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span>                                    <span class="se">\</span>
+  -X POST -d <span class="s1">'{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"        \
+              , "accept" : true                                          \
+              }'</span>
+</code></pre>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"op_id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"accept"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+
+</span></code></pre>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="s2">""</span><span class="w">
+</span></code></pre><h3 id='http-request-3'>HTTP Request</h3>
+<aside class="success"><b><code> POST /rpc/mark_operation </code></b></aside>
+<h3 id='request-json-fields-3'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>op_id</td>
+<td>String</td>
+<td>UUID reference that was returned from the <code>send_funds_to_email</code> endpoint.</td>
+</tr>
+<tr>
+<td>accept</td>
+<td>Boolean</td>
+<td>Either if the merchant wants to approve (true) or reject (false) the process.</td>
 </tr>
 </tbody></table>
 
