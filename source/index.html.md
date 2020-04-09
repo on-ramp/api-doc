@@ -24,6 +24,14 @@ search: true
 - Merchant: The service using **ON/RAMP** as payment processor.
 - User: The physical person who sends or receives funds to/from the merchant through **ON/RAMP**.
 
+## Base URL
+
+Production:
+**[https://api.onramp.ltd](https://api.onramp.ltd)**
+
+Test: 
+**[https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)**
+
 ## API flow
 
 ### Ingress flow
