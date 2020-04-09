@@ -1,6 +1,6 @@
 # Egress API
 
-## Create Egress Invoice (Automatic flow)
+## Create Egress Invoice (App redirection flow)
 
 
 > Example Call
@@ -88,9 +88,7 @@ invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
 invoice_url | String  | Url where to redirect user.
 
 
-#### Manual flow
-
-## Create Manual Egress Invoice (Manual flow)
+## Create Egress Invoice (User email flow)
 
 
 > Example Call
@@ -161,7 +159,7 @@ image             | url         | image to stylized the offer.
 description       | string      | A text explaining what the user is redeeming.
 
 
-## Approve or Reject Manual Egress Invoice (Manual flow)
+## Approve or Reject User Email Egress Invoice (User email flow)
 
 
 > Example Call
