@@ -251,13 +251,13 @@
             <a href="#egress-api" class="toc-h1 toc-link" data-title="Egress API">Egress API</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#create-egress-invoice-automatic-flow" class="toc-h2 toc-link" data-title="Create Egress Invoice (Automatic flow)">Create Egress Invoice (Automatic flow)</a>
+                    <a href="#create-egress-invoice-app-redirection-flow" class="toc-h2 toc-link" data-title="Create Egress Invoice (App redirection flow)">Create Egress Invoice (App redirection flow)</a>
                   </li>
                   <li>
-                    <a href="#create-manual-egress-invoice-manual-flow" class="toc-h2 toc-link" data-title="Create Manual Egress Invoice (Manual flow)">Create Manual Egress Invoice (Manual flow)</a>
+                    <a href="#create-egress-invoice-user-email-flow" class="toc-h2 toc-link" data-title="Create Egress Invoice (User email flow)">Create Egress Invoice (User email flow)</a>
                   </li>
                   <li>
-                    <a href="#approve-or-reject-manual-egress-invoice-manual-flow" class="toc-h2 toc-link" data-title="Approve or Reject Manual Egress Invoice (Manual flow)">Approve or Reject Manual Egress Invoice (Manual flow)</a>
+                    <a href="#approve-or-reject-user-email-egress-invoice-user-email-flow" class="toc-h2 toc-link" data-title="Approve or Reject User Email Egress Invoice (User email flow)">Approve or Reject User Email Egress Invoice (User email flow)</a>
                   </li>
               </ul>
           </li>
@@ -288,21 +288,20 @@ merchants confirms, the ingress payment will be considered fulfilled, otherwise,
 </ol>
 <h3 id='egress-flow'>Egress flow</h3>
 <p>There are currently two different supported flows for egress:</p>
-<h4 id='automatic-flow'>Automatic flow</h4>
+<h4 id='app-redirection-flow'>App redirection flow</h4>
 <ol>
-<li>Merchant <a href="#create-egress-invoice">creates an egress invoice url</a>.</li>
+<li>Merchant <a href="#create-egress-invoice-app-redirection-flow">creates an egress invoice url</a>.</li>
 <li>Merchant redirects user to the egress invoice url.</li>
 <li><strong>ON/RAMP</strong> handles the payment.</li>
-<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant to either confirm the egress transaction or to abort it</a>. If
-merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
+<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant to either confirm the egress transaction or to abort it</a>. If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
 <li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
 </ol>
-<h4 id='manual-flow'>Manual flow</h4>
+<h4 id='user-email-flow'>User email flow</h4>
 <ol>
 <li>Prerequisite: User will need to have an account in <strong>ON/RAMP</strong> with KYC verified.</li>
-<li>Merchant <a href="#create-manual-egress-invoice">creates a manual egress invoice</a>.</li>
+<li>Merchant <a href="#create-egress-invoice-user-email-flow">creates a user email egress invoice</a>.</li>
 <li><strong>ON/RAMP</strong> prepares the payment and returns a reference of it for the merchant to later approve it or reject it.</li>
-<li>Before the <a href="#invoice-expiration">invoice expires</a>, whenever merchants want to, they can <a href="#approve-or-reject-manual-egress-invoice">approve or reject the process</a>. At that moment, <strong>ON/RAMP</strong> will finish the process, move the funds to users balance if needed and return a success or failure.</li>
+<li>Before the <a href="#invoice-expiration">invoice expires</a>, whenever merchants want to, they can <a href="#approve-or-reject-user-email-egress-invoice-user-email-flow">approve or reject the process</a>. At that moment, <strong>ON/RAMP</strong> will finish the process, move the funds to users balance if needed and return a success or failure.</li>
 <li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
 </ol>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
@@ -462,7 +461,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
-<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-automatic-flow'>Create Egress Invoice (Automatic flow)</h2>
+<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
@@ -594,7 +593,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
-<h4 id='manual-flow'>Manual flow</h4><h2 id='create-manual-egress-invoice-manual-flow'>Create Manual Egress Invoice (Manual flow)</h2>
+<h2 id='create-egress-invoice-user-email-flow'>Create Egress Invoice (User email flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
@@ -700,7 +699,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>A text explaining what the user is redeeming.</td>
 </tr>
 </tbody></table>
-<h2 id='approve-or-reject-manual-egress-invoice-manual-flow'>Approve or Reject Manual Egress Invoice (Manual flow)</h2>
+<h2 id='approve-or-reject-user-email-egress-invoice-user-email-flow'>Approve or Reject User Email Egress Invoice (User email flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
