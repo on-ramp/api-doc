@@ -333,19 +333,41 @@ get redirected back to the merchant.</p>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                          <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>         <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                                           <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                                     \
-              , "fiat_currency"      : "EUR"                                    \
-              , "payment_ack_url"    : "wwww.example.com"                       \
-              , "user_redirect_url"  : "www.example.com?user_redirected"        \
-              , "timeout_in_sec"     : 3600                                     \
-              , "offer_skin"         :                                          \
-                  { "title" : "The Nice merchant"                               \
-                  , "image" : "https:static.example.com/merchant-logo"          \
-                  , "description": "Awesome green Pluff with handler"           \
-                  }                                                             \
+<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                                    <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000
+              , "fiat_currency"      : "EUR"
+              , "payment_ack_url"    : "wwww.example.com"
+              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "timeout_in_sec"     : 3600
+              , "offer_skin"         :
+                  { "title" : "The Nice merchant"
+                  , "image" : "https:static.example.com/merchant-logo"
+                  , "description": "Awesome green Pluff with handler"
+                  }
+              , "billing_details"    :
+                  { "payer_email"            : "mrpayer.payerson@email.com"
+                  , "payer_first_name"       : "MrPayer"
+                  , "payer_last_name"        : "Payerson"
+                  , "birth_date"             : "24:11:1980"
+                  , "street"                 : "Main Street"
+                  , "unit"                   : "Floor 7 12B"
+                  , "postal_code"            : "0000001"
+                  , "city"                   : "Big Town"
+                  , "county"                 : "Big Town county"
+                  , "state"                  : "CA"
+                  , "prefecture"             : "Prefecture-ku"
+                  , "country"                : "GBR"
+                  , "kyc_verified"           : "24:11:1999"
+                  , "kyc_document"           : "Passport"
+                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
+                  , "address_verified"       : "24:11:1999"
+                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
+                  , "player_level"           : "New"
+                  , "member_since"           : "14:07:2019"
+                  , "merchant_customer_id"   : "u2340112"
+                  }
               }'</span>
 </code></pre>
 <blockquote>
@@ -360,6 +382,28 @@ get redirected back to the merchant.</p>
     </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="s2">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1980"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w"> 
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1999"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1999"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"14:07:2019"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
@@ -410,6 +454,11 @@ get redirected back to the merchant.</p>
 <td>Ingress Skin</td>
 <td>Specify how the offer should be displayed to the user.</td>
 </tr>
+<tr>
+<td>billing_details</td>
+<td>Billing Details</td>
+<td>User billing details. (Optional)</td>
+</tr>
 </tbody></table>
 <h3 id='ingress-skin'>Ingress Skin</h3>
 <table><thead>
@@ -421,18 +470,127 @@ get redirected back to the merchant.</p>
 </thead><tbody>
 <tr>
 <td>title</td>
-<td>string</td>
+<td>String</td>
 <td>Short string containing merchant&#39;s or product&#39;s name.</td>
 </tr>
 <tr>
 <td>image</td>
-<td>url</td>
+<td>Url</td>
 <td>image to stylized the offer.</td>
 </tr>
 <tr>
 <td>description</td>
-<td>string</td>
+<td>String</td>
 <td>A text explaining what the user is purchasing.</td>
+</tr>
+</tbody></table>
+<h3 id='billing-details'>Billing Details</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payer_email</td>
+<td>Email</td>
+<td>Email of the user making the payment.</td>
+</tr>
+<tr>
+<td>payer_first_name</td>
+<td>String</td>
+<td>First name of the user making the payment.</td>
+</tr>
+<tr>
+<td>payer_last_name</td>
+<td>String</td>
+<td>Last name of the user making the payment.</td>
+</tr>
+<tr>
+<td>birth_date</td>
+<td>Date</td>
+<td>Date of birth of the user making the payment.</td>
+</tr>
+<tr>
+<td>street</td>
+<td>String</td>
+<td>Street from the billing address.</td>
+</tr>
+<tr>
+<td>unit</td>
+<td>String</td>
+<td>Unit from the billing address.</td>
+</tr>
+<tr>
+<td>postal_code</td>
+<td>String</td>
+<td>Postal code from the billing address.</td>
+</tr>
+<tr>
+<td>city</td>
+<td>String</td>
+<td>City from the billing address.</td>
+</tr>
+<tr>
+<td>county</td>
+<td>String</td>
+<td>County from the billing address.</td>
+</tr>
+<tr>
+<td>state</td>
+<td>String</td>
+<td>State from the billing address.</td>
+</tr>
+<tr>
+<td>prefecture</td>
+<td>String</td>
+<td>Prefecture from the billing address.</td>
+</tr>
+<tr>
+<td>country</td>
+<td>String</td>
+<td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+</tr>
+<tr>
+<td>kyc_verified</td>
+<td>Date</td>
+<td>Date when the user was KYC verified.</td>
+</tr>
+<tr>
+<td>kyc_document</td>
+<td>String</td>
+<td>Type of the document. Some examples would be Passport or National_ID.</td>
+</tr>
+<tr>
+<td>kyc_reference</td>
+<td>String</td>
+<td>A unique id of the KYC verification. Something like a UUID.</td>
+</tr>
+<tr>
+<td>address_verified</td>
+<td>Date</td>
+<td>Date when the address was verified.</td>
+</tr>
+<tr>
+<td>address_doc_reference</td>
+<td>String</td>
+<td>A unique id of the address document reference.</td>
+</tr>
+<tr>
+<td>player_level</td>
+<td>String</td>
+<td>Your internal player level. Something like New, Normal or VIP would be examples of it.</td>
+</tr>
+<tr>
+<td>member_since</td>
+<td>Date</td>
+<td>The date since that user is a member of yours.</td>
+</tr>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
 </tr>
 </tbody></table>
 <h3 id='callback-ingress-invoice'>Callback Ingress Invoice</h3>
@@ -468,16 +626,16 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_egress_invoice                     <span class="se">\</span>
   -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>   <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                               \
-              , "fiat_currency"      : "EUR"                              \
-              , "payment_ack_url"    : "wwww.example.com"                 \
-              , "user_redirect_url"  : "www.example.com?user_redirected"  \
-              , "timeout_in_sec"     : 3600                               \
-              , "offer_skin"         :                                    \
-                  { "title" : "The Nice merchant"                         \
-                  , "image" : "https:static.example.com/merchant-logo"    \
-                  , "description": "¥‎435.22 redemption from your account" \
-                  }                                                       \
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000
+              , "fiat_currency"      : "EUR"
+              , "payment_ack_url"    : "wwww.example.com"
+              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "timeout_in_sec"     : 3600
+              , "offer_skin"         :
+                  { "title" : "The Nice merchant"
+                  , "image" : "https:static.example.com/merchant-logo"
+                  , "description": "¥‎435.22 redemption from your account"
+                  }
               }'</span>
 </code></pre>
 <blockquote>
@@ -600,16 +758,16 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/send_funds_to_email                           <span class="se">\</span>
   -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>       <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span>                                         <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000                                   \
-              , "fiat_currency"      : "EUR"                                  \
-              , "user_redirect_url"  : "www.example.com?user_redirected"      \
-              , "offer_skin"         :                                        \
-                  { "title" : "The Nice merchant"                             \
-                  , "image" : "https:static.example.com/merchant-logo"        \
-                  , "description": "¥435.22 redemption from your account"     \
-                  }                                                           \
-              , "onramp_user_email"  : "user@example.com"                     \
-              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540" \
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000
+              , "fiat_currency"      : "EUR"
+              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "offer_skin"         :
+                  { "title" : "The Nice merchant"
+                  , "image" : "https:static.example.com/merchant-logo"
+                  , "description": "¥435.22 redemption from your account"
+                  }
+              , "onramp_user_email"  : "user@example.com"
+              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
               }'</span>
 </code></pre>
 <blockquote>
@@ -706,8 +864,8 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/mark_operation                           <span class="se">\</span>
   -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>  <span class="se">\</span>
   -H <span class="s2">"Content-Type: application/json"</span>                                    <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"        \
-              , "accept" : true                                          \
+  -X POST -d <span class="s1">'{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+              , "accept" : true
               }'</span>
 </code></pre>
 <blockquote>
