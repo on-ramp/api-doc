@@ -9,16 +9,16 @@
 curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"   \
   -H "Content-Type: application/json"                                     \
-  -X POST -d '{ "fiat_amount"        : 3000                               \
-              , "fiat_currency"      : "EUR"                              \
-              , "payment_ack_url"    : "wwww.example.com"                 \
-              , "user_redirect_url"  : "www.example.com?user_redirected"  \
-              , "timeout_in_sec"     : 3600                               \
-              , "offer_skin"         :                                    \
-                  { "title" : "The Nice merchant"                         \
-                  , "image" : "https:static.example.com/merchant-logo"    \
-                  , "description": "¥‎435.22 redemption from your account" \
-                  }                                                       \
+  -X POST -d '{ "fiat_amount"        : 3000
+              , "fiat_currency"      : "EUR"
+              , "payment_ack_url"    : "wwww.example.com"
+              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "timeout_in_sec"     : 3600
+              , "offer_skin"         :
+                  { "title" : "The Nice merchant"
+                  , "image" : "https:static.example.com/merchant-logo"
+                  , "description": "¥‎435.22 redemption from your account"
+                  }
               }'
 ```
 
@@ -97,16 +97,16 @@ invoice_url | String  | Url where to redirect user.
 curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"       \
   -H "Content-Type: application/json"                                         \
-  -X POST -d '{ "fiat_amount"        : 3000                                   \
-              , "fiat_currency"      : "EUR"                                  \
-              , "user_redirect_url"  : "www.example.com?user_redirected"      \
-              , "offer_skin"         :                                        \
-                  { "title" : "The Nice merchant"                             \
-                  , "image" : "https:static.example.com/merchant-logo"        \
-                  , "description": "¥435.22 redemption from your account"     \
-                  }                                                           \
-              , "onramp_user_email"  : "user@example.com"                     \
-              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540" \
+  -X POST -d '{ "fiat_amount"        : 3000
+              , "fiat_currency"      : "EUR"
+              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "offer_skin"         :
+                  { "title" : "The Nice merchant"
+                  , "image" : "https:static.example.com/merchant-logo"
+                  , "description": "¥435.22 redemption from your account"
+                  }
+              , "onramp_user_email"  : "user@example.com"
+              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
               }'
 ```
 
@@ -168,8 +168,8 @@ description       | string      | A text explaining what the user is redeeming.
 curl https://api.onramp.ltd/rpc/mark_operation                           \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"  \
   -H "Content-Type: application/json"                                    \
-  -X POST -d '{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"        \
-              , "accept" : true                                          \
+  -X POST -d '{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+              , "accept" : true
               }'
 ```
 
