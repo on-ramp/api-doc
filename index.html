@@ -275,7 +275,7 @@
 <p>Production:
 <strong><a href="https://api.onramp.ltd">https://api.onramp.ltd</a></strong></p>
 
-<p>Test: 
+<p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd</a></strong></p>
 <h2 id='api-flow'>API flow</h2><h3 id='ingress-flow'>Ingress flow</h3>
 <ol>
@@ -312,16 +312,16 @@ Each call shall include the headers:</p>
 <li><p><code>Content-Type: application/json</code></p></li>
 <li><p><code>x-xco-authorization: Bearer AUTH_TOKEN</code></p></li>
 </ul>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                          <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer </span><span class="nv">$AUTH_TOKEN</span><span class="s2">"</span>                                  <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                                           <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 1234                                     \
-              , "fiat_currency"      : "EUR"                                    \
-              , "payment_ack_url"    : "wwww.example.com"                       \
-              , "user_redirect_url"  : "www.example.com?user_redirected"        \
-              , "timeout_in_sec"     : 3600                                     \
-              , "offer_skin"         : {}                                       \
-              }'</span>                                                                <span class="se">\</span>
+<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice <span class="se">\</span>
+  -H <span class="s2">"x-xco-authorization: Bearer </span><span class="nv">$AUTH_TOKEN</span><span class="s2">"</span>         <span class="se">\</span>
+  -H <span class="s2">"Content-Type: application/json"</span>                  <span class="se">\</span>
+  -X POST -d <span class="s1">'{ "fiat_amount"        : 1234                                     
+              , "fiat_currency"      : "EUR"                                    
+              , "payment_ack_url"    : "wwww.example.com"                       
+              , "user_redirect_url"  : "www.example.com?user_redirected"        
+              , "timeout_in_sec"     : 3600                                     
+              , "offer_skin"         : {}                                       
+              }'</span>
 </code></pre>
 <p>Where <code>AUTH_TOKEN</code> is replaced with merchant&#39;s API key.</p>
 <h1 id='invoice-expiration'>Invoice expiration</h1>
@@ -350,6 +350,7 @@ get redirected back to the merchant.</p>
                   { "payer_email"            : "mrpayer.payerson@email.com"
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
+                  , "payer_phone"            : "0034666444446"
                   , "birth_date"             : "24:11:1980"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
@@ -387,6 +388,7 @@ get redirected back to the merchant.</p>
     </span><span class="p">{</span><span class="w"> </span><span class="s2">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1980"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
@@ -395,7 +397,7 @@ get redirected back to the merchant.</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w"> 
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1999"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
@@ -506,6 +508,11 @@ get redirected back to the merchant.</p>
 <td>payer_last_name</td>
 <td>String</td>
 <td>Last name of the user making the payment.</td>
+</tr>
+<tr>
+<td>payer_phone</td>
+<td>String</td>
+<td>Including country code, without spaces or separators.</td>
 </tr>
 <tr>
 <td>birth_date</td>
