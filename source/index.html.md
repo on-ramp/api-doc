@@ -1,139 +1,98 @@
 ---
-title: On-RAMP payment API v1.0 
+title: ON/RAMP payment API v1.0
 
 version: 1.0
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
 
-toc_footers:
-  - <a href='https://coinweb.io' target='_blank' rel='noopener'>Sign Up for a Developer Key</a>
+#toc_footers:
+#  - <a href='https://coinweb.io' target='_blank' rel='noopener'>Sign Up for a Developer Key</a>
 
 includes:
   - ingress
   - egress
-  - errors
 
 search: true
 ---
 
-# On-RAMP payment API
+# ON/RAMP merchant integration.
 
-In this documentation it is described how the integration with **On-RAMP** payment System should be done.
-In this first section there is a general description of the Flow between an External System that wants to integrate with ****On-RAMP**'s API** 
 
-## Terminology and Acronyms 
+## Terminology and Acronyms
 
-- Client Service (**CIS**): The service using **On-RAMP** as payment processor
-- User (**USR**): CIS's users.
+- Merchant: The service using **ON/RAMP** as payment processor.
+- User: The physical person who sends or receives funds to/from the merchant through **ON/RAMP**.
 
-## Suggested flow
+## Base URL
+
+Production:
+**[https://api.onramp.ltd](https://api.onramp.ltd)**
+
+Test:
+**[https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)**
+
+## API flow
 
 ### Ingress flow
 
-- **CIS** dynamically generate an invoice for the **USR** calling the **ON-RAMP** endpoint [Create Ingress Invoice](#create-ingress-invoice).
+1. Merchant [creates an ingress invoice url](#create-ingress-invoice).
+1. Merchant redirects user to the ingress invoice url.
+1. **ON/RAMP** handles the payment.
+1. If the payment succeed, **ON/RAMP** will [call back the merchant to either confirm the ingress transaction or to abort it](#callback-ingress-invoice). If
+   merchants confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.
+1. **ON/RAMP** redirects the user back to merchant.
 
-  - These invoices can be cached, but once paid, they will become **invalid**.
-
-  - If cached for too long, they'd became invalid. The expiration date for each invoice is specified as an argument when creating the invoice.
-
-  - Invoices are **ON-RAMP** url for a specific **USR**; the same invoice should not be reused among different users.
-
-- **CIS** shows the invoice to the **USR** as a link to click and/or QR to scan.
-
-- **On-RAMP** process the payment. This could long anything between the instant the invoice is created to the expiration date is reached. For example, the **USR** could start the payment, stops in the middle, then resume next day.
-
-- **On-RAMP** [callback the **CIS**](#callback-ingress-invoice) to inform the payment had been successfully completed. This callback will include any reference included as a parameter when creating the invoice.
-
-  - The **CIS** should return a **HTTP Status Code 200** after this callback.
-
-  - If the **CIS** does not return a **HTTP Status Code 200** after the callback, either the callback will be retried with exponential decay until **HTTP Status Code 200** is returned, or until **some number N** of tries has been reached.
-
-- **On-RAMP** will inform the **USR** the payment was a success.
-
-- **On-RAMP** will redirect the **USR** to the url specified as a parameter when the invoice was created; or it will redirect the **USR** back to where it was if not specified.
 
 ### Egress flow
 
-**Analogous to the ingress flow**
+There are currently two different supported flows for egress:
 
-- The **CIS** dynamically [Create Egress Invoices](#create-egress-invoice)
+#### App redirection flow
 
-  - It is possible but not required for the **CIS** to cache this invoices.
+1. Merchant [creates an egress invoice url](#create-egress-invoice-app-redirection-flow).
+1. Merchant redirects user to the egress invoice url.
+1. **ON/RAMP** handles the payment.
+1. If the payment succeed, **ON/RAMP** will [call back the merchant to either confirm the egress transaction or to abort it](#callback-egress-invoice). If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.
+1. User will see in **ON/RAMP** client the outcome of the process.
 
-  - Each withdrawal associated with one of these invoices would be executed at most once.
-  
-- The **CIS** shows the **USR** the invoice as a URL or QR.
+#### User email flow
 
-- After the **USR** clicks/scan it.
+1. Prerequisite: User will need to have an account in **ON/RAMP** with KYC verified.
+1. Merchant [creates a user email egress invoice](#create-egress-invoice-user-email-flow).
+1. **ON/RAMP** prepares the payment and returns a reference of it for the merchant to later approve it or reject it.
+1. Before the [invoice expires](#invoice-expiration), whenever merchants want to, they can [approve or reject the process](#approve-or-reject-user-email-egress-invoice-user-email-flow). At that moment, **ON/RAMP** will finish the process, move the funds to users balance if needed and return a success or failure.
+1. User will see in **ON/RAMP** client the outcome of the process.
 
-- **On-RAMP** [callbacks the **CIS**](#callback-egress-invoice) to confirm the withdrawal.
+# Calling **ON/RAMP** API endpoints.
 
-- As with the ingress callback, this callback will contain any specified when the invoice was created reference.
+**ON/RAMP** offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
+Each call shall include the headers:
 
-- According to what the **CIS** returns:
+- `Content-Type: application/json`
 
-  - **HTTP Status Code 200** with payload {success: true}. **ON-RAMP** considers the withdrawal confirm, and continue to send funds back to the **USR**. Then redirect the user back to where specified, or kept them on the **ON-RAMP** app if not specified.
-  
-  - **HTTP Status Code 200** with payload {success: false, redirect: <err-url\>}. **ON-RAMP** will consider the withdrawal cancel, the egress-invoice invalidated, and will redirect the **USR** to <err-url\> which could be a page where the **CIS** explains the reason it was cancel (i.e, temporally down, not enough funds \... etc).
+- `x-xco-authorization: Bearer AUTH_TOKEN`
 
-  - Anything else: **ON-RAMP** will retry the callback with exponential decay.
-
-## Questions
-
-- What metadata will be offer to enhance the **USR** info about the payment? Such images, text description, links to click, etc...
-
-- Extra requirement for us? Such queries about **USR**s, due balances or payment statuses?
-
-- Allow **USR**s to ingress offline? (Meaning doing so directly through **ON-RAMP**, without the user interacting with the **CIS**).
-
-- Allow **USR**s to egress offline?
-
-## Suggested offline extension for ingress/egress
-
-### Offline Ingress flow
-
-- When **CIS** creates an online ingress-invoice, it will add the following parameters:
-
-  - refresh\_invoice\_url: a callback to **CIS** with any require reference. If specified and not null, once the invoice is no longer valid (the **USR** already used it or it was timeout) **ON-RAMP** will call it to generate a new invoice.The expected return payload for this callback is the same as the payload the **CIS** would use to create a new invoice, and the result would be the same.
-
-  - invoice\_display\_key: if set to null or not specified, the ingress-invoice won't be display on the **USR** **ON-RAMP** app. If set to something else, the **ON-RAMP** will display the invoice, allowing the user to click on it at any time to initiate an ingress without directly interacting with **CIS**. If the **ON-RAMP** app gets 2 invoices from the same **CIS** with the same invoice\_display\_key, the first one will be discarded (this is a mechanism such **CIS** is able to update the invoice, such changing its description**.
-
-### Offline Egress flow
-
-Similar to offline ingress, we'll add the parameters refresh\_invoice\_url and invoice\_display\_key to create\_egress\_invoice.
-
-# API Reference
-
-This API is built in REST API style. In this sense it has resource-oriented URLs, accepts [JSON](http://www.json.org/) request bodies, returns []JSON-encoded](http://www.json.org/) responses, and uses standard HTTP response codes, authentication, and verbs.
-
-# Base URL 
-
-Production:
-**https://api.onramp.ltd/api/v1**
-
-Test: 
-**https://stage-api.onramp.ltd/api/v1**
-
-
-# Authentication
-
-> To authorize, use this code:
 
 ```shell
-# With shell, you can just pass the correct header with each request
-curl "https://api.onramp.ltd/api/v1/ingress/invoice" -H "Authorization: Bearer AUTH_TOKEN"
+curl https://api.onramp.ltd/rpc/create_ingress_invoice \
+  -H "x-xco-authorization: Bearer $AUTH_TOKEN"         \
+  -H "Content-Type: application/json"                  \
+  -X POST -d '{ "fiat_amount"        : 1234                                     
+              , "fiat_currency"      : "EUR"                                    
+              , "payment_ack_url"    : "wwww.example.com"                       
+              , "user_redirect_url"  : "www.example.com?user_redirected"        
+              , "timeout_in_sec"     : 3600                                     
+              , "offer_skin"         : {}                                       
+              }'
 ```
 
-> Make sure to replace `AUTH_TOKEN` with your API key.
+Where `AUTH_TOKEN` is replaced with merchant's API key.
 
-**On-RAMP** uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](https://onramp.ltd/developers).
 
-**On-RAMP** expects for the API key to be included in all API requests to the server in a header that looks like the following:
+# Invoice expiration
 
-`Authorization: Bearer AUTH_TOKEN`
-
-<aside class="notice">
-You must replace <code>AUTH_TOKEN</code> with your personal API key.
-</aside>
-
+Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
+twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
+create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
+get redirected back to the merchant.

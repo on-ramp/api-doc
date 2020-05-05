@@ -21,6 +21,7 @@ Options:
 
 
 run_build() {
+  #docker run --rm -ti -p 4567:4567 -v $PWD/source:/usr/src/app/source -w /usr/src/app/source -v $PWD/build:/usr/src/app/build coinweb/onramp-api-doc:latest bundle exec middleman build
   bundle exec middleman build --clean
 }
 
