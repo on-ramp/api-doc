@@ -29,7 +29,7 @@ search: true
 Production:
 **[https://api.onramp.ltd](https://api.onramp.ltd)**
 
-Test: 
+Test:
 **[https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)**
 
 ## API flow
@@ -75,16 +75,16 @@ Each call shall include the headers:
 
 
 ```shell
-curl https://api.onramp.ltd/rpc/create_ingress_invoice                          \
-  -H "x-xco-authorization: Bearer $AUTH_TOKEN"                                  \
-  -H "Content-Type: application/json"                                           \
-  -X POST -d '{ "fiat_amount"        : 1234                                     \
-              , "fiat_currency"      : "EUR"                                    \
-              , "payment_ack_url"    : "wwww.example.com"                       \
-              , "user_redirect_url"  : "www.example.com?user_redirected"        \
-              , "timeout_in_sec"     : 3600                                     \
-              , "offer_skin"         : {}                                       \
-              }'                                                                \
+curl https://api.onramp.ltd/rpc/create_ingress_invoice \
+  -H "x-xco-authorization: Bearer $AUTH_TOKEN"         \
+  -H "Content-Type: application/json"                  \
+  -X POST -d '{ "fiat_amount"        : 1234                                     
+              , "fiat_currency"      : "EUR"                                    
+              , "payment_ack_url"    : "wwww.example.com"                       
+              , "user_redirect_url"  : "www.example.com?user_redirected"        
+              , "timeout_in_sec"     : 3600                                     
+              , "offer_skin"         : {}                                       
+              }'
 ```
 
 Where `AUTH_TOKEN` is replaced with merchant's API key.

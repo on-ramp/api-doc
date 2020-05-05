@@ -22,6 +22,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
                   { "payer_email"            : "mrpayer.payerson@email.com"
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
+                  , "payer_phone"            : "0034666444446"
                   , "birth_date"             : "24:11:1980"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
@@ -60,6 +61,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
     { "payer_email"            : "mrpayer.payerson@email.com"
     , "payer_first_name"       : "MrPayer"
     , "payer_last_name"        : "Payerson"
+    , "payer_phone"            : "0034666444446"
     , "birth_date"             : "24:11:1980"
     , "street"                 : "Main Street"
     , "unit"                   : "Floor 7 12B"
@@ -68,7 +70,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
     , "county"                 : "Big Town county"
     , "state"                  : "CA"
     , "prefecture"             : "Prefecture-ku"
-    , "country"                : "GBR" 
+    , "country"                : "GBR"
     , "kyc_verified"           : "24:11:1999"
     , "kyc_document"           : "Passport"
     , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
@@ -123,6 +125,7 @@ Field                 |   Type      | Description
 payer_email           | Email       | Email of the user making the payment.
 payer_first_name      | String      | First name of the user making the payment.
 payer_last_name       | String      | Last name of the user making the payment.
+payer_phone           | String      | Including country code, without spaces or separators.
 birth_date            | Date        | Date of birth of the user making the payment.
 street                | String      | Street from the billing address.
 unit                  | String      | Unit from the billing address.
