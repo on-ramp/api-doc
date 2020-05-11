@@ -19,6 +19,29 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
                   , "image" : "https:static.example.com/merchant-logo"
                   , "description": "¥‎435.22 redemption from your account"
                   }
+              , "billing_details"    :
+                  { "payer_email"            : "mrpayer.payerson@email.com"
+                  , "payer_first_name"       : "MrPayer"
+                  , "payer_last_name"        : "Payerson"
+                  , "payer_phone"            : "0034666444446"
+                  , "birth_date"             : "24:11:1980"
+                  , "street"                 : "Main Street"
+                  , "unit"                   : "Floor 7 12B"
+                  , "postal_code"            : "0000001"
+                  , "city"                   : "Big Town"
+                  , "county"                 : "Big Town county"
+                  , "state"                  : "CA"
+                  , "prefecture"             : "Prefecture-ku"
+                  , "country"                : "GBR"
+                  , "kyc_verified"           : "24:11:1999"
+                  , "kyc_document"           : "Passport"
+                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
+                  , "address_verified"       : "24:11:1999"
+                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
+                  , "player_level"           : "New"
+                  , "member_since"           : "14:07:2019"
+                  , "merchant_customer_id"   : "u2340112"
+                  }
               }'
 ```
 
@@ -34,6 +57,29 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
     { "title"      : "The Nice merchant"
     , "image"      : "https:static.example.com/merchant-logo"
     , "description": "¥‎435.22 redemption from your account"
+    }
+, "billing_details"    :
+    { "payer_email"            : "mrpayer.payerson@email.com"
+    , "payer_first_name"       : "MrPayer"
+    , "payer_last_name"        : "Payerson"
+    , "payer_phone"            : "0034666444446"
+    , "birth_date"             : "24:11:1980"
+    , "street"                 : "Main Street"
+    , "unit"                   : "Floor 7 12B"
+    , "postal_code"            : "0000001"
+    , "city"                   : "Big Town"
+    , "county"                 : "Big Town county"
+    , "state"                  : "CA"
+    , "prefecture"             : "Prefecture-ku"
+    , "country"                : "GBR"
+    , "kyc_verified"           : "24:11:1999"
+    , "kyc_document"           : "Passport"
+    , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
+    , "address_verified"       : "24:11:1999"
+    , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
+    , "player_level"           : "New"
+    , "member_since"           : "14:07:2019"
+    , "merchant_customer_id"   : "u2340112"
     }
 }
 
@@ -61,6 +107,7 @@ payment_ack_url   | String       | Merchant callback endpoint to confirm egress 
 user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
 timeout_in_sec    | Integer      | When to expire the link if unused.
 offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user.
+billing_details   | Billing Details | User billing details. (Optional)
 
 ### Egress Skin
 
@@ -69,6 +116,33 @@ Field             |   Type      | Description
 title             | string      | Short string containing merchant's or redemption's name.
 image             | url         | image to stylized the offer.
 description       | string      | A text explaining what the user is redeeming.
+
+### Billing Details
+
+Field                 |   Type      | Description
+--------------------- | ----------- | ---------
+payer_email           | Email       | Email of the user making the payment.
+payer_first_name      | String      | First name of the user making the payment.
+payer_last_name       | String      | Last name of the user making the payment.
+payer_phone           | String      | Including country code, without spaces or separators.
+birth_date            | Date        | Date of birth of the user making the payment.
+street                | String      | Street from the billing address.
+unit                  | String      | Unit from the billing address.
+postal_code           | String      | Postal code from the billing address.
+city                  | String      | City from the billing address.
+county                | String      | County from the billing address.
+state                 | String      | State from the billing address.
+prefecture            | String      | Prefecture from the billing address.
+country               | String      | Country from the billing address. Should be a 3 letter ISO Code.
+kyc_verified          | Date        | Date when the user was KYC verified.
+kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID.
+kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.
+address_verified      | Date        | Date when the address was verified.
+address_doc_reference | String      | A unique id of the address document reference.
+player_level          | String      | Your internal player level. Something like New, Normal or VIP would be examples of it.
+member_since          | Date        | The date since that user is a member of yours.
+merchant_customer_id  | String      | The merchant customer id.
+
 
 
 ### Callback Egress Invoice
@@ -106,7 +180,29 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
                   , "description": "¥435.22 redemption from your account"
                   }
               , "onramp_user_email"  : "user@example.com"
-              , "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+              , "billing_details"    :
+                  { "payer_email"            : "mrpayer.payerson@email.com"
+                  , "payer_first_name"       : "MrPayer"
+                  , "payer_last_name"        : "Payerson"
+                  , "payer_phone"            : "0034666444446"
+                  , "birth_date"             : "24:11:1980"
+                  , "street"                 : "Main Street"
+                  , "unit"                   : "Floor 7 12B"
+                  , "postal_code"            : "0000001"
+                  , "city"                   : "Big Town"
+                  , "county"                 : "Big Town county"
+                  , "state"                  : "CA"
+                  , "prefecture"             : "Prefecture-ku"
+                  , "country"                : "GBR"
+                  , "kyc_verified"           : "24:11:1999"
+                  , "kyc_document"           : "Passport"
+                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
+                  , "address_verified"       : "24:11:1999"
+                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
+                  , "player_level"           : "New"
+                  , "member_since"           : "14:07:2019"
+                  , "merchant_customer_id"   : "u2340112"
+                  }
               }'
 ```
 
@@ -122,7 +218,29 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
     , "description": "¥‎435.22 redemption from your account"
     }
 , "onramp_user_email"  : "user@example.com"
-, "invoice_id"         : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+, "billing_details"    :
+    { "payer_email"            : "mrpayer.payerson@email.com"
+    , "payer_first_name"       : "MrPayer"
+    , "payer_last_name"        : "Payerson"
+    , "payer_phone"            : "0034666444446"
+    , "birth_date"             : "24:11:1980"
+    , "street"                 : "Main Street"
+    , "unit"                   : "Floor 7 12B"
+    , "postal_code"            : "0000001"
+    , "city"                   : "Big Town"
+    , "county"                 : "Big Town county"
+    , "state"                  : "CA"
+    , "prefecture"             : "Prefecture-ku"
+    , "country"                : "GBR"
+    , "kyc_verified"           : "24:11:1999"
+    , "kyc_document"           : "Passport"
+    , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
+    , "address_verified"       : "24:11:1999"
+    , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
+    , "player_level"           : "New"
+    , "member_since"           : "14:07:2019"
+    , "merchant_customer_id"   : "u2340112"
+    }
 }
 
 ```
@@ -148,7 +266,6 @@ fiat_currency     | String       | The constant `"EUR"`.
 user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
 offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user (It might not be shown in this flow).
 onramp_user_email | String       | The email the user has registered with ON/RAMP.
-invoice_id        | String       | An identifier of the process for the merchant (for possible further use).
 
 ### Egress Skin
 
@@ -157,6 +274,34 @@ Field             |   Type      | Description
 title             | string      | Short string containing merchant's or redemption's name.
 image             | url         | image to stylized the offer.
 description       | string      | A text explaining what the user is redeeming.
+billing_details   | Billing Details | User billing details. (Optional)
+
+### Billing Details
+
+Field                 |   Type      | Description
+--------------------- | ----------- | ---------
+payer_email           | Email       | Email of the user making the payment.
+payer_first_name      | String      | First name of the user making the payment.
+payer_last_name       | String      | Last name of the user making the payment.
+payer_phone           | String      | Including country code, without spaces or separators.
+birth_date            | Date        | Date of birth of the user making the payment.
+street                | String      | Street from the billing address.
+unit                  | String      | Unit from the billing address.
+postal_code           | String      | Postal code from the billing address.
+city                  | String      | City from the billing address.
+county                | String      | County from the billing address.
+state                 | String      | State from the billing address.
+prefecture            | String      | Prefecture from the billing address.
+country               | String      | Country from the billing address. Should be a 3 letter ISO Code.
+kyc_verified          | Date        | Date when the user was KYC verified.
+kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID.
+kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.
+address_verified      | Date        | Date when the address was verified.
+address_doc_reference | String      | A unique id of the address document reference.
+player_level          | String      | Your internal player level. Something like New, Normal or VIP would be examples of it.
+member_since          | Date        | The date since that user is a member of yours.
+merchant_customer_id  | String      | The merchant customer id.
+
 
 
 ## Approve or Reject User Email Egress Invoice (User email flow)
