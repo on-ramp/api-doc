@@ -196,20 +196,20 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all.js"></script>
+    <link href="stylesheets/screen-052ba3a1.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print-bccf8c07.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all-c5541673.js"></script>
   </head>
 
   <body class="index" data-languages="[&quot;shell&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="images/navbar-cad8cdcb.png" alt="Navbar" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="images/logo-86952380.png" class="logo" alt="Logo" />
         <span class="toc-link">API v1.0</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
@@ -282,8 +282,7 @@
 <li>Merchant <a href="#create-ingress-invoice">creates an ingress invoice url</a>.</li>
 <li>Merchant redirects user to the ingress invoice url.</li>
 <li><strong>ON/RAMP</strong> handles the payment.</li>
-<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-ingress-invoice">call back the merchant to either confirm the ingress transaction or to abort it</a>. If
-merchants confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
+<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-ingress-invoice">call back the merchant</a> to either confirm the ingress transaction or to abort it. If merchant confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
 <li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
 </ol>
 <h3 id='egress-flow'>Egress flow</h3>
@@ -293,7 +292,7 @@ merchants confirms, the ingress payment will be considered fulfilled, otherwise,
 <li>Merchant <a href="#create-egress-invoice-app-redirection-flow">creates an egress invoice url</a>.</li>
 <li>Merchant redirects user to the egress invoice url.</li>
 <li><strong>ON/RAMP</strong> handles the payment.</li>
-<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant to either confirm the egress transaction or to abort it</a>. If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
+<li>If the payment succeeds, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant</a> to either confirm the egress transaction or to abort it. If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
 <li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
 </ol>
 <h4 id='user-email-flow'>User email flow</h4>
@@ -325,10 +324,7 @@ Each call shall include the headers:</p>
 </code></pre>
 <p>Where <code>AUTH_TOKEN</code> is replaced with merchant&#39;s API key.</p>
 <h1 id='invoice-expiration'>Invoice expiration</h1>
-<p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
-twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
-create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
-get redirected back to the merchant.</p>
+<p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will get redirected back to the merchant.</p>
 <h1 id='ingress-api'>Ingress API</h1><h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
 <blockquote>
 <p>Example Call</p>
@@ -343,7 +339,7 @@ get redirected back to the merchant.</p>
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "Awesome green Pluff with handler"
                   }
               , "billing_details"    :
@@ -381,7 +377,7 @@ get redirected back to the merchant.</p>
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">
     </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
@@ -429,7 +425,7 @@ get redirected back to the merchant.</p>
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>Eur amount to be paid denominated in cents .</td>
+<td>EUR amount to be paid denominated in cents.</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
@@ -478,7 +474,7 @@ get redirected back to the merchant.</p>
 <tr>
 <td>image</td>
 <td>Url</td>
-<td>image to stylized the offer.</td>
+<td>Image to stylize the offer.</td>
 </tr>
 <tr>
 <td>description</td>
@@ -601,12 +597,7 @@ get redirected back to the merchant.</p>
 </tr>
 </tbody></table>
 <h3 id='callback-ingress-invoice'>Callback Ingress Invoice</h3>
-<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
-when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to
-credit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
-credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
-invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
-pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to credit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>, pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
@@ -640,7 +631,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "¥‎435.22 redemption from your account"
                   }
               , "billing_details"    :
@@ -678,7 +669,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
     </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
@@ -726,7 +717,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>Eur amount to be paid denominated in cents.</td>
+<td>EUR amount to be paid denominated in cents.</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
@@ -775,7 +766,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <td>image</td>
 <td>url</td>
-<td>image to stylized the offer.</td>
+<td>Image to stylize the offer.</td>
 </tr>
 <tr>
 <td>description</td>
@@ -898,12 +889,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </tr>
 </tbody></table>
 <h3 id='callback-egress-invoice'>Callback Egress Invoice</h3>
-<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
-when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to
-debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
-debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
-invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
-pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>, pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
@@ -935,7 +921,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "¥435.22 redemption from your account"
                   }
               , "onramp_user_email"  : "user@example.com"
@@ -972,7 +958,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
     </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https:static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"onramp_user_email"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="w">
@@ -1021,7 +1007,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>Eur amount to be paid denominated in cents.</td>
+<td>EUR amount to be paid denominated in cents.</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
@@ -1060,7 +1046,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <td>image</td>
 <td>url</td>
-<td>image to stylized the offer.</td>
+<td>Image to stylize the offer.</td>
 </tr>
 <tr>
 <td>description</td>
