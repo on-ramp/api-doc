@@ -16,7 +16,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "¥‎435.22 redemption from your account"
                   }
               , "billing_details"    :
@@ -55,7 +55,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 , "timeout_in_sec"     : 3600
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
-    , "image"      : "https:static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-logo"
     , "description": "¥‎435.22 redemption from your account"
     }
 , "billing_details"    :
@@ -101,7 +101,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 Field             |   Type       | Description
 ----------------- | ------------ | ---------
-fiat_amount       | Integer      | Eur amount to be paid denominated in cents.
+fiat_amount       | Integer      | EUR amount to be paid denominated in cents.
 fiat_currency     | String       | The constant `"EUR"`.
 payment_ack_url   | String       | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
 user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
@@ -114,7 +114,7 @@ billing_details   | Billing Details | User billing details. (Optional)
 Field             |   Type      | Description
 ----------------- | ----------- | ---------
 title             | string      | Short string containing merchant's or redemption's name.
-image             | url         | image to stylized the offer.
+image             | url         | Image to stylize the offer.
 description       | string      | A text explaining what the user is redeeming.
 
 ### Billing Details
@@ -144,15 +144,9 @@ member_since          | Date        | The date since that user is a member of yo
 merchant_customer_id  | String      | The merchant customer id.
 
 
-
 ### Callback Egress Invoice
 
-Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point
-when the user transaction should be consider done and be debited at merchant's side**. If the merchant was able to
-debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
-debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
-invoice link). **Any other status code** but 200 or 204 **will be treated as an internal error from the merchant side**,
-pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
+Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point when the user transaction should be consider done and be debited at merchant's side**. If the merchant was able to debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his invoice link). **Any other status code** but 200 or 204 **will be treated as an internal error from the merchant side**, pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
 
 ### Response JSON Fields
 
@@ -163,7 +157,6 @@ invoice_url | String  | Url where to redirect user.
 
 
 ## Create Egress Invoice (User email flow)
-
 
 > Example Call
 
@@ -176,7 +169,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "¥435.22 redemption from your account"
                   }
               , "onramp_user_email"  : "user@example.com"
@@ -214,7 +207,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 , "user_redirect_url"  : "www.example.com?user_redirected"
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
-    , "image"      : "https:static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-logo"
     , "description": "¥‎435.22 redemption from your account"
     }
 , "onramp_user_email"  : "user@example.com"
@@ -261,7 +254,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 
 Field             |   Type       | Description
 ----------------- | ------------ | ---------
-fiat_amount       | Integer      | Eur amount to be paid denominated in cents.
+fiat_amount       | Integer      | EUR amount to be paid denominated in cents.
 fiat_currency     | String       | The constant `"EUR"`.
 user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
 offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user (It might not be shown in this flow).
@@ -272,7 +265,7 @@ onramp_user_email | String       | The email the user has registered with ON/RAM
 Field             |   Type      | Description
 ----------------- | ----------- | ---------
 title             | string      | Short string containing merchant's or redemption's name.
-image             | url         | image to stylized the offer.
+image             | url         | Image to stylize the offer.
 description       | string      | A text explaining what the user is redeeming.
 billing_details   | Billing Details | User billing details. (Optional)
 
@@ -305,7 +298,6 @@ merchant_customer_id  | String      | The merchant customer id.
 
 
 ## Approve or Reject User Email Egress Invoice (User email flow)
-
 
 > Example Call
 

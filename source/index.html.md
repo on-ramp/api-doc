@@ -39,8 +39,7 @@ Test:
 1. Merchant [creates an ingress invoice url](#create-ingress-invoice).
 1. Merchant redirects user to the ingress invoice url.
 1. **ON/RAMP** handles the payment.
-1. If the payment succeed, **ON/RAMP** will [call back the merchant to either confirm the ingress transaction or to abort it](#callback-ingress-invoice). If
-   merchants confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.
+1. If the payment succeed, **ON/RAMP** will [call back the merchant](#callback-ingress-invoice) to either confirm the ingress transaction or to abort it. If merchant confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.
 1. **ON/RAMP** redirects the user back to merchant.
 
 
@@ -53,7 +52,7 @@ There are currently two different supported flows for egress:
 1. Merchant [creates an egress invoice url](#create-egress-invoice-app-redirection-flow).
 1. Merchant redirects user to the egress invoice url.
 1. **ON/RAMP** handles the payment.
-1. If the payment succeed, **ON/RAMP** will [call back the merchant to either confirm the egress transaction or to abort it](#callback-egress-invoice). If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.
+1. If the payment succeeds, **ON/RAMP** will [call back the merchant](#callback-egress-invoice) to either confirm the egress transaction or to abort it. If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.
 1. User will see in **ON/RAMP** client the outcome of the process.
 
 #### User email flow
@@ -63,6 +62,7 @@ There are currently two different supported flows for egress:
 1. **ON/RAMP** prepares the payment and returns a reference of it for the merchant to later approve it or reject it.
 1. Before the [invoice expires](#invoice-expiration), whenever merchants want to, they can [approve or reject the process](#approve-or-reject-user-email-egress-invoice-user-email-flow). At that moment, **ON/RAMP** will finish the process, move the funds to users balance if needed and return a success or failure.
 1. User will see in **ON/RAMP** client the outcome of the process.
+
 
 # Calling **ON/RAMP** API endpoints.
 
@@ -92,7 +92,4 @@ Where `AUTH_TOKEN` is replaced with merchant's API key.
 
 # Invoice expiration
 
-Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
-twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
-create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
-get redirected back to the merchant.
+Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will get redirected back to the merchant.
