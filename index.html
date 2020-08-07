@@ -293,7 +293,7 @@
 <li>Merchant redirects user to the egress invoice url.</li>
 <li><strong>ON/RAMP</strong> handles the payment.</li>
 <li>If the payment succeeds, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant</a> to either confirm the egress transaction or to abort it. If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
-<li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
+<li>The user will see the outcome of the process in the <strong>ON/RAMP</strong> wallet.</li>
 </ol>
 <h4 id='user-email-flow'>User email flow</h4>
 <ol>
@@ -301,7 +301,7 @@
 <li>Merchant <a href="#create-egress-invoice-user-email-flow">creates a user email egress invoice</a>.</li>
 <li><strong>ON/RAMP</strong> prepares the payment and returns a reference of it for the merchant to later approve it or reject it.</li>
 <li>Before the <a href="#invoice-expiration">invoice expires</a>, whenever merchants want to, they can <a href="#approve-or-reject-user-email-egress-invoice-user-email-flow">approve or reject the process</a>. At that moment, <strong>ON/RAMP</strong> will finish the process, move the funds to users balance if needed and return a success or failure.</li>
-<li>User will see in <strong>ON/RAMP</strong> client the outcome of the process.</li>
+<li>The user will see the outcome of the process in the <strong>ON/RAMP</strong> wallet.</li>
 </ol>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
 <p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
@@ -324,8 +324,19 @@ Each call shall include the headers:</p>
 </code></pre>
 <p>Where <code>AUTH_TOKEN</code> is replaced with merchant&#39;s API key.</p>
 <h1 id='invoice-expiration'>Invoice expiration</h1>
-<p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will get redirected back to the merchant.</p>
-<h1 id='ingress-api'>Ingress API</h1><h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
+<p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
+twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
+create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
+get redirected back to the merchant.</p>
+<h1 id='ingress-api'>Ingress API</h1>
+<p>Any of the endpoints below will return:</p>
+
+<ul>
+<li><strong>200</strong> http status if everything was ok.</li>
+<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones.)</li>
+<li><strong>500</strong> http status if something unexpected happened on ON/RAMP&#39;s server.</li>
+</ul>
+<h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
@@ -347,7 +358,7 @@ Each call shall include the headers:</p>
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
                   , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "24:11:1980"
+                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
                   , "postal_code"            : "0000001"
@@ -356,13 +367,13 @@ Each call shall include the headers:</p>
                   , "state"                  : "CA"
                   , "prefecture"             : "Prefecture-ku"
                   , "country"                : "GBR"
-                  , "kyc_verified"           : "1999-11-24 09:14:49.087362+00"
+                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
                   , "kyc_document"           : "Passport"
                   , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "1999-11-24 09:14:49.087362+00"
+                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
                   , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
                   , "player_level"           : "New"
-                  , "member_since"           : "14:07:2019"
+                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'</span>
@@ -385,7 +396,7 @@ Each call shall include the headers:</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1980"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
@@ -394,13 +405,13 @@ Each call shall include the headers:</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"1999-11-24 09:14:49.087362+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"1999-11-24 09:14:49.087362+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"14:07:2019"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -455,7 +466,7 @@ Each call shall include the headers:</p>
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
-<td>User billing details. (Optional)</td>
+<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
 </tr>
 </tbody></table>
 <h3 id='ingress-skin'>Ingress Skin</h3>
@@ -488,116 +499,143 @@ Each call shall include the headers:</p>
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>payer_email</td>
 <td>Email</td>
 <td>Email of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_first_name</td>
 <td>String</td>
 <td>First name of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_last_name</td>
 <td>String</td>
 <td>Last name of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_phone</td>
 <td>String</td>
 <td>Including country code, without spaces or separators.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>birth_date</td>
 <td>Date</td>
 <td>Date of birth of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>street</td>
 <td>String</td>
 <td>Street from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>unit</td>
 <td>String</td>
 <td>Unit from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>postal_code</td>
 <td>String</td>
 <td>Postal code from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>city</td>
 <td>String</td>
 <td>City from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>county</td>
 <td>String</td>
 <td>County from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>state</td>
 <td>String</td>
 <td>State from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>prefecture</td>
 <td>String</td>
 <td>Prefecture from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>country</td>
 <td>String</td>
 <td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_verified</td>
 <td>Date</td>
 <td>Date when the user was KYC verified.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_document</td>
 <td>String</td>
 <td>Type of the document. Some examples would be Passport or National_ID.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_reference</td>
 <td>String</td>
 <td>A unique id of the KYC verification. Something like a UUID.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>address_verified</td>
 <td>Date</td>
 <td>Date when the address was verified.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>address_doc_reference</td>
 <td>String</td>
 <td>A unique id of the address document reference.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>player_level</td>
 <td>String</td>
-<td>Your internal player level. Something like New, Normal or VIP would be examples of it.</td>
+<td>Your internal player level. Something like New, Normal, VIP, ...</td>
+<td>No</td>
 </tr>
 <tr>
 <td>member_since</td>
 <td>Date</td>
 <td>The date since that user is a member of yours.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>merchant_customer_id</td>
 <td>String</td>
 <td>The merchant customer id.</td>
+<td>Yes</td>
 </tr>
 </tbody></table>
 <h3 id='callback-ingress-invoice'>Callback Ingress Invoice</h3>
-<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to credit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>, pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
+when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to
+credit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
+pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
@@ -617,7 +655,15 @@ Each call shall include the headers:</p>
 <td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
-<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
+<h1 id='egress-api'>Egress API</h1>
+<p>Any of the endpoints below will return:</p>
+
+<ul>
+<li><strong>200</strong> http status if everything was ok.</li>
+<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones.)</li>
+<li><strong>500</strong> http status if something unexpected happened on ON/RAMP&#39;s server.</li>
+</ul>
+<h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
@@ -639,7 +685,7 @@ Each call shall include the headers:</p>
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
                   , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "24:11:1980"
+                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
                   , "postal_code"            : "0000001"
@@ -648,13 +694,13 @@ Each call shall include the headers:</p>
                   , "state"                  : "CA"
                   , "prefecture"             : "Prefecture-ku"
                   , "country"                : "GBR"
-                  , "kyc_verified"           : "1999-11-24 09:14:49.087362+00"
+                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
                   , "kyc_document"           : "Passport"
                   , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "1999-11-24 09:14:49.087362+00"
+                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
                   , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
                   , "player_level"           : "New"
-                  , "member_since"           : "14:07:2019"
+                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'</span>
@@ -677,7 +723,7 @@ Each call shall include the headers:</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1980"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
@@ -686,13 +732,13 @@ Each call shall include the headers:</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"1999-11-24 09:14:49.087362+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"1999-11-24 09:14:49.087362+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"14:07:2019"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -747,7 +793,7 @@ Each call shall include the headers:</p>
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
-<td>User billing details. (Optional)</td>
+<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
 </tr>
 </tbody></table>
 <h3 id='egress-skin'>Egress Skin</h3>
@@ -780,116 +826,143 @@ Each call shall include the headers:</p>
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>payer_email</td>
 <td>Email</td>
 <td>Email of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_first_name</td>
 <td>String</td>
 <td>First name of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_last_name</td>
 <td>String</td>
 <td>Last name of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_phone</td>
 <td>String</td>
 <td>Including country code, without spaces or separators.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>birth_date</td>
 <td>Date</td>
 <td>Date of birth of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>street</td>
 <td>String</td>
 <td>Street from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>unit</td>
 <td>String</td>
 <td>Unit from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>postal_code</td>
 <td>String</td>
 <td>Postal code from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>city</td>
 <td>String</td>
 <td>City from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>county</td>
 <td>String</td>
 <td>County from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>state</td>
 <td>String</td>
 <td>State from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>prefecture</td>
 <td>String</td>
 <td>Prefecture from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>country</td>
 <td>String</td>
 <td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_verified</td>
 <td>Date</td>
 <td>Date when the user was KYC verified.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_document</td>
 <td>String</td>
 <td>Type of the document. Some examples would be Passport or National_ID.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_reference</td>
 <td>String</td>
 <td>A unique id of the KYC verification. Something like a UUID.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>address_verified</td>
 <td>Date</td>
 <td>Date when the address was verified.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>address_doc_reference</td>
 <td>String</td>
 <td>A unique id of the address document reference.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>player_level</td>
 <td>String</td>
-<td>Your internal player level. Something like New, Normal or VIP would be examples of it.</td>
+<td>Your internal player level. Something like New, Normal, VIP, ...</td>
+<td>No</td>
 </tr>
 <tr>
 <td>member_since</td>
 <td>Date</td>
 <td>The date since that user is a member of yours.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>merchant_customer_id</td>
 <td>String</td>
 <td>The merchant customer id.</td>
+<td>Yes</td>
 </tr>
 </tbody></table>
 <h3 id='callback-egress-invoice'>Callback Egress Invoice</h3>
-<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>, pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+<p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
+when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to
+debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
+pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
@@ -930,7 +1003,7 @@ Each call shall include the headers:</p>
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
                   , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "24:11:1980"
+                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
                   , "postal_code"            : "0000001"
@@ -939,13 +1012,13 @@ Each call shall include the headers:</p>
                   , "state"                  : "CA"
                   , "prefecture"             : "Prefecture-ku"
                   , "country"                : "GBR"
-                  , "kyc_verified"           : "1999-11-24 09:14:49.087362+00"
+                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
                   , "kyc_document"           : "Passport"
                   , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "1999-11-24 09:14:49.087362+00"
+                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
                   , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
                   , "player_level"           : "New"
-                  , "member_since"           : "14:07:2019"
+                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'</span>
@@ -967,7 +1040,7 @@ Each call shall include the headers:</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"24:11:1980"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
@@ -976,13 +1049,13 @@ Each call shall include the headers:</p>
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"1999-11-24 09:14:49.087362+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"1999-11-24 09:14:49.087362+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"14:07:2019"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
     </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1025,6 +1098,11 @@ Each call shall include the headers:</p>
 <td>Specify how the offer should be displayed to the user (It might not be shown in this flow).</td>
 </tr>
 <tr>
+<td>billing_details</td>
+<td>Billing Details</td>
+<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+</tr>
+<tr>
 <td>onramp_user_email</td>
 <td>String</td>
 <td>The email the user has registered with ON/RAMP.</td>
@@ -1053,11 +1131,6 @@ Each call shall include the headers:</p>
 <td>string</td>
 <td>A text explaining what the user is redeeming.</td>
 </tr>
-<tr>
-<td>billing_details</td>
-<td>Billing Details</td>
-<td>User billing details. (Optional)</td>
-</tr>
 </tbody></table>
 <h3 id='billing-details-2'>Billing Details</h3>
 <table><thead>
@@ -1065,114 +1138,150 @@ Each call shall include the headers:</p>
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>payer_email</td>
 <td>Email</td>
 <td>Email of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_first_name</td>
 <td>String</td>
 <td>First name of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_last_name</td>
 <td>String</td>
 <td>Last name of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>payer_phone</td>
 <td>String</td>
 <td>Including country code, without spaces or separators.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>birth_date</td>
 <td>Date</td>
 <td>Date of birth of the user making the payment.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>street</td>
 <td>String</td>
 <td>Street from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>unit</td>
 <td>String</td>
 <td>Unit from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>postal_code</td>
 <td>String</td>
 <td>Postal code from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>city</td>
 <td>String</td>
 <td>City from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>county</td>
 <td>String</td>
 <td>County from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>state</td>
 <td>String</td>
 <td>State from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>prefecture</td>
 <td>String</td>
 <td>Prefecture from the billing address.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>country</td>
 <td>String</td>
 <td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_verified</td>
 <td>Date</td>
 <td>Date when the user was KYC verified.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_document</td>
 <td>String</td>
 <td>Type of the document. Some examples would be Passport or National_ID.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>kyc_reference</td>
 <td>String</td>
 <td>A unique id of the KYC verification. Something like a UUID.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>address_verified</td>
 <td>Date</td>
 <td>Date when the address was verified.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>address_doc_reference</td>
 <td>String</td>
 <td>A unique id of the address document reference.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>player_level</td>
 <td>String</td>
-<td>Your internal player level. Something like New, Normal or VIP would be examples of it.</td>
+<td>Your internal player level. Something like New, Normal, VIP, ...</td>
+<td>No</td>
 </tr>
 <tr>
 <td>member_since</td>
 <td>Date</td>
 <td>The date since that user is a member of yours.</td>
+<td>No</td>
 </tr>
 <tr>
 <td>merchant_customer_id</td>
 <td>String</td>
 <td>The merchant customer id.</td>
+<td>Yes</td>
 </tr>
 </tbody></table>
+
+<p><strong>Note</strong>: If user inputs an invalid email, <strong>ON/RAMP</strong> will respond with the attached response.</p>
+
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"hint"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"details"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_CODE_UNKNOWN_USER_ACCOUNT"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>You should inform the user about this email being invalid and show a link to sign up with <strong>ON/RAMP</strong> at <a href="https://onrampwallet.com">https://onrampwallet.com</a>.</p>
 <h2 id='approve-or-reject-user-email-egress-invoice-user-email-flow'>Approve or Reject User Email Egress Invoice (User email flow)</h2>
 <blockquote>
 <p>Example Call</p>
@@ -1195,7 +1304,7 @@ Each call shall include the headers:</p>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="s2">""</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="kc">null</span><span class="w">
 </span></code></pre><h3 id='http-request-3'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/mark_operation </code></b></aside>
 <h3 id='request-json-fields-3'>Request JSON Fields</h3>
