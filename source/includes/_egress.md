@@ -1,5 +1,13 @@
 # Egress API
 
+Any of the endpoints below will return:
+
+- **200** http status if everything was ok.
+- **400** http status if some parameters were invalid (It may specify exactly which ones.
++ **400** http status if some parameters were invalid (It may specify exactly which ones.)
+
+- **500** http status if something unexpected happened on ON/RAMP's server.
+
 ## Create Egress Invoice (App redirection flow)
 
 
@@ -24,7 +32,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
                   , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "24:11:1980"
+                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
                   , "postal_code"            : "0000001"
@@ -33,13 +41,13 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
                   , "state"                  : "CA"
                   , "prefecture"             : "Prefecture-ku"
                   , "country"                : "GBR"
-                  , "kyc_verified"           : "24:11:1999"
+                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
                   , "kyc_document"           : "Passport"
                   , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "24:11:1999"
+                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
                   , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
                   , "player_level"           : "New"
-                  , "member_since"           : "14:07:2019"
+                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'
@@ -63,7 +71,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
     , "payer_first_name"       : "MrPayer"
     , "payer_last_name"        : "Payerson"
     , "payer_phone"            : "0034666444446"
-    , "birth_date"             : "24:11:1980"
+    , "birth_date"             : "1980-11-24 00:00:00.000000+00"
     , "street"                 : "Main Street"
     , "unit"                   : "Floor 7 12B"
     , "postal_code"            : "0000001"
@@ -72,13 +80,13 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
     , "state"                  : "CA"
     , "prefecture"             : "Prefecture-ku"
     , "country"                : "GBR"
-    , "kyc_verified"           : "24:11:1999"
+    , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
     , "kyc_document"           : "Passport"
     , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-    , "address_verified"       : "24:11:1999"
+    , "address_verified"       : "2020-01-01 12:55:00.000000+00"
     , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
     , "player_level"           : "New"
-    , "member_since"           : "14:07:2019"
+    , "member_since"           : "2020-01-01 12:35:00.000000+00"
     , "merchant_customer_id"   : "u2340112"
     }
 }
@@ -99,49 +107,49 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 ### Request JSON Fields
 
-Field             |   Type       | Description
------------------ | ------------ | ---------
-fiat_amount       | Integer      | Eur amount to be paid denominated in cents.
-fiat_currency     | String       | The constant `"EUR"`.
-payment_ack_url   | String       | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
-user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
-timeout_in_sec    | Integer      | When to expire the link if unused.
-offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user.
-billing_details   | Billing Details | User billing details. (Optional)
+Field             |   Type          | Description
+----------------- | --------------- | -----------
+fiat_amount       | Integer         | Eur amount to be paid denominated in cents.
+fiat_currency     | String          | The constant `"EUR"`.
+payment_ack_url   | String          | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
+user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
+timeout_in_sec    | Integer         | When to expire the link if unused.
+offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
 
 ### Egress Skin
 
 Field             |   Type      | Description
------------------ | ----------- | ---------
+----------------- | ----------- | -----------
 title             | string      | Short string containing merchant's or redemption's name.
 image             | url         | image to stylized the offer.
 description       | string      | A text explaining what the user is redeeming.
 
 ### Billing Details
 
-Field                 |   Type      | Description
---------------------- | ----------- | ---------
-payer_email           | Email       | Email of the user making the payment.
-payer_first_name      | String      | First name of the user making the payment.
-payer_last_name       | String      | Last name of the user making the payment.
-payer_phone           | String      | Including country code, without spaces or separators.
-birth_date            | Date        | Date of birth of the user making the payment.
-street                | String      | Street from the billing address.
-unit                  | String      | Unit from the billing address.
-postal_code           | String      | Postal code from the billing address.
-city                  | String      | City from the billing address.
-county                | String      | County from the billing address.
-state                 | String      | State from the billing address.
-prefecture            | String      | Prefecture from the billing address.
-country               | String      | Country from the billing address. Should be a 3 letter ISO Code.
-kyc_verified          | Date        | Date when the user was KYC verified.
-kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID.
-kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.
-address_verified      | Date        | Date when the address was verified.
-address_doc_reference | String      | A unique id of the address document reference.
-player_level          | String      | Your internal player level. Something like New, Normal or VIP would be examples of it.
-member_since          | Date        | The date since that user is a member of yours.
-merchant_customer_id  | String      | The merchant customer id.
+Field                 |   Type      | Description                                                           | Required
+--------------------- | ----------- | --------------------------------------------------------------------- | --------
+payer_email           | Email       | Email of the user making the payment.                                 | No
+payer_first_name      | String      | First name of the user making the payment.                            | No
+payer_last_name       | String      | Last name of the user making the payment.                             | No
+payer_phone           | String      | Including country code, without spaces or separators.                 | No
+birth_date            | Date        | Date of birth of the user making the payment.                         | No
+street                | String      | Street from the billing address.                                      | No
+unit                  | String      | Unit from the billing address.                                        | No
+postal_code           | String      | Postal code from the billing address.                                 | No
+city                  | String      | City from the billing address.                                        | No
+county                | String      | County from the billing address.                                      | No
+state                 | String      | State from the billing address.                                       | No
+prefecture            | String      | Prefecture from the billing address.                                  | No
+country               | String      | Country from the billing address. Should be a 3 letter ISO Code.      | No
+kyc_verified          | Date        | Date when the user was KYC verified.                                  | No
+kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID. | No
+kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.           | No
+address_verified      | Date        | Date when the address was verified.                                   | No
+address_doc_reference | String      | A unique id of the address document reference.                        | No
+player_level          | String      | Your internal player level. Something like New, Normal, VIP, ...      | No
+member_since          | Date        | The date since that user is a member of yours.                        | No
+merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
 
 
@@ -185,7 +193,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
                   , "payer_first_name"       : "MrPayer"
                   , "payer_last_name"        : "Payerson"
                   , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "24:11:1980"
+                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
                   , "street"                 : "Main Street"
                   , "unit"                   : "Floor 7 12B"
                   , "postal_code"            : "0000001"
@@ -194,13 +202,13 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
                   , "state"                  : "CA"
                   , "prefecture"             : "Prefecture-ku"
                   , "country"                : "GBR"
-                  , "kyc_verified"           : "24:11:1999"
+                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
                   , "kyc_document"           : "Passport"
                   , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "24:11:1999"
+                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
                   , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
                   , "player_level"           : "New"
-                  , "member_since"           : "14:07:2019"
+                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'
@@ -223,7 +231,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
     , "payer_first_name"       : "MrPayer"
     , "payer_last_name"        : "Payerson"
     , "payer_phone"            : "0034666444446"
-    , "birth_date"             : "24:11:1980"
+    , "birth_date"             : "1980-11-24 00:00:00.000000+00"
     , "street"                 : "Main Street"
     , "unit"                   : "Floor 7 12B"
     , "postal_code"            : "0000001"
@@ -232,13 +240,13 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
     , "state"                  : "CA"
     , "prefecture"             : "Prefecture-ku"
     , "country"                : "GBR"
-    , "kyc_verified"           : "24:11:1999"
+    , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
     , "kyc_document"           : "Passport"
     , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-    , "address_verified"       : "24:11:1999"
+    , "address_verified"       : "2020-01-01 12:55:00.000000+00"
     , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
     , "player_level"           : "New"
-    , "member_since"           : "14:07:2019"
+    , "member_since"           : "2020-01-01 12:35:00.000000+00"
     , "merchant_customer_id"   : "u2340112"
     }
 }
@@ -259,49 +267,64 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 
 ### Request JSON Fields
 
-Field             |   Type       | Description
------------------ | ------------ | ---------
-fiat_amount       | Integer      | Eur amount to be paid denominated in cents.
-fiat_currency     | String       | The constant `"EUR"`.
-user_redirect_url | String       | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
-offer_skin        | Egress Skin  | Specify how the offer should be displayed to the user (It might not be shown in this flow).
-onramp_user_email | String       | The email the user has registered with ON/RAMP.
+Field             |   Type          | Description
+----------------- | --------------- | ---------
+fiat_amount       | Integer         | Eur amount to be paid denominated in cents.
+fiat_currency     | String          | The constant `"EUR"`.
+user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
+offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
+onramp_user_email | String          | The email the user has registered with ON/RAMP.
 
 ### Egress Skin
 
 Field             |   Type      | Description
------------------ | ----------- | ---------
+----------------- | ----------- | -----------
 title             | string      | Short string containing merchant's or redemption's name.
 image             | url         | image to stylized the offer.
 description       | string      | A text explaining what the user is redeeming.
-billing_details   | Billing Details | User billing details. (Optional)
 
 ### Billing Details
 
-Field                 |   Type      | Description
---------------------- | ----------- | ---------
-payer_email           | Email       | Email of the user making the payment.
-payer_first_name      | String      | First name of the user making the payment.
-payer_last_name       | String      | Last name of the user making the payment.
-payer_phone           | String      | Including country code, without spaces or separators.
-birth_date            | Date        | Date of birth of the user making the payment.
-street                | String      | Street from the billing address.
-unit                  | String      | Unit from the billing address.
-postal_code           | String      | Postal code from the billing address.
-city                  | String      | City from the billing address.
-county                | String      | County from the billing address.
-state                 | String      | State from the billing address.
-prefecture            | String      | Prefecture from the billing address.
-country               | String      | Country from the billing address. Should be a 3 letter ISO Code.
-kyc_verified          | Date        | Date when the user was KYC verified.
-kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID.
-kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.
-address_verified      | Date        | Date when the address was verified.
-address_doc_reference | String      | A unique id of the address document reference.
-player_level          | String      | Your internal player level. Something like New, Normal or VIP would be examples of it.
-member_since          | Date        | The date since that user is a member of yours.
-merchant_customer_id  | String      | The merchant customer id.
+Field                 |   Type      | Description                                                           | Required
+--------------------- | ----------- | --------------------------------------------------------------------- | --------
+payer_email           | Email       | Email of the user making the payment.                                 | No
+payer_first_name      | String      | First name of the user making the payment.                            | No
+payer_last_name       | String      | Last name of the user making the payment.                             | No
+payer_phone           | String      | Including country code, without spaces or separators.                 | No
+birth_date            | Date        | Date of birth of the user making the payment.                         | No
+street                | String      | Street from the billing address.                                      | No
+unit                  | String      | Unit from the billing address.                                        | No
+postal_code           | String      | Postal code from the billing address.                                 | No
+city                  | String      | City from the billing address.                                        | No
+county                | String      | County from the billing address.                                      | No
+state                 | String      | State from the billing address.                                       | No
+prefecture            | String      | Prefecture from the billing address.                                  | No
+country               | String      | Country from the billing address. Should be a 3 letter ISO Code.      | No
+kyc_verified          | Date        | Date when the user was KYC verified.                                  | No
+kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID. | No
+kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.           | No
+address_verified      | Date        | Date when the address was verified.                                   | No
+address_doc_reference | String      | A unique id of the address document reference.                        | No
+player_level          | String      | Your internal player level. Something like New, Normal, VIP, ...      | No
+member_since          | Date        | The date since that user is a member of yours.                        | No
+merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
+
+**Note**: If user inputs an invalid email, **ON/RAMP** will respond with the attached response.
+
+> Response JSON
+
+```json
+{
+    "hint": null,
+    "details": null,
+    "code": "00001",
+    "message": "ERR_CODE_UNKNOWN_USER_ACCOUNT"
+}
+```
+
+You should inform the user about this email being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
 
 
 ## Approve or Reject User Email Egress Invoice (User email flow)
@@ -330,7 +353,7 @@ curl https://api.onramp.ltd/rpc/mark_operation                           \
 > Response JSON
 
 ```json
-""
+null
 ```
 
 ### HTTP Request
