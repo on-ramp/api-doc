@@ -58,10 +58,11 @@ There are currently two different supported flows for egress:
 
 #### User email flow
 
-1. Prerequisite: User will need to have an account in **ON/RAMP**.
 1. Merchant [creates a user email egress invoice](#create-egress-invoice-user-email-flow).
 1. **ON/RAMP** prepares the payment and returns a reference of it for the merchant to later approve it or reject it.
-1. Before the [invoice expires](#invoice-expiration), whenever merchants want to, they can [approve or reject the process](#approve-or-reject-user-email-egress-invoice-user-email-flow). At that moment, **ON/RAMP** will finish the process, move the funds to users balance if needed and return a success or failure.
+1. **ON/RAMP** also returns if the user exists (and so the process can be immediately approved) or if the user does not exist (and so merchant needs to wait for the user to sign up with **ON/RAMP**).
+1. If the user didn't exist, once the user signs up in **ON/RAMP**, a callback notifying the merchant about it will be sent from **ON/RAMP**.
+1. Before the [invoice expires](#invoice-expiration), whenever merchants want to (and after receiving the mentioned callback if it was needed), they can [approve or reject the process](#approve-or-reject-user-email-egress-invoice-user-email-flow). At that moment, **ON/RAMP** will finish the process, move the funds to users balance if needed and return a success or failure.
 1. The user will see the outcome of the process in the **ON/RAMP** wallet.
 
 # Calling **ON/RAMP** API endpoints.

@@ -3,9 +3,7 @@
 Any of the endpoints below will return:
 
 - **200** http status if everything was ok.
-- **400** http status if some parameters were invalid (It may specify exactly which ones.
-+ **400** http status if some parameters were invalid (It may specify exactly which ones.)
-
+- **400** http status if some parameters were invalid (It may specify exactly which ones).
 - **500** http status if something unexpected happened on ON/RAMP's server.
 
 ## Create Egress Invoice (App redirection flow)
@@ -107,23 +105,23 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 ### Request JSON Fields
 
-Field             |   Type          | Description
------------------ | --------------- | -----------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents.
-fiat_currency     | String          | The constant `"EUR"`.
-payment_ack_url   | String          | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
-user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
-timeout_in_sec    | Integer         | When to expire the link if unused.
-offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.
-billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
+Field             |   Type          | Description                                                                                                                          | Required 
+----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
+fiat_amount       | Integer         | Eur amount to be paid denominated in cents.                                                                                          | Yes
+fiat_currency     | String          | `"EUR"` or `"USD"`, depending what is available on the merchants account settings.                                                   | Yes 
+payment_ack_url   | String          | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.                                 | Yes
+user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                           | Yes
+timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
+offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.                                                                               | Yes
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
 
 ### Egress Skin
 
-Field             |   Type      | Description
------------------ | ----------- | -----------
-title             | string      | Short string containing merchant's or redemption's name.
-image             | url         | image to stylized the offer.
-description       | string      | A text explaining what the user is redeeming.
+Field             |   Type      | Description                                               | Required
+----------------- | ----------- | --------------------------------------------------------- | --------
+title             | string      | Short string containing merchant's or redemption's name.  | Yes
+image             | url         | image to stylized the offer.                              | Yes
+description       | string      | A text explaining what the user is redeeming.             | Yes
 
 ### Billing Details
 
@@ -150,7 +148,6 @@ address_doc_reference | String      | A unique id of the address document refere
 player_level          | String      | Your internal player level. Something like New, Normal, VIP, ...      | No
 member_since          | Date        | The date since that user is a member of yours.                        | No
 merchant_customer_id  | String      | The merchant customer id.                                             | Yes
-
 
 
 ### Callback Egress Invoice
@@ -181,6 +178,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
   -H "Content-Type: application/json"                                         \
   -X POST -d '{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
+              , "user_ready_url"     : "wwww.example.com"
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
@@ -219,6 +217,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 ```json
 { "fiat_amount"        : 3000
 , "fiat_currency"      : "EUR"
+, "user_ready_url"     : "www.example.com"
 , "user_redirect_url"  : "www.example.com?user_redirected"
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
@@ -258,6 +257,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 ```json
 { "invoice_id" : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
 , "description": {}
+, "message": ""
 }
 ```
 
@@ -267,22 +267,23 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 
 ### Request JSON Fields
 
-Field             |   Type          | Description
------------------ | --------------- | ---------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents.
-fiat_currency     | String          | The constant `"EUR"`.
-user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
-offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).
-billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
-onramp_user_email | String          | The email the user has registered with ON/RAMP.
+Field             |   Type          | Description                                                                                                                         | Required
+----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------| --------
+fiat_amount       | Integer         | Eur amount to be paid denominated in cents.                                                                                         | Yes
+fiat_currency     | String          | `"EUR"` or `"USD"`, depending what is available on the merchants account settings.                                                  | Yes
+user_ready_url    | String          | Merchant callback endpoint to notify user signed up and is ready to accept the payment. It should be a complete, well formed, url.  | No
+user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                          | Yes
+offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).                                         | Yes
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`. | Yes
+onramp_user_email | String          | The email the user has registered with ON/RAMP.                                                                                     | Yes
 
 ### Egress Skin
 
-Field             |   Type      | Description
------------------ | ----------- | -----------
-title             | string      | Short string containing merchant's or redemption's name.
-image             | url         | image to stylized the offer.
-description       | string      | A text explaining what the user is redeeming.
+Field             |   Type      | Description                                               | Required
+----------------- | ----------- | --------------------------------------------------------- | --------
+title             | string      | Short string containing merchant's or redemption's name.  | Yes
+image             | url         | image to stylized the offer.                              | Yes
+description       | string      | A text explaining what the user is redeeming.             | Yes
 
 ### Billing Details
 
@@ -310,8 +311,46 @@ player_level          | String      | Your internal player level. Something like
 member_since          | Date        | The date since that user is a member of yours.                        | No
 merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
+### Callback notifying about user registered or didn't do it before the expiring date
 
-**Note**: If user inputs an invalid email, **ON/RAMP** will respond with the attached response.
+Either once the user signs up with **ON/RAMP** or after some defined expiration time passes, **ON/RAMP** will notify the merchant about if they provided a valid `user_ready_url` parameter.
+
+
+- If user signed up, **ON/RAMP** will make a **POST** request to the provided callback with the following body:
+
+```json
+{ "message": "COMPLETED_REGISTRATION"
+}
+```
+
+- If user didn't sing up before expiration date, **ON/RAMP** will make a **POST** request to the provided callback with the following body:
+
+```json
+{ "message": "CANCELLED_WITHDRAWAL"
+}
+```
+
+### Response JSON Fields
+
+Field       | Type    | Description
+----------- | ------- | -----------
+invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
+description | String  | Description about the invoice. Might be empty.
+message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is not registered. If user is not registered its value will be "WAITING_FOR_USER_REGISTRATION"
+
+**Note**: If `user_ready_url` is provided and user inputs a not registered email, **ON/RAMP** will respond with the attached response.
+
+> Response JSON
+
+```json
+{ "invoice_id" : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+, "description": {}
+, "message": "WAITING_FOR_USER_REGISTRATION"
+}
+```
+
+
+**Note**: If no `user_ready_url` is provided and user inputs a not registered email, **ON/RAMP** will respond with the attached response.
 
 > Response JSON
 
@@ -324,7 +363,7 @@ merchant_customer_id  | String      | The merchant customer id.                 
 }
 ```
 
-You should inform the user about this email being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
+In that case, merchant should inform the user about this email being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
 
 
 ## Approve or Reject User Email Egress Invoice (User email flow)
