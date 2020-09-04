@@ -58,7 +58,7 @@ There are currently two different supported flows for egress:
 
 #### User email flow
 
-1. Prerequisite: User will need to have an account in **ON/RAMP** with KYC verified.
+1. Prerequisite: User will need to have an account in **ON/RAMP**.
 1. Merchant [creates a user email egress invoice](#create-egress-invoice-user-email-flow).
 1. **ON/RAMP** prepares the payment and returns a reference of it for the merchant to later approve it or reject it.
 1. Before the [invoice expires](#invoice-expiration), whenever merchants want to, they can [approve or reject the process](#approve-or-reject-user-email-egress-invoice-user-email-flow). At that moment, **ON/RAMP** will finish the process, move the funds to users balance if needed and return a success or failure.
