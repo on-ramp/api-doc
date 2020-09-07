@@ -107,10 +107,10 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 Field             |   Type          | Description                                                                                                                          | Required 
 ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents.                                                                                          | Yes
-fiat_currency     | String          | `"EUR"` or `"USD"`, depending what is available on the merchants account settings.                                                   | Yes 
-payment_ack_url   | String          | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.                                 | Yes
-user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                           | Yes
+fiat_amount       | Integer         | Amount to be paid denominated in cents.                                                                                              | Yes
+fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
+payment_ack_url   | Url             | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.                                 | Yes
+user_redirect_url | Url             | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                           | Yes
 timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
 offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.                                                                               | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
@@ -119,9 +119,9 @@ billing_details   | Billing Details | User billing details. Please, notice how *
 
 Field             |   Type      | Description                                               | Required
 ----------------- | ----------- | --------------------------------------------------------- | --------
-title             | string      | Short string containing merchant's or redemption's name.  | Yes
-image             | url         | image to stylized the offer.                              | Yes
-description       | string      | A text explaining what the user is redeeming.             | Yes
+title             | String      | Short string containing merchant's or redemption's name.  | Yes
+image             | Url         | Image to stylize the offer.                               | Yes
+description       | String      | A text explaining what the user is redeeming.             | Yes
 
 ### Billing Details
 
@@ -164,7 +164,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 Field       | Type    | Description
 ----------- | ------- | -----------
 invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
-invoice_url | String  | Url where to redirect user.
+invoice_url | Url     | Url where to redirect user.
 
 
 ## Create Egress Invoice (User email flow)
@@ -269,10 +269,10 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 
 Field             |   Type          | Description                                                                                                                         | Required
 ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------| --------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents.                                                                                         | Yes
-fiat_currency     | String          | `"EUR"` or `"USD"`, depending what is available on the merchants account settings.                                                  | Yes
-user_ready_url    | String          | Merchant callback endpoint to notify user signed up and is ready to accept the payment. It should be a complete, well formed, url.  | No
-user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                          | Yes
+fiat_amount       | Integer         | Amount to be paid denominated in cents.                                                                                             | Yes
+fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`. | Yes
+user_ready_url    | Url             | Merchant callback endpoint to notify user signed up and is ready to accept the payment. It should be a complete, well formed, url.  | No
+user_redirect_url | Url             | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                          | Yes
 offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).                                         | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`. | Yes
 onramp_user_email | String          | The email the user has registered with ON/RAMP.                                                                                     | Yes
@@ -281,9 +281,9 @@ onramp_user_email | String          | The email the user has registered with ON/
 
 Field             |   Type      | Description                                               | Required
 ----------------- | ----------- | --------------------------------------------------------- | --------
-title             | string      | Short string containing merchant's or redemption's name.  | Yes
-image             | url         | image to stylized the offer.                              | Yes
-description       | string      | A text explaining what the user is redeeming.             | Yes
+title             | String      | Short string containing merchant's or redemption's name.  | Yes
+image             | Url         | image to stylize the offer.                               | Yes
+description       | String      | A text explaining what the user is redeeming.             | Yes
 
 ### Billing Details
 
@@ -313,7 +313,7 @@ merchant_customer_id  | String      | The merchant customer id.                 
 
 ### Callback notifying about user registered or didn't do it before the expiring date
 
-Either once the user signs up with **ON/RAMP** or after some defined expiration time passes, **ON/RAMP** will notify the merchant about if they provided a valid `user_ready_url` parameter.
+Either once the user signs up with **ON/RAMP** or after an expiration time passes, **ON/RAMP** will notify the merchant about if they provided a valid `user_ready_url` parameter.
 
 
 - If user signed up, **ON/RAMP** will make a **POST** request to the provided callback with the following body:

@@ -108,10 +108,10 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 
 Field             |   Type          | Description                                                                                                                          | Required
 ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents .                                                                                         | Yes
-fiat_currency     | String          | `"EUR"` or `"USD"`, depending what is available on the merchants account settings.                                                   | Yes
-payment_ack_url   | String          | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                                | Yes
-user_redirect_url | String          | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                    | Yes
+fiat_amount       | Integer         | Amount to be paid denominated in cents .                                                                                             | Yes
+fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
+payment_ack_url   | Url             | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                                | Yes
+user_redirect_url | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                    | Yes
 timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
 offer_skin        | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                               | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
@@ -121,7 +121,7 @@ billing_details   | Billing Details | User billing details. Please, notice how *
 Field             |   Type      | Description                                            | Required
 ----------------- | ----------- | ------------------------------------------------------ | --------
 title             | String      | Short string containing merchant's or product's name.  | Yes
-image             | Url         | image to stylized the offer.                           | Yes
+image             | Url         | image to stylize the offer.                            | Yes
 description       | String      | A text explaining what the user is purchasing.         | Yes
 
 ### Billing Details
@@ -165,4 +165,4 @@ pausing the user payment and prompting manual intervention, potentially delaying
 Field       | Type    | Description
 ----------- | ------- | -----------
 invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
-invoice_url | String  | Url where to redirect user.
+invoice_url | Url     | Url where to redirect user.
