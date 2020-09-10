@@ -51,19 +51,35 @@ There are currently two different supported flows for egress:
 #### App redirection flow
 
 1. Merchant [creates an egress invoice url](#create-egress-invoice-app-redirection-flow).
+
 1. Merchant redirects user to the egress invoice url.
-1. **ON/RAMP** handles the payment.
-1. If the payment succeed, **ON/RAMP** will [call back the merchant to either confirm the egress transaction or to abort it](#callback-egress-invoice). If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.
-1. The user will see the outcome of the process in the **ON/RAMP** wallet.
+
+1. **ON/RAMP** gathers required user's data and consent. If the payment is not feasible or was rejected
+   by the user, it will fail at this point.
+
+1. **ON/RAMP** [calls back the merchant](#callback-egress-invoice) returning a reference for execution.
+
+1. Merchants accepts, rejects or postpones the egress payment.
+
+1. If postponed, merchant will have up to 3 days to [accept or reject it](#mark_operation).
+
+1. If after 3 days merchant neither accepts nor reject the egress payment it will automatically get rejected.
 
 #### User email flow
 
 1. Merchant [creates a user email egress invoice](#create-egress-invoice-user-email-flow).
-1. **ON/RAMP** prepares the payment and returns a reference of it for the merchant to later approve it or reject it.
-1. **ON/RAMP** also returns if the user exists (and so the process can be immediately approved) or if the user does not exist (and so merchant needs to wait for the user to sign up with **ON/RAMP**).
-1. If the user didn't exist, once the user signs up in **ON/RAMP**, a callback notifying the merchant about it will be sent from **ON/RAMP**.
-1. Before the [invoice expires](#invoice-expiration), whenever merchants want to (and after receiving the mentioned callback if it was needed), they can [approve or reject the process](#approve-or-reject-user-email-egress-invoice-user-email-flow). At that moment, **ON/RAMP** will finish the process, move the funds to users balance if needed and return a success or failure.
-1. The user will see the outcome of the process in the **ON/RAMP** wallet.
+
+1. **ON/RAMP** prepares the payment and returns a reference for the merchant to later accept it or reject it.
+   Merchants can decide whether accept any user or only users previously registered on **ON/RAMP**. If only
+   previously registered users was requested but the user hast not already registered, or the payment is not feasible, it will fail at this point, otherwise it will return a reference to the Merchant to accept or reject the payment.
+
+1. Merchants will have up to 3 days to accept or reject the payment, unless the option `required_merchant_confirmation`
+   is set to `false`, in which case it will be always considered accepted by the merchant.
+
+1. If the user is not already registered, **ON/RAMP** will send emails to the user requesting his/her registration.
+   Users will have up to 3 days to register, otherwise the egress payment will get cancel **even if it was previously
+   accepted by the merchant**.
+
 
 # Calling **ON/RAMP** API endpoints.
 

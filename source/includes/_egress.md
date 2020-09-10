@@ -105,7 +105,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 ### Request JSON Fields
 
-Field             |   Type          | Description                                                                                                                          | Required 
+Field             |   Type          | Description                                                                                                                          | Required
 ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
 fiat_amount       | Integer         | Amount to be paid denominated in cents.                                                                                              | Yes
 fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
@@ -114,6 +114,7 @@ user_redirect_url | Url             | Where to redirect the user after the egres
 timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
 offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.                                                                               | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
+cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                 | No
 
 ### Egress Skin
 
@@ -276,7 +277,9 @@ user_redirect_url | Url             | Where to redirect the user after the egres
 offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).                                         | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`. | Yes
 onramp_user_email | String          | The email the user has registered with ON/RAMP.                                                                                     | Yes
-
+cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                | No
+accept_unregister_user | Bool       | If `false` egress to users without an **ON/RAMP** account at the moment the egress was created will be immediately rejected. Defaults to `false` | No  
+required_merchant_confirmation | Bool | If `true`, **ON/RAMP** will wait for a merchant confirmation before releasing the funds. Defaults to `true`                       | No
 ### Egress Skin
 
 Field             |   Type      | Description                                               | Required

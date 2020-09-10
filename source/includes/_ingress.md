@@ -115,6 +115,7 @@ user_redirect_url | Url             | Where to redirect the user after a success
 timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
 offer_skin        | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                               | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
+cancel_callback   | Url             | Merchant callback endpoint to be called when an ingress payment couldn't be completed                                                | No
 
 ### Ingress Skin
 
