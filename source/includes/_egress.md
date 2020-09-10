@@ -179,7 +179,6 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
   -H "Content-Type: application/json"                                         \
   -X POST -d '{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
-              , "user_ready_url"     : "wwww.example.com"
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
@@ -218,7 +217,6 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 ```json
 { "fiat_amount"        : 3000
 , "fiat_currency"      : "EUR"
-, "user_ready_url"     : "www.example.com"
 , "user_redirect_url"  : "www.example.com?user_redirected"
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
@@ -272,7 +270,6 @@ Field             |   Type          | Description                              
 ----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------| --------
 fiat_amount       | Integer         | Amount to be paid denominated in cents.                                                                                             | Yes
 fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`. | Yes
-user_ready_url    | Url             | Merchant callback endpoint to notify user signed up and is ready to accept the payment. It should be a complete, well formed, url.  | No
 user_redirect_url | Url             | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                          | Yes
 offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).                                         | Yes
 billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`. | Yes
@@ -314,24 +311,6 @@ player_level          | String      | Your internal player level. Something like
 member_since          | Date        | The date since that user is a member of yours.                        | No
 merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
-### Callback notifying about user registered or didn't do it before the expiring date
-
-Either once the user signs up with **ON/RAMP** or after an expiration time passes, **ON/RAMP** will notify the merchant about if they provided a valid `user_ready_url` parameter.
-
-
-- If user signed up, **ON/RAMP** will make a **POST** request to the provided callback with the following body:
-
-```json
-{ "message": "COMPLETED_REGISTRATION"
-}
-```
-
-- If user didn't sing up before expiration date, **ON/RAMP** will make a **POST** request to the provided callback with the following body:
-
-```json
-{ "message": "CANCELLED_WITHDRAWAL"
-}
-```
 
 ### Response JSON Fields
 
@@ -339,21 +318,11 @@ Field       | Type    | Description
 ----------- | ------- | -----------
 invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
 description | String  | Description about the invoice. Might be empty.
-message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is not registered. If user is not registered its value will be "WAITING_FOR_USER_REGISTRATION"
-
-**Note**: If `user_ready_url` is provided and user inputs a not registered email, **ON/RAMP** will respond with the attached response.
-
-> Response JSON
-
-```json
-{ "invoice_id" : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
-, "description": {}
-, "message": "WAITING_FOR_USER_REGISTRATION"
-}
-```
+message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is not registered.
 
 
-**Note**: If no `user_ready_url` is provided and user inputs a not registered email, **ON/RAMP** will respond with the attached response.
+
+**Note**: If `accept_unregister_user` is set to `false` and user inputs a not registered email, **ON/RAMP** will respond with the attached response.
 
 > Response JSON
 
@@ -366,7 +335,7 @@ message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is n
 }
 ```
 
-In that case, merchant should inform the user about this email being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
+In that case, merchant should inform the user about email account being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
 
 
 ## Approve or Reject User Email Egress Invoice (User email flow)
