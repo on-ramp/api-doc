@@ -3,7 +3,7 @@
 Any of the endpoints below will return:
 
 - **200** http status if everything was ok.
-- **400** http status if some parameters were invalid (It may specify exactly which ones.)
+- **400** http status if some parameters were invalid (It may specify exactly which ones).
 - **500** http status if something unexpected happened on ON/RAMP's server.
 
 ## Create Ingress Invoice
@@ -106,23 +106,25 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 
 ### Request JSON Fields
 
-Field             |   Type          | Description
------------------ | --------------- | -----------
-fiat_amount       | Integer         | EUR amount to be paid denominated in cents.
-fiat_currency     | String          | The constant `"EUR"`.
-payment_ack_url   | String          | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.
-user_redirect_url | String          | Where to redirect the user after a successful payment. It should be a complete, well formed, url.
-timeout_in_sec    | Integer         | When to expire the link if unused.
-offer_skin        | Ingress Skin    | Specify how the offer should be displayed to the user.
-billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
+Field             |   Type          | Description                                                                                                                          | Required
+----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
+fiat_amount       | Integer         | Amount to be paid denominated in cents .                                                                                             | Yes
+fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
+payment_ack_url   | Url             | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                                | Yes
+user_redirect_url | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                    | Yes
+timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
+offer_skin        | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                               | Yes
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
+cancel_callback   | Url             | Merchant callback endpoint to be called when an ingress payment couldn't be completed                                                | No
 
 ### Ingress Skin
 
-Field             |   Type      | Description
------------------ | ----------- | -----------
-title             | String      | Short string containing merchant's or product's name.
-image             | Url         | Image to stylize the offer.
-description       | String      | A text explaining what the user is purchasing.
+Field             |   Type      | Description                                            | Required
+----------------- | ----------- | ------------------------------------------------------ | --------
+title             | String      | Short string containing merchant's or product's name.  | Yes
+image             | Url         | image to stylize the offer.                            | Yes
+description       | String      | A text explaining what the user is purchasing.         | Yes
+
 
 ### Billing Details
 
@@ -165,4 +167,4 @@ pausing the user payment and prompting manual intervention, potentially delaying
 Field       | Type    | Description
 ----------- | ------- | -----------
 invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
-invoice_url | String  | Url where to redirect user.
+invoice_url | Url     | Url where to redirect user.
