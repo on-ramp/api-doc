@@ -3,9 +3,7 @@
 Any of the endpoints below will return:
 
 - **200** http status if everything was ok.
-- **400** http status if some parameters were invalid (It may specify exactly which ones.
-+ **400** http status if some parameters were invalid (It may specify exactly which ones.)
-
+- **400** http status if some parameters were invalid (It may specify exactly which ones).
 - **500** http status if something unexpected happened on ON/RAMP's server.
 
 ## Create Egress Invoice (App redirection flow)
@@ -107,23 +105,24 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 
 ### Request JSON Fields
 
-Field             |   Type          | Description
------------------ | --------------- | -----------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents.
-fiat_currency     | String          | The constant `"EUR"`.
-payment_ack_url   | String          | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.
-user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
-timeout_in_sec    | Integer         | When to expire the link if unused.
-offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.
-billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
+Field             |   Type          | Description                                                                                                                          | Required
+----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
+fiat_amount       | Integer         | Amount to be paid denominated in cents.                                                                                              | Yes
+fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
+payment_ack_url   | Url             | Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.                                 | Yes
+user_redirect_url | Url             | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                           | Yes
+timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
+offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user.                                                                               | Yes
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
+cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                 | No
 
 ### Egress Skin
 
-Field             |   Type      | Description
------------------ | ----------- | -----------
-title             | string      | Short string containing merchant's or redemption's name.
-image             | url         | image to stylized the offer.
-description       | string      | A text explaining what the user is redeeming.
+Field             |   Type      | Description                                               | Required
+----------------- | ----------- | --------------------------------------------------------- | --------
+title             | String      | Short string containing merchant's or redemption's name.  | Yes
+image             | Url         | Image to stylize the offer.                               | Yes
+description       | String      | A text explaining what the user is redeeming.             | Yes
 
 ### Billing Details
 
@@ -152,7 +151,6 @@ member_since          | Date        | The date since that user is a member of yo
 merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
 
-
 ### Callback Egress Invoice
 
 Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point
@@ -167,7 +165,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 Field       | Type    | Description
 ----------- | ------- | -----------
 invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
-invoice_url | String  | Url where to redirect user.
+invoice_url | Url     | Url where to redirect user.
 
 
 ## Create Egress Invoice (User email flow)
@@ -258,6 +256,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 ```json
 { "invoice_id" : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
 , "description": {}
+, "message": ""
 }
 ```
 
@@ -267,22 +266,24 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 
 ### Request JSON Fields
 
-Field             |   Type          | Description
------------------ | --------------- | ---------
-fiat_amount       | Integer         | Eur amount to be paid denominated in cents.
-fiat_currency     | String          | The constant `"EUR"`.
-user_redirect_url | String          | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.
-offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).
-billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.
-onramp_user_email | String          | The email the user has registered with ON/RAMP.
-
+Field             |   Type          | Description                                                                                                                         | Required
+----------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------| --------
+fiat_amount       | Integer         | Amount to be paid denominated in cents.                                                                                             | Yes
+fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`. | Yes
+user_redirect_url | Url             | Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.                          | Yes
+offer_skin        | Egress Skin     | Specify how the offer should be displayed to the user (It might not be shown in this flow).                                         | Yes
+billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`. | Yes
+onramp_user_email | String          | The email the user has registered with ON/RAMP.                                                                                     | Yes
+cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                | No
+accept_unregister_user | Bool       | If `false` egress to users without an **ON/RAMP** account at the moment the egress was created will be immediately rejected. Defaults to `false` | No  
+required_merchant_confirmation | Bool | If `true`, **ON/RAMP** will wait for a merchant confirmation before releasing the funds. Defaults to `true`                       | No
 ### Egress Skin
 
-Field             |   Type      | Description
------------------ | ----------- | -----------
-title             | string      | Short string containing merchant's or redemption's name.
-image             | url         | image to stylized the offer.
-description       | string      | A text explaining what the user is redeeming.
+Field             |   Type      | Description                                               | Required
+----------------- | ----------- | --------------------------------------------------------- | --------
+title             | String      | Short string containing merchant's or redemption's name.  | Yes
+image             | Url         | image to stylize the offer.                               | Yes
+description       | String      | A text explaining what the user is redeeming.             | Yes
 
 ### Billing Details
 
@@ -311,7 +312,17 @@ member_since          | Date        | The date since that user is a member of yo
 merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
 
-**Note**: If user inputs an invalid email, **ON/RAMP** will respond with the attached response.
+### Response JSON Fields
+
+Field       | Type    | Description
+----------- | ------- | -----------
+invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
+description | String  | Description about the invoice. Might be empty.
+message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is not registered.
+
+
+
+**Note**: If `accept_unregister_user` is set to `false` and user inputs a not registered email, **ON/RAMP** will respond with the attached response.
 
 > Response JSON
 
@@ -324,7 +335,7 @@ merchant_customer_id  | String      | The merchant customer id.                 
 }
 ```
 
-You should inform the user about this email being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
+In that case, merchant should inform the user about email account being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
 
 
 ## Approve or Reject User Email Egress Invoice (User email flow)
