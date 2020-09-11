@@ -39,8 +39,7 @@ Test:
 1. Merchant [creates an ingress invoice url](#create-ingress-invoice).
 1. Merchant redirects user to the ingress invoice url.
 1. **ON/RAMP** handles the payment.
-1. If the payment succeed, **ON/RAMP** will [call back the merchant to either confirm the ingress transaction or to abort it](#callback-ingress-invoice). If
-   merchants confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.
+1. If the payment succeed, **ON/RAMP** will [call back the merchant](#callback-ingress-invoice) to either confirm the ingress transaction or to abort it. If merchant confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.
 1. **ON/RAMP** redirects the user back to merchant.
 
 
@@ -79,6 +78,7 @@ There are currently two different supported flows for egress:
 1. If the user is not already registered, **ON/RAMP** will send emails to the user requesting his/her registration.
    Users will have up to 3 days to register, otherwise the egress payment will get cancel **even if it was previously
    accepted by the merchant**.
+
 
 
 # Calling **ON/RAMP** API endpoints.

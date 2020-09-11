@@ -21,7 +21,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "Awesome green Pluff with handler"
                   }
               , "billing_details"    :
@@ -60,7 +60,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 , "timeout_in_sec"     : 3600
 , "offer_skin"         :
     { "title"      : "The Nice merchant"
-    , "image"      : "https:static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-logo"
     , "description": "Awesome green Pluff with handler"
     }
 , "billing_details"    :
@@ -124,6 +124,7 @@ Field             |   Type      | Description                                  
 title             | String      | Short string containing merchant's or product's name.  | Yes
 image             | Url         | image to stylize the offer.                            | Yes
 description       | String      | A text explaining what the user is purchasing.         | Yes
+
 
 ### Billing Details
 

@@ -22,7 +22,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "¥‎435.22 redemption from your account"
                   }
               , "billing_details"    :
@@ -61,7 +61,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 , "timeout_in_sec"     : 3600
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
-    , "image"      : "https:static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-logo"
     , "description": "¥‎435.22 redemption from your account"
     }
 , "billing_details"    :
@@ -124,6 +124,7 @@ title             | String      | Short string containing merchant's or redempti
 image             | Url         | Image to stylize the offer.                               | Yes
 description       | String      | A text explaining what the user is redeeming.             | Yes
 
+
 ### Billing Details
 
 Field                 |   Type      | Description                                                           | Required
@@ -182,7 +183,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https:static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-logo"
                   , "description": "¥435.22 redemption from your account"
                   }
               , "onramp_user_email"  : "user@example.com"
@@ -220,7 +221,7 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 , "user_redirect_url"  : "www.example.com?user_redirected"
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
-    , "image"      : "https:static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-logo"
     , "description": "¥‎435.22 redemption from your account"
     }
 , "onramp_user_email"  : "user@example.com"
