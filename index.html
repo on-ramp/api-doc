@@ -289,19 +289,26 @@
 <p>There are currently two different supported flows for egress:</p>
 <h4 id='app-redirection-flow'>App redirection flow</h4>
 <ol>
-<li>Merchant <a href="#create-egress-invoice-app-redirection-flow">creates an egress invoice url</a>.</li>
-<li>Merchant redirects user to the egress invoice url.</li>
-<li><strong>ON/RAMP</strong> handles the payment.</li>
-<li>If the payment succeeds, <strong>ON/RAMP</strong> will <a href="#callback-egress-invoice">call back the merchant</a> to either confirm the egress transaction or to abort it. If merchants confirms, the egress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
-<li>The user will see the outcome of the process in the <strong>ON/RAMP</strong> wallet.</li>
+<li><p>Merchant <a href="#create-egress-invoice-app-redirection-flow">creates an egress invoice url</a>.</p></li>
+<li><p>Merchant redirects user to the egress invoice url.</p></li>
+<li><p><strong>ON/RAMP</strong> gathers required user&#39;s data and consent. If the payment is not feasible or was rejected
+by the user, it will fail at this point.</p></li>
+<li><p><strong>ON/RAMP</strong> <a href="#callback-egress-invoice">calls back the merchant</a> returning a reference for execution.</p></li>
+<li><p>Merchants accepts, rejects or postpones the egress payment.</p></li>
+<li><p>If postponed, merchant will have up to 3 days to <a href="#mark_operation">accept or reject it</a>.</p></li>
+<li><p>If after 3 days merchant neither accepts nor reject the egress payment it will automatically get rejected.</p></li>
 </ol>
 <h4 id='user-email-flow'>User email flow</h4>
 <ol>
-<li>Prerequisite: User will need to have an account in <strong>ON/RAMP</strong> with KYC verified.</li>
-<li>Merchant <a href="#create-egress-invoice-user-email-flow">creates a user email egress invoice</a>.</li>
-<li><strong>ON/RAMP</strong> prepares the payment and returns a reference of it for the merchant to later approve it or reject it.</li>
-<li>Before the <a href="#invoice-expiration">invoice expires</a>, whenever merchants want to, they can <a href="#approve-or-reject-user-email-egress-invoice-user-email-flow">approve or reject the process</a>. At that moment, <strong>ON/RAMP</strong> will finish the process, move the funds to users balance if needed and return a success or failure.</li>
-<li>The user will see the outcome of the process in the <strong>ON/RAMP</strong> wallet.</li>
+<li><p>Merchant <a href="#create-egress-invoice-user-email-flow">creates a user email egress invoice</a>.</p></li>
+<li><p><strong>ON/RAMP</strong> prepares the payment and returns a reference for the merchant to later accept it or reject it.
+Merchants can decide whether accept any user or only users previously registered on <strong>ON/RAMP</strong>. If only
+previously registered users was requested but the user hast not already registered, or the payment is not feasible, it will fail at this point, otherwise it will return a reference to the Merchant to accept or reject the payment.</p></li>
+<li><p>Merchants will have up to 3 days to accept or reject the payment, unless the option <code>required_merchant_confirmation</code>
+is set to <code>false</code>, in which case it will be always considered accepted by the merchant.</p></li>
+<li><p>If the user is not already registered, <strong>ON/RAMP</strong> will send emails to the user requesting his/her registration.
+Users will have up to 3 days to register, otherwise the egress payment will get cancel <strong>even if it was previously
+accepted by the merchant</strong>.</p></li>
 </ol>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
 <p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
@@ -333,7 +340,7 @@ get redirected back to the merchant.</p>
 
 <ul>
 <li><strong>200</strong> http status if everything was ok.</li>
-<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones.)</li>
+<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones).</li>
 <li><strong>500</strong> http status if something unexpected happened on ON/RAMP&#39;s server.</li>
 </ul>
 <h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
@@ -431,42 +438,56 @@ get redirected back to the merchant.</p>
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>EUR amount to be paid denominated in cents.</td>
+<td>Amount to be paid denominated in cents .</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
 <td>String</td>
-<td>The constant <code>&quot;EUR&quot;</code>.</td>
+<td>Currency identifier following the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217 standard</a>. Valid values are <code>&quot;EUR&quot;</code> or <code>&quot;USD&quot;</code>.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>payment_ack_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>user_redirect_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Where to redirect the user after a successful payment. It should be a complete, well formed, url.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>timeout_in_sec</td>
 <td>Integer</td>
 <td>When to expire the link if unused.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>offer_skin</td>
 <td>Ingress Skin</td>
 <td>Specify how the offer should be displayed to the user.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
 <td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>cancel_callback</td>
+<td>Url</td>
+<td>Merchant callback endpoint to be called when an ingress payment couldn&#39;t be completed</td>
+<td>No</td>
 </tr>
 </tbody></table>
 <h3 id='ingress-skin'>Ingress Skin</h3>
@@ -475,22 +496,26 @@ get redirected back to the merchant.</p>
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>title</td>
 <td>String</td>
 <td>Short string containing merchant&#39;s or product&#39;s name.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>image</td>
 <td>Url</td>
-<td>Image to stylize the offer.</td>
+<td>image to stylize the offer.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>description</td>
 <td>String</td>
 <td>A text explaining what the user is purchasing.</td>
+<td>Yes</td>
 </tr>
 </tbody></table>
 <h3 id='billing-details'>Billing Details</h3>
@@ -651,7 +676,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </tr>
 <tr>
 <td>invoice_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
@@ -660,7 +685,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 <ul>
 <li><strong>200</strong> http status if everything was ok.</li>
-<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones.)</li>
+<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones).</li>
 <li><strong>500</strong> http status if something unexpected happened on ON/RAMP&#39;s server.</li>
 </ul>
 <h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
@@ -758,42 +783,56 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>EUR amount to be paid denominated in cents.</td>
+<td>Amount to be paid denominated in cents.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
 <td>String</td>
-<td>The constant <code>&quot;EUR&quot;</code>.</td>
+<td>Currency identifier following the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217 standard</a>. Valid values are <code>&quot;EUR&quot;</code> or <code>&quot;USD&quot;</code>.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>payment_ack_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Merchant callback endpoint to confirm egress transaction. It should be a complete, well formed, url.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>user_redirect_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>timeout_in_sec</td>
 <td>Integer</td>
 <td>When to expire the link if unused.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>offer_skin</td>
 <td>Egress Skin</td>
 <td>Specify how the offer should be displayed to the user.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
 <td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>cancel_callback</td>
+<td>Url</td>
+<td>Merchant callback endpoint to be called when an egress payment couldn&#39;t be completed</td>
+<td>No</td>
 </tr>
 </tbody></table>
 <h3 id='egress-skin'>Egress Skin</h3>
@@ -802,22 +841,26 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>title</td>
-<td>string</td>
+<td>String</td>
 <td>Short string containing merchant&#39;s or redemption&#39;s name.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>image</td>
-<td>url</td>
+<td>Url</td>
 <td>Image to stylize the offer.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>description</td>
-<td>string</td>
+<td>String</td>
 <td>A text explaining what the user is redeeming.</td>
+<td>Yes</td>
 </tr>
 </tbody></table>
 <h3 id='billing-details'>Billing Details</h3>
@@ -978,7 +1021,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </tr>
 <tr>
 <td>invoice_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Url where to redirect user.</td>
 </tr>
 </tbody></table>
@@ -1066,6 +1109,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='http-request-2'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/send_funds_to_email </code></b></aside>
@@ -1075,37 +1119,62 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>EUR amount to be paid denominated in cents.</td>
+<td>Amount to be paid denominated in cents.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
 <td>String</td>
-<td>The constant <code>&quot;EUR&quot;</code>.</td>
+<td>Currency identifier following the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217 standard</a>. Valid values are <code>&quot;EUR&quot;</code> or <code>&quot;USD&quot;</code>.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>user_redirect_url</td>
-<td>String</td>
+<td>Url</td>
 <td>Where to redirect the user after the egress has been confirmed. It should be a complete, well formed, url.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>offer_skin</td>
 <td>Egress Skin</td>
 <td>Specify how the offer should be displayed to the user (It might not be shown in this flow).</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
 <td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>onramp_user_email</td>
 <td>String</td>
 <td>The email the user has registered with ON/RAMP.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>cancel_callback</td>
+<td>Url</td>
+<td>Merchant callback endpoint to be called when an egress payment couldn&#39;t be completed</td>
+<td>No</td>
+</tr>
+<tr>
+<td>accept_unregister_user</td>
+<td>Bool</td>
+<td>If <code>false</code> egress to users without an <strong>ON/RAMP</strong> account at the moment the egress was created will be immediately rejected. Defaults to <code>false</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td>required_merchant_confirmation</td>
+<td>Bool</td>
+<td>If <code>true</code>, <strong>ON/RAMP</strong> will wait for a merchant confirmation before releasing the funds. Defaults to <code>true</code></td>
+<td>No</td>
 </tr>
 </tbody></table>
 <h3 id='egress-skin-2'>Egress Skin</h3>
@@ -1114,22 +1183,26 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <th>Field</th>
 <th>Type</th>
 <th> Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>title</td>
-<td>string</td>
+<td>String</td>
 <td>Short string containing merchant&#39;s or redemption&#39;s name.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>image</td>
-<td>url</td>
-<td>Image to stylize the offer.</td>
+<td>Url</td>
+<td>image to stylize the offer.</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>description</td>
-<td>string</td>
+<td>String</td>
 <td>A text explaining what the user is redeeming.</td>
+<td>Yes</td>
 </tr>
 </tbody></table>
 <h3 id='billing-details-2'>Billing Details</h3>
@@ -1268,8 +1341,32 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Yes</td>
 </tr>
 </tbody></table>
+<h3 id='response-json-fields-2'>Response JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s Invoice Identifier.</td>
+</tr>
+<tr>
+<td>description</td>
+<td>String</td>
+<td>Description about the invoice. Might be empty.</td>
+</tr>
+<tr>
+<td>message</td>
+<td>String</td>
+<td><strong>MIGHT NOT BE PRESENT</strong>: Additional status if user is not registered.</td>
+</tr>
+</tbody></table>
 
-<p><strong>Note</strong>: If user inputs an invalid email, <strong>ON/RAMP</strong> will respond with the attached response.</p>
+<p><strong>Note</strong>: If <code>accept_unregister_user</code> is set to <code>false</code> and user inputs a not registered email, <strong>ON/RAMP</strong> will respond with the attached response.</p>
 
 <blockquote>
 <p>Response JSON</p>
@@ -1281,7 +1378,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
     </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_CODE_UNKNOWN_USER_ACCOUNT"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>You should inform the user about this email being invalid and show a link to sign up with <strong>ON/RAMP</strong> at <a href="https://onrampwallet.com">https://onrampwallet.com</a>.</p>
+<p>In that case, merchant should inform the user about email account being invalid and show a link to sign up with <strong>ON/RAMP</strong> at <a href="https://onrampwallet.com">https://onrampwallet.com</a>.</p>
 <h2 id='approve-or-reject-user-email-egress-invoice-user-email-flow'>Approve or Reject User Email Egress Invoice (User email flow)</h2>
 <blockquote>
 <p>Example Call</p>
