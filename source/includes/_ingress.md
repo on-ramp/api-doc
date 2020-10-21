@@ -169,4 +169,4 @@ Field          | Type    | Description
 -------------- | ------- | -----------
 invoice_id     | String  | Internal **ON/RAMP**'s Invoice Identifier.
 invoice_url    | Url     | Url where to redirect user.
-invoice_url_qr | Url     | Url where to redirect user in QR code format.
+invoice_url_qr | Url     | Source Url for an image with QR-encoded `invoice_url`
