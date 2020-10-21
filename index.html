@@ -429,6 +429,7 @@ get redirected back to the merchant.</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_ingress_invoice </code></b></aside>
@@ -679,6 +680,11 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Url</td>
 <td>Url where to redirect user.</td>
 </tr>
+<tr>
+<td>invoice_url_qr</td>
+<td>Url</td>
+<td>Source Url for an image with QR-encoded <code>invoice_url</code></td>
+</tr>
 </tbody></table>
 <h1 id='egress-api'>Egress API</h1>
 <p>Any of the endpoints below will return:</p>
@@ -774,6 +780,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f696e6772657373696e673f7265666572656e63653d65646361623662342d343464342d343763652d396261322d366636656562626661313567"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_egress_invoice </code></b></aside>
@@ -1023,6 +1030,11 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>invoice_url</td>
 <td>Url</td>
 <td>Url where to redirect user.</td>
+</tr>
+<tr>
+<td>invoice_url_qr</td>
+<td>Url</td>
+<td>Source Url for an image with QR-encoded <code>invoice_url</code></td>
 </tr>
 </tbody></table>
 <h2 id='create-egress-invoice-user-email-flow'>Create Egress Invoice (User email flow)</h2>
