@@ -96,6 +96,7 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 ```json
 { "invoice_id": "cde6f458-8754-4ffe-81a9-77c6d05a5540"
 , "invoice_url": "https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"
+, "invoice_url_qr": "https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f696e6772657373696e673f7265666572656e63653d65646361623662342d343464342d343763652d396261322d366636656562626661313567"
 }
 ```
 
@@ -163,10 +164,11 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 ### Response JSON Fields
 
-Field       | Type    | Description
------------ | ------- | -----------
-invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
-invoice_url | Url     | Url where to redirect user.
+Field          | Type    | Description
+-------------- | ------- | -----------
+invoice_id     | String  | Internal **ON/RAMP**'s Invoice Identifier.
+invoice_url    | Url     | Url where to redirect user.
+invoice_url_qr | Url     | Url where to redirect user in QR code format.
 
 
 ## Create Egress Invoice (User email flow)

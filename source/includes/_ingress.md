@@ -95,6 +95,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 ```json
 { "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2"
 , "invoice_url": "https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"
+, "invoice_url_qr": "https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"
 }
 ```
 
@@ -164,7 +165,8 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 ### Response JSON Fields
 
-Field       | Type    | Description
------------ | ------- | -----------
-invoice_id  | String  | Internal **ON/RAMP**'s Invoice Identifier.
-invoice_url | Url     | Url where to redirect user.
+Field          | Type    | Description
+-------------- | ------- | -----------
+invoice_id     | String  | Internal **ON/RAMP**'s Invoice Identifier.
+invoice_url    | Url     | Url where to redirect user.
+invoice_url_qr | Url     | Url where to redirect user in QR code format.
