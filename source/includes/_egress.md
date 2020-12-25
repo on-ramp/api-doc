@@ -22,8 +22,9 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-banner"
                   , "description": "¥‎435.22 redemption from your account"
+                  , "logo": "https://static.example.com/merchant-logo"
                   }
               , "billing_details"    :
                   { "payer_email"            : "mrpayer.payerson@email.com"
@@ -61,8 +62,9 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
 , "timeout_in_sec"     : 3600
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
-    , "image"      : "https://static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-banner"
     , "description": "¥‎435.22 redemption from your account"
+    , "logo"       : "https://static.example.com/merchant-logo"
     }
 , "billing_details"    :
     { "payer_email"            : "mrpayer.payerson@email.com"
@@ -124,6 +126,7 @@ Field             |   Type      | Description                                  
 title             | String      | Short string containing merchant's or redemption's name.  | Yes
 image             | Url         | Image to stylize the offer.                               | Yes
 description       | String      | A text explaining what the user is redeeming.             | Yes
+logo              | String      | Logo of the merchant                                      | No
 
 
 ### Billing Details
@@ -185,8 +188,9 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-banner"
                   , "description": "¥435.22 redemption from your account"
+                  , "logo": "https://static.example.com/merchant-logo"
                   }
               , "onramp_user_email"  : "user@example.com"
               , "billing_details"    :
@@ -223,8 +227,9 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
 , "user_redirect_url"  : "www.example.com?user_redirected"
 , "offer_skin"         :     
     { "title"      : "The Nice merchant"
-    , "image"      : "https://static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-banner"
     , "description": "¥‎435.22 redemption from your account"
+    , "logo"       : "https://static.example.com/merchant-logo"
     }
 , "onramp_user_email"  : "user@example.com"
 , "billing_details"    :
@@ -280,13 +285,15 @@ onramp_user_email | String          | The email the user has registered with ON/
 cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                | No
 accept_unregister_user | Bool       | If `false` egress to users without an **ON/RAMP** account at the moment the egress was created will be immediately rejected. Defaults to `false` | No  
 required_merchant_confirmation | Bool | If `true`, **ON/RAMP** will wait for a merchant confirmation before releasing the funds. Defaults to `true`                       | No
+
 ### Egress Skin
 
 Field             |   Type      | Description                                               | Required
 ----------------- | ----------- | --------------------------------------------------------- | --------
 title             | String      | Short string containing merchant's or redemption's name.  | Yes
-image             | Url         | image to stylize the offer.                               | Yes
+image             | Url         | Image to stylize the offer.                               | Yes
 description       | String      | A text explaining what the user is redeeming.             | Yes
+logo              | String      | Logo of the merchant                                      | No
 
 ### Billing Details
 

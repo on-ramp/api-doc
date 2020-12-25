@@ -21,8 +21,9 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
+                  , "image" : "https://static.example.com/merchant-banner"
                   , "description": "Awesome green Pluff with handler"
+                  , "logo": "https://static.example.com/merchant-logo"
                   }
               , "billing_details"    :
                   { "payer_email"            : "mrpayer.payerson@email.com"
@@ -60,8 +61,9 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 , "timeout_in_sec"     : 3600
 , "offer_skin"         :
     { "title"      : "The Nice merchant"
-    , "image"      : "https://static.example.com/merchant-logo"
+    , "image"      : "https://static.example.com/merchant-banner"
     , "description": "Awesome green Pluff with handler"
+    , "logo"       : "https://static.example.com/merchant-logo"
     }
 , "billing_details"    :
     { "payer_email"            : "mrpayer.payerson@email.com"
@@ -123,8 +125,9 @@ cancel_callback   | Url             | Merchant callback endpoint to be called wh
 Field             |   Type      | Description                                            | Required
 ----------------- | ----------- | ------------------------------------------------------ | --------
 title             | String      | Short string containing merchant's or product's name.  | Yes
-image             | Url         | image to stylize the offer.                            | Yes
+image             | Url         | Image to stylize the offer.                            | Yes
 description       | String      | A text explaining what the user is purchasing.         | Yes
+logo              | String      | Logo of the merchant                                   | No
 
 
 ### Billing Details
