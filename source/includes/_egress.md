@@ -162,6 +162,8 @@ debit the user, it should answer with an http 204 status code (this will cancel 
 invoice link). **Any other status code** but 200 or 204 **will be treated as an internal error from the merchant side**,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
 
+> IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET, either for `payment_ack_url` or `cancel_url`.
+
 ### Response JSON Fields
 
 Field          | Type    | Description
