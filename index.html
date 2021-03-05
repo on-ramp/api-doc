@@ -662,6 +662,10 @@ credit the user, then it should answer the callback with an http 200 status code
 credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
 invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+
+<blockquote>
+<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET, either for <code>payment_ack_url</code> or <code>cancel_url</code>.</p>
+</blockquote>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
@@ -1013,6 +1017,10 @@ debit the user, then it should answer the callback with an http 200 status code;
 debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
 invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+
+<blockquote>
+<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET, either for <code>payment_ack_url</code> or <code>cancel_url</code>.</p>
+</blockquote>
 <h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
