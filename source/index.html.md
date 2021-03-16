@@ -29,10 +29,10 @@ code_clipboard: true
 ## Base URL
 
 Production:
-**[https://api.onramp.ltd](https://api.onramp.ltd)**
+**[https://api.onramp.ltd/rpc](https://api.onramp.ltd)**
 
 Test:
-**[https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)**
+**[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
 
 ## Changelog
 
@@ -47,27 +47,41 @@ Changes since v1.0:
 **ON/RAMP** offers a simple REST API taking JSON values as request payload, and returning JSON
 values as response.
 
+All calls shall be made using **`POST`** method.
+
 Every call shall include the headers:
 
 - `Content-Type: application/json`
 
 - `X-XCO-Authorization: Bearer AUTH_TOKEN`
 
-
-```shell
-curl https://api.onramp.ltd/rpc/create_ingress_invoice \
-  -H "x-xco-authorization: Bearer $AUTH_TOKEN"         \
-  -H "Content-Type: application/json"                  \
-  -X POST -d '{ "fiat_amount"        : 1234
-              , "fiat_currency"      : "EUR"
-              , "payment_ack_url"    : "wwww.example.com"
-              , "user_redirect_url"  : "www.example.com?user_redirected"
-              , "timeout_in_sec"     : 3600
-              , "offer_skin"         : {}
-              }'
-```
-
 Where `AUTH_TOKEN` is replaced with merchant's API key.
+
+## Error handling
+
+All ON/RAMP endpoints follow standard HTTP semantics. Errors can be detected from response
+status code:
+
+Status code | Meaning
+----------: | ----------------------------------------------
+**200**     | Everything was ok. Success.
+**400**     | Invalid request parameters. See response body.
+**500**     | Temporary ON/RAMP server malfunction.
+
+Requests resulting in 4xx errors **must not be retried** as-is, that will not resolve the error.
+
+Requests giving 5xx errors may be retried. If retried, the retry interval must multiplicatively
+increase in geometric progression, using [exponential backoff][]. E.g. retry 1 after 160ms, retry 2
+after 320ms, retry 3 after 640ms, retry 4 after 1280ms, and so on.
+
+[exponential backoff]: https://en.wikipedia.org/wiki/Exponential_backoff
+
+## Webhook callbacks
+
+Some endpoints involve *callbacks:* ON/RAMP system will sometimes make requests to
+Merchant-provided URLs.
+
+All callbacks invoked by ON/RAMP are made using **`POST`** method.
 
 
 # API flows

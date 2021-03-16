@@ -1,11 +1,5 @@
 # Egress API
 
-Any of the endpoints below will return:
-
-- **200** http status if everything was ok.
-- **400** http status if some parameters were invalid (It may specify exactly which ones).
-- **500** http status if something unexpected happened on ON/RAMP's server.
-
 ## Create Egress Invoice (App redirection flow)
 
 
