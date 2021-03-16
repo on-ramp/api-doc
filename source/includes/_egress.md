@@ -282,6 +282,7 @@ onramp_user_email | String          | The email the user has registered with ON/
 cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                | No
 accept_unregister_user | Bool       | If `false` egress to users without an **ON/RAMP** account at the moment the egress was created will be immediately rejected. Defaults to `false` | No  
 required_merchant_confirmation | Bool | If `true`, **ON/RAMP** will wait for a merchant confirmation before releasing the funds. Defaults to `true`                       | No
+
 ### Egress Skin
 
 Field             |   Type      | Description                                               | Required
@@ -343,7 +344,7 @@ message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is n
 In that case, merchant should inform the user about email account being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
 
 
-## Approve or Reject User Email Egress Invoice (User email flow)
+## Approve or Reject Egress Invoice
 
 
 > Example Call

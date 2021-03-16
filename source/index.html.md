@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.0
+title: ON/RAMP payment API v1.1
 
-version: 1.0
+version: 1.1
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,84 +34,101 @@ Production:
 Test:
 **[https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)**
 
-## API flow
+## Changelog
 
-### Ingress flow
+Changes since v1.0:
 
-1. Merchant [creates an ingress invoice url](#create-ingress-invoice).
-1. Merchant redirects user to the ingress invoice url.
-1. **ON/RAMP** handles the payment.
-1. If the payment succeed, **ON/RAMP** will [call back the merchant](#callback-ingress-invoice) to either confirm the ingress transaction or to abort it. If merchant confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.
-1. **ON/RAMP** redirects the user back to merchant.
+ * Document structure streamlined and ToC nesting reduced.
+ * Typos, convoluted wording & broken internal links fixed.
 
 
-### Egress flow
+# Calling **ON/RAMP** API endpoints
 
-There are currently two different supported flows for egress:
+**ON/RAMP** offers a simple REST API taking JSON values as request payload, and returning JSON
+values as response.
 
-#### App redirection flow
-
-1. Merchant [creates an egress invoice url](#create-egress-invoice-app-redirection-flow).
-
-1. Merchant redirects user to the egress invoice url.
-
-1. **ON/RAMP** gathers required user's data and consent. If the payment is not feasible or was rejected
-   by the user, it will fail at this point.
-
-1. **ON/RAMP** [calls back the merchant](#callback-egress-invoice) returning a reference for execution.
-
-1. Merchants accepts, rejects or postpones the egress payment.
-
-1. If postponed, merchant will have up to 3 days to [accept or reject it](#mark_operation).
-
-1. If after 3 days merchant neither accepts nor reject the egress payment it will automatically get rejected.
-
-#### User email flow
-
-1. Merchant [creates a user email egress invoice](#create-egress-invoice-user-email-flow).
-
-1. **ON/RAMP** prepares the payment and returns a reference for the merchant to later accept it or reject it.
-   Merchants can decide whether accept any user or only users previously registered on **ON/RAMP**. If only
-   previously registered users was requested but the user hast not already registered, or the payment is not feasible, it will fail at this point, otherwise it will return a reference to the Merchant to accept or reject the payment.
-
-1. Merchants will have up to 3 days to accept or reject the payment, unless the option `required_merchant_confirmation`
-   is set to `false`, in which case it will be always considered accepted by the merchant.
-
-1. If the user is not already registered, **ON/RAMP** will send emails to the user requesting his/her registration.
-   Users will have up to 3 days to register, otherwise the egress payment will get cancel **even if it was previously
-   accepted by the merchant**.
-
-
-
-# Calling **ON/RAMP** API endpoints.
-
-**ON/RAMP** offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
-Each call shall include the headers:
+Every call shall include the headers:
 
 - `Content-Type: application/json`
 
-- `x-xco-authorization: Bearer AUTH_TOKEN`
+- `X-XCO-Authorization: Bearer AUTH_TOKEN`
 
 
 ```shell
 curl https://api.onramp.ltd/rpc/create_ingress_invoice \
   -H "x-xco-authorization: Bearer $AUTH_TOKEN"         \
   -H "Content-Type: application/json"                  \
-  -X POST -d '{ "fiat_amount"        : 1234                                     
-              , "fiat_currency"      : "EUR"                                    
-              , "payment_ack_url"    : "wwww.example.com"                       
-              , "user_redirect_url"  : "www.example.com?user_redirected"        
-              , "timeout_in_sec"     : 3600                                     
-              , "offer_skin"         : {}                                       
+  -X POST -d '{ "fiat_amount"        : 1234
+              , "fiat_currency"      : "EUR"
+              , "payment_ack_url"    : "wwww.example.com"
+              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "timeout_in_sec"     : 3600
+              , "offer_skin"         : {}
               }'
 ```
 
 Where `AUTH_TOKEN` is replaced with merchant's API key.
 
 
+# API flows
+
+## Ingress flow
+
+1. Merchant [creates an ingress invoice url](#create-ingress-invoice).
+
+1. Merchant redirects user to the returned `invoice_url`.
+
+1. **ON/RAMP** handles the payment.
+
+1. Once the payment gets cleared, **ON/RAMP** will [call back the merchant](#callback-ingress-invoice)
+   to finalize the transaction.
+
+1. **ON/RAMP** redirects the user back to merchant.
+
+
+## App Egress flow
+
+1. Merchant [creates an egress invoice url](#create-egress-invoice-app-redirection-flow).
+
+1. Merchant redirects user to the returned `invoice_url`.
+
+1. **ON/RAMP** gathers required user's data and consent.
+   If the payment is not feasible or was rejected by the user, it will fail at this point.
+
+1. **ON/RAMP** [calls back the merchant](#callback-egress-invoice) returning a reference for execution.
+
+1. Merchant accepts, rejects or postpones the egress payment.
+
+1. If postponed in the callback, merchant will have up to 3 days to [accept or reject it](#approve-or-reject-egress-invoice).
+
+1. The payment will get automatically rejected if merchant fails to approve or reject within
+   the 72 hours timeout.
+
+
+## Email Egress flow
+
+1. Merchant [creates a user email egress invoice](#create-egress-invoice-user-email-flow).
+
+1. **ON/RAMP** prepares the payment and returns `invoice_id` reference.
+   Merchant can decide whether to accept any user or only users previously registered on
+   **ON/RAMP** using the `accept_unregister_user` option.
+   On success, the returned `invoice_id` reference shall be used by the Merchant
+   to [accept or reject](#approve-or-reject-egress-invoice) the payment.
+
+1. Merchants will have up to 3 days to accept or reject the payment, unless the option `required_merchant_confirmation`
+   is set to `false`, in which case it will be always considered accepted by the merchant.
+
+1. If the user is not already registered, **ON/RAMP** will send emails to the user requesting his/her registration.
+   Users will have up to 3 days to register. If they don't, the egress payment will get cancelled **even if it was previously
+   accepted by the merchant**.
+
+
+
 # Invoice expiration
 
-Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
-twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
-create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
-get redirected back to the merchant.
+Each invoice expires after the timeout given on creation, or once it has been paid. This ensures
+that the user can not accidentally pay twice for the same ingress invoice, nor get paid twice from
+the same egress invoice.
+
+As a consequence, the merchant must create a new invoice every time a user requests a payment.
+If a user clicks on an expired invoice, they will get redirected back to the merchant.
