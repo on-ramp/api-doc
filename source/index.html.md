@@ -27,6 +27,8 @@ code_clipboard: true
 - Merchant: The service using **ON/RAMP** as payment processor.
 - User: The physical person who sends or receives funds to/from the merchant through **ON/RAMP**.
 
+- CC: credit card.
+
 ## Base URL
 
 Production:
@@ -41,6 +43,7 @@ Changes since v1.0:
 
  * Document structure streamlined and ToC nesting reduced.
  * Typos, convoluted wording & broken internal links fixed.
+ * Previously undocumented `op_status` endpoint covered.
 
 
 # Calling **ON/RAMP** API endpoints
