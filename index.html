@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.0</title>
+    <title>ON/RAMP payment API v1.1</title>
 
-    <style>
+    <style media="screen">
       .highlight table td { padding: 5px; }
 .highlight table pre { margin: 0; }
 .highlight .gh {
@@ -42,7 +42,7 @@
 .highlight .cs {
   color: #75715e;
 }
-.highlight .c, .highlight .cd {
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
   color: #75715e;
 }
 .highlight .err {
@@ -126,7 +126,7 @@
 .highlight .s1 {
   color: #e6db74;
 }
-.highlight .s {
+.highlight .s, .highlight .sa, .highlight .dl {
   color: #e6db74;
 }
 .highlight .na {
@@ -141,16 +141,13 @@
 .highlight .ne {
   color: #a6e22e;
 }
-.highlight .nf {
+.highlight .nf, .highlight .fm {
   color: #a6e22e;
 }
 .highlight .vc {
   color: #ffffff;
 }
 .highlight .nn {
-  color: #ffffff;
-}
-.highlight .nl {
   color: #ffffff;
 }
 .highlight .ni {
@@ -165,7 +162,7 @@
 .highlight .vi {
   color: #ffffff;
 }
-.highlight .nv {
+.highlight .nv, .highlight .vm {
   color: #ffffff;
 }
 .highlight .w {
@@ -176,6 +173,9 @@
 }
 .highlight .n, .highlight .py, .highlight .nx {
   color: #ffffff;
+}
+.highlight .nl {
+  color: #f92672;
 }
 .highlight .ow {
   color: #f92672;
@@ -196,21 +196,111 @@
   color: #f92672;
 }
     </style>
-    <link href="stylesheets/screen-052ba3a1.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print-bccf8c07.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all-c5541673.js"></script>
+    <style media="print">
+      * {
+        -webkit-transition:none!important;
+        transition:none!important;
+      }
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight, .highlight .w {
+  color: #586e75;
+}
+.highlight .err {
+  color: #002b36;
+  background-color: #dc322f;
+}
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cm, .highlight .cpf, .highlight .c1, .highlight .cs {
+  color: #657b83;
+}
+.highlight .cp {
+  color: #b58900;
+}
+.highlight .nt {
+  color: #b58900;
+}
+.highlight .o, .highlight .ow {
+  color: #93a1a1;
+}
+.highlight .p, .highlight .pi {
+  color: #93a1a1;
+}
+.highlight .gi {
+  color: #859900;
+}
+.highlight .gd {
+  color: #dc322f;
+}
+.highlight .gh {
+  color: #268bd2;
+  background-color: #002b36;
+  font-weight: bold;
+}
+.highlight .k, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kv {
+  color: #6c71c4;
+}
+.highlight .kc {
+  color: #cb4b16;
+}
+.highlight .kt {
+  color: #cb4b16;
+}
+.highlight .kd {
+  color: #cb4b16;
+}
+.highlight .s, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .sh, .highlight .sx, .highlight .s1 {
+  color: #859900;
+}
+.highlight .sa {
+  color: #6c71c4;
+}
+.highlight .sr {
+  color: #2aa198;
+}
+.highlight .si {
+  color: #d33682;
+}
+.highlight .se {
+  color: #d33682;
+}
+.highlight .nn {
+  color: #b58900;
+}
+.highlight .nc {
+  color: #b58900;
+}
+.highlight .no {
+  color: #b58900;
+}
+.highlight .na {
+  color: #268bd2;
+}
+.highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .il, .highlight .mo, .highlight .mx {
+  color: #859900;
+}
+.highlight .ss {
+  color: #859900;
+}
+    </style>
+    <link href="stylesheets/screen-9bc0a4fb.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all-a9fde460.js"></script>
+
+    <script>
+      $(function() { setupCodeCopy(); });
+    </script>
   </head>
 
   <body class="index" data-languages="[&quot;shell&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar-cad8cdcb.png" alt="Navbar" />
+        <img src="images/navbar-cad8cdcb.png" alt="" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo-86952380.png" class="logo" alt="Logo" />
-        <span class="toc-link">API v1.0</span>
+      <img src="images/logo-86952380.png" class="logo" alt="" />
+        <span class="toc-link">API v1.1</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -229,12 +319,34 @@
                     <a href="#base-url" class="toc-h2 toc-link" data-title="Base URL">Base URL</a>
                   </li>
                   <li>
-                    <a href="#api-flow" class="toc-h2 toc-link" data-title="API flow">API flow</a>
+                    <a href="#changelog" class="toc-h2 toc-link" data-title="Changelog">Changelog</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#calling-on-ramp-api-endpoints" class="toc-h1 toc-link" data-title="Calling ON/RAMP API endpoints.">Calling <strong>ON/RAMP</strong> API endpoints.</a>
+            <a href="#calling-on-ramp-api-endpoints" class="toc-h1 toc-link" data-title="Calling ON/RAMP API endpoints">Calling <strong>ON/RAMP</strong> API endpoints</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#error-handling" class="toc-h2 toc-link" data-title="Error handling">Error handling</a>
+                  </li>
+                  <li>
+                    <a href="#webhook-callbacks" class="toc-h2 toc-link" data-title="Webhook callbacks">Webhook callbacks</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#api-flows" class="toc-h1 toc-link" data-title="API flows">API flows</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#ingress-flow" class="toc-h2 toc-link" data-title="Ingress flow">Ingress flow</a>
+                  </li>
+                  <li>
+                    <a href="#app-egress-flow" class="toc-h2 toc-link" data-title="App Egress flow">App Egress flow</a>
+                  </li>
+                  <li>
+                    <a href="#email-egress-flow" class="toc-h2 toc-link" data-title="Email Egress flow">Email Egress flow</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#invoice-expiration" class="toc-h1 toc-link" data-title="Invoice expiration">Invoice expiration</a>
@@ -256,8 +368,16 @@
                   <li>
                     <a href="#create-egress-invoice-user-email-flow" class="toc-h2 toc-link" data-title="Create Egress Invoice (User email flow)">Create Egress Invoice (User email flow)</a>
                   </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#payment-lifecycle-api" class="toc-h1 toc-link" data-title="Payment lifecycle API">Payment lifecycle API</a>
+              <ul class="toc-list-h2">
                   <li>
-                    <a href="#approve-or-reject-user-email-egress-invoice-user-email-flow" class="toc-h2 toc-link" data-title="Approve or Reject User Email Egress Invoice (User email flow)">Approve or Reject User Email Egress Invoice (User email flow)</a>
+                    <a href="#mark-operation" class="toc-h2 toc-link" data-title="Mark Operation">Mark Operation</a>
+                  </li>
+                  <li>
+                    <a href="#poll-operation-status" class="toc-h2 toc-link" data-title="Poll Operation status">Poll Operation status</a>
                   </li>
               </ul>
           </li>
@@ -269,88 +389,125 @@
         <h1 id='on-ramp-merchant-integration'>ON/RAMP merchant integration.</h1><h2 id='terminology-and-acronyms'>Terminology and Acronyms</h2>
 <ul>
 <li>Merchant: The service using <strong>ON/RAMP</strong> as payment processor.</li>
-<li>User: The physical person who sends or receives funds to/from the merchant through <strong>ON/RAMP</strong>.</li>
+<li><p>User: The physical person who sends or receives funds to/from the merchant through <strong>ON/RAMP</strong>.</p></li>
+<li><p>CC: credit card.</p></li>
 </ul>
 <h2 id='base-url'>Base URL</h2>
 <p>Production:
-<strong><a href="https://api.onramp.ltd">https://api.onramp.ltd</a></strong></p>
+<strong><a href="https://api.onramp.ltd">https://api.onramp.ltd/rpc</a></strong></p>
 
 <p>Test:
-<strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd</a></strong></p>
-<h2 id='api-flow'>API flow</h2><h3 id='ingress-flow'>Ingress flow</h3>
-<ol>
-<li>Merchant <a href="#create-ingress-invoice">creates an ingress invoice url</a>.</li>
-<li>Merchant redirects user to the ingress invoice url.</li>
-<li><strong>ON/RAMP</strong> handles the payment.</li>
-<li>If the payment succeed, <strong>ON/RAMP</strong> will <a href="#callback-ingress-invoice">call back the merchant</a> to either confirm the ingress transaction or to abort it. If merchant confirms, the ingress payment will be considered fulfilled, otherwise, it will be considered as failed.</li>
-<li><strong>ON/RAMP</strong> redirects the user back to merchant.</li>
-</ol>
-<h3 id='egress-flow'>Egress flow</h3>
-<p>There are currently two different supported flows for egress:</p>
-<h4 id='app-redirection-flow'>App redirection flow</h4>
-<ol>
-<li><p>Merchant <a href="#create-egress-invoice-app-redirection-flow">creates an egress invoice url</a>.</p></li>
-<li><p>Merchant redirects user to the egress invoice url.</p></li>
-<li><p><strong>ON/RAMP</strong> gathers required user&#39;s data and consent. If the payment is not feasible or was rejected
-by the user, it will fail at this point.</p></li>
-<li><p><strong>ON/RAMP</strong> <a href="#callback-egress-invoice">calls back the merchant</a> returning a reference for execution.</p></li>
-<li><p>Merchants accepts, rejects or postpones the egress payment.</p></li>
-<li><p>If postponed, merchant will have up to 3 days to <a href="#mark_operation">accept or reject it</a>.</p></li>
-<li><p>If after 3 days merchant neither accepts nor reject the egress payment it will automatically get rejected.</p></li>
-</ol>
-<h4 id='user-email-flow'>User email flow</h4>
-<ol>
-<li><p>Merchant <a href="#create-egress-invoice-user-email-flow">creates a user email egress invoice</a>.</p></li>
-<li><p><strong>ON/RAMP</strong> prepares the payment and returns a reference for the merchant to later accept it or reject it.
-Merchants can decide whether accept any user or only users previously registered on <strong>ON/RAMP</strong>. If only
-previously registered users was requested but the user hast not already registered, or the payment is not feasible, it will fail at this point, otherwise it will return a reference to the Merchant to accept or reject the payment.</p></li>
-<li><p>Merchants will have up to 3 days to accept or reject the payment, unless the option <code>required_merchant_confirmation</code>
-is set to <code>false</code>, in which case it will be always considered accepted by the merchant.</p></li>
-<li><p>If the user is not already registered, <strong>ON/RAMP</strong> will send emails to the user requesting his/her registration.
-Users will have up to 3 days to register, otherwise the egress payment will get cancel <strong>even if it was previously
-accepted by the merchant</strong>.</p></li>
-</ol>
-<h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints.</h1>
-<p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON values as response.
-Each call shall include the headers:</p>
+<strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
+<h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.0:</p>
+
+<ul>
+<li>Document structure streamlined and ToC nesting reduced.</li>
+<li>Typos, convoluted wording &amp; broken internal links fixed.</li>
+<li>Previously undocumented <code>op_status</code> endpoint covered.</li>
+<li>Added Error Handling section.</li>
+<li>Added Webhook Callbacks section.</li>
+</ul>
+<h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints</h1>
+<p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON
+values as response.</p>
+
+<p>All calls shall be made using <strong><code>POST</code></strong> method.</p>
+
+<p>Every call shall include the headers:</p>
 
 <ul>
 <li><p><code>Content-Type: application/json</code></p></li>
-<li><p><code>x-xco-authorization: Bearer AUTH_TOKEN</code></p></li>
+<li><p><code>X-XCO-Authorization: Bearer AUTH_TOKEN</code></p></li>
 </ul>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer </span><span class="nv">$AUTH_TOKEN</span><span class="s2">"</span>         <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                  <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 1234                                     
-              , "fiat_currency"      : "EUR"                                    
-              , "payment_ack_url"    : "wwww.example.com"                       
-              , "user_redirect_url"  : "www.example.com?user_redirected"        
-              , "timeout_in_sec"     : 3600                                     
-              , "offer_skin"         : {}                                       
-              }'</span>
-</code></pre>
-<p>Where <code>AUTH_TOKEN</code> is replaced with merchant&#39;s API key.</p>
-<h1 id='invoice-expiration'>Invoice expiration</h1>
-<p>Each invoice expires after the given timeout or after it has been paid once. This means the user can not accidentally paid
-twice for the same ingress invoice, nor get paid twice from the same egress invoice; but it also means the merchant should
-create a new invoice to the user every time the user request a new payment. If an user clicks on an expired invoice, it will
-get redirected back to the merchant.</p>
-<h1 id='ingress-api'>Ingress API</h1>
-<p>Any of the endpoints below will return:</p>
 
-<ul>
-<li><strong>200</strong> http status if everything was ok.</li>
-<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones).</li>
-<li><strong>500</strong> http status if something unexpected happened on ON/RAMP&#39;s server.</li>
-</ul>
-<h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
+<p>Where <code>AUTH_TOKEN</code> is replaced with merchant&#39;s API key.</p>
+<h2 id='error-handling'>Error handling</h2>
+<p>All ON/RAMP endpoints respect standard HTTP semantics. Errors can be detected from response
+status code:</p>
+
+<table><thead>
+<tr>
+<th style="text-align: right">Status code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td style="text-align: right"><strong>200</strong></td>
+<td>Everything was ok. Success.</td>
+</tr>
+<tr>
+<td style="text-align: right"><strong>400</strong></td>
+<td>Invalid request parameters. See response body.</td>
+</tr>
+<tr>
+<td style="text-align: right"><strong>500</strong></td>
+<td>Temporary ON/RAMP server malfunction.</td>
+</tr>
+</tbody></table>
+
+<p>Requests resulting in 4xx errors <strong>must not be retried</strong> as-is, that will not resolve the error.</p>
+
+<p>Requests giving 5xx errors may be retried. If retried, the retry interval must multiplicatively
+increase in geometric progression, using <a href="https://en.wikipedia.org/wiki/Exponential_backoff">exponential backoff</a>. E.g. retry 1 after 160ms, retry 2
+after 320ms, retry 3 after 640ms, retry 4 after 1280ms, and so on.</p>
+<h2 id='webhook-callbacks'>Webhook callbacks</h2>
+<p>Some endpoints involve <em>callbacks:</em> ON/RAMP system will sometimes make requests to
+Merchant-provided URLs.</p>
+
+<p>All callbacks invoked by ON/RAMP are made using <strong><code>POST</code></strong> method.</p>
+
+<p>In callback response, any HTTP status code besides 200 <strong>is treated as callback failure</strong>.</p>
+<h1 id='api-flows'>API flows</h1><h2 id='ingress-flow'>Ingress flow</h2>
+<ol>
+<li><p>Merchant <a href="#create-ingress-invoice">creates an ingress invoice url</a>.</p></li>
+<li><p>Merchant redirects user to the returned <code>invoice_url</code>.</p></li>
+<li><p><strong>ON/RAMP</strong> handles the payment.</p></li>
+<li><p>Once the payment gets cleared, <strong>ON/RAMP</strong> will <a href="#callback-ingress-invoice">call back the merchant</a>
+to finalize the transaction.</p></li>
+<li><p><strong>ON/RAMP</strong> redirects the user back to merchant.</p></li>
+</ol>
+<h2 id='app-egress-flow'>App Egress flow</h2>
+<ol>
+<li><p>Merchant <a href="#create-egress-invoice-app-redirection-flow">creates an egress invoice url</a>.</p></li>
+<li><p>Merchant redirects user to the returned <code>invoice_url</code>.</p></li>
+<li><p><strong>ON/RAMP</strong> gathers required user&#39;s data and consent.
+If the payment is not feasible or was rejected by the user, it will fail at this point.</p></li>
+<li><p><strong>ON/RAMP</strong> <a href="#callback-egress-invoice">calls back the merchant</a> returning a reference for execution.</p></li>
+<li><p>Merchant accepts, rejects or postpones the egress payment.</p></li>
+<li><p>If postponed in the callback, merchant will have up to 3 days to <a href="#mark-operation">accept or reject it</a>.</p></li>
+<li><p>The payment will get automatically rejected if merchant fails to approve or reject within
+the 72 hours timeout.</p></li>
+</ol>
+<h2 id='email-egress-flow'>Email Egress flow</h2>
+<ol>
+<li><p>Merchant <a href="#create-egress-invoice-user-email-flow">creates a user email egress invoice</a>.</p></li>
+<li><p><strong>ON/RAMP</strong> prepares the payment and returns <code>invoice_id</code> reference.
+Merchant can decide whether to accept any user or only users previously registered on
+<strong>ON/RAMP</strong> using the <code>accept_unregister_user</code> option.
+On success, the returned <code>invoice_id</code> reference shall be used by the Merchant
+to <a href="#mark-operation">accept or reject</a> the payment.</p></li>
+<li><p>Merchants will have up to 3 days to accept or reject the payment, unless the option <code>required_merchant_confirmation</code>
+is set to <code>false</code>, in which case it will be always considered accepted by the merchant.</p></li>
+<li><p>If the user is not already registered, <strong>ON/RAMP</strong> will send emails to the user requesting his/her registration.
+Users will have up to 3 days to register. If they don&#39;t, the egress payment will get cancelled <strong>even if it was previously
+accepted by the merchant</strong>.</p></li>
+</ol>
+<h1 id='invoice-expiration'>Invoice expiration</h1>
+<p>Each invoice expires after the timeout given on creation, or once it has been paid. This ensures
+that the user can not accidentally pay twice for the same ingress invoice, nor get paid twice from
+the same egress invoice.</p>
+
+<p>As a consequence, the merchant must create a new invoice every time a user requests a payment.
+If a user clicks on an expired invoice, they will get redirected back to the merchant.</p>
+<h1 id='ingress-api'>Ingress API</h1><h2 id='create-ingress-invoice'>Create Ingress Invoice</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                                    <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                                    <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
+  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
               , "payment_ack_url"    : "wwww.example.com"
               , "user_redirect_url"  : "www.example.com?user_redirected"
@@ -384,54 +541,54 @@ get redirected back to the merchant.</p>
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'</span>
-</code></pre>
+</code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
     </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre>
+</span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='http-request'>HTTP Request</h3>
+</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_ingress_invoice </code></b></aside>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
@@ -690,22 +847,14 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Source Url for an image with QR-encoded <code>invoice_url</code></td>
 </tr>
 </tbody></table>
-<h1 id='egress-api'>Egress API</h1>
-<p>Any of the endpoints below will return:</p>
-
-<ul>
-<li><strong>200</strong> http status if everything was ok.</li>
-<li><strong>400</strong> http status if some parameters were invalid (It may specify exactly which ones).</li>
-<li><strong>500</strong> http status if something unexpected happened on ON/RAMP&#39;s server.</li>
-</ul>
-<h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
+<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_egress_invoice                     <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>   <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_egress_invoice                     <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>   <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
+  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
               , "payment_ack_url"    : "wwww.example.com"
               , "user_redirect_url"  : "www.example.com?user_redirected"
@@ -739,54 +888,54 @@ pausing the user payment and prompting manual intervention, potentially delaying
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'</span>
-</code></pre>
+</code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
     </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre>
+</span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f696e6772657373696e673f7265666572656e63653d65646361623662342d343464342d343763652d396261322d366636656562626661313567"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f696e6772657373696e673f7265666572656e63653d65646361623662342d343464342d343763652d396261322d366636656562626661313567"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='http-request'>HTTP Request</h3>
+</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_egress_invoice </code></b></aside>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
@@ -1049,10 +1198,10 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/send_funds_to_email                           <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>       <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                                         <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "fiat_amount"        : 3000
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/send_funds_to_email                           <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>       <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                         <span class="se">\</span>
+  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
               , "user_redirect_url"  : "www.example.com?user_redirected"
               , "offer_skin"         :
@@ -1085,53 +1234,53 @@ pausing the user payment and prompting manual intervention, potentially delaying
                   , "merchant_customer_id"   : "u2340112"
                   }
               }'</span>
-</code></pre>
+</code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
     </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"onramp_user_email"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="s2">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"onramp_user_email"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
+    </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre>
+</span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"invoice_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre><h3 id='http-request-2'>HTTP Request</h3>
+</span></code></pre></div><h3 id='http-request-2'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/send_funds_to_email </code></b></aside>
 <h3 id='request-json-fields-2'>Request JSON Fields</h3>
 <table><thead>
@@ -1391,40 +1540,42 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="s2">"hint"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"details"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00001"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_CODE_UNKNOWN_USER_ACCOUNT"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"hint"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"details"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_CODE_UNKNOWN_USER_ACCOUNT"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
+</span></code></pre></div>
 <p>In that case, merchant should inform the user about email account being invalid and show a link to sign up with <strong>ON/RAMP</strong> at <a href="https://onrampwallet.com">https://onrampwallet.com</a>.</p>
-<h2 id='approve-or-reject-user-email-egress-invoice-user-email-flow'>Approve or Reject User Email Egress Invoice (User email flow)</h2>
+<h1 id='payment-lifecycle-api'>Payment lifecycle API</h1><h2 id='mark-operation'>Mark Operation</h2>
+<p>This call is for active (dis-)approval of payments by Merchant. See <a href="#api-flows">API flows</a>.</p>
+
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/mark_operation                           <span class="se">\</span>
-  -H <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>  <span class="se">\</span>
-  -H <span class="s2">"Content-Type: application/json"</span>                                    <span class="se">\</span>
-  -X POST -d <span class="s1">'{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/mark_operation                           <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>  <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                    <span class="se">\</span>
+  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
               , "accept" : true
               }'</span>
-</code></pre>
+</code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="s2">"op_id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="s2">"accept"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"accept"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
-</span></code></pre>
+</span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="kc">null</span><span class="w">
-</span></code></pre><h3 id='http-request-3'>HTTP Request</h3>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="kc">null</span><span class="w">
+</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/mark_operation </code></b></aside>
-<h3 id='request-json-fields-3'>Request JSON Fields</h3>
+<h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
 <tr>
 <th>Field</th>
@@ -1441,6 +1592,183 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>accept</td>
 <td>Boolean</td>
 <td>Either if the merchant wants to approve (true) or reject (false) the process.</td>
+</tr>
+</tbody></table>
+<h2 id='poll-operation-status'>Poll Operation status</h2>
+<p>This endpoint can be used to query lifecycle status of payments by their UUID, to check
+completion or query rejection reason.</p>
+
+<blockquote>
+<p>Example Call</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/op_status <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+  <span class="nt">--header</span> <span class="s1">'X-XCO-Authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{"invoices_id": [
+                 "eaed5195-b85c-41aa-9661-10693b65976e",
+                 "0928b88d-372a-475e-8095-2f20a66cfa9f",
+                 "5059dadc-4463-440b-9025-694355c0a941",
+                 "73f4a88c-8591-4550-9b4d-dfa687d61a89",
+                 "e59eeff7-5780-4707-b1f6-fa0a7e020ce0"]}'</span>
+</code></pre></div>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="nl">"invoices_id"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+  </span><span class="s2">"eaed5195-b85c-41aa-9661-10693b65976e"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"0928b88d-372a-475e-8095-2f20a66cfa9f"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"5059dadc-4463-440b-9025-694355c0a941"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"73f4a88c-8591-4550-9b4d-dfa687d61a89"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"e59eeff7-5780-4707-b1f6-fa0a7e020ce0"</span><span class="w">
+</span><span class="p">]}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5059dadc-4463-440b-9025-694355c0a941"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"accepted"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"credit_card_payment_attempt"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"accepted"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"rejected"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"reject_reason"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"when_submitted"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-03-17T11:41:00.000006+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"card_number_masked"</span><span class="p">:</span><span class="w"> </span><span class="s2">"409849******1447"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"card_holder_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EXAMPLE REDACTED"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eaed5195-b85c-41aa-9661-10693b65976e"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"waiting_user_confirmation"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"credit_card_payment_attempt"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"accepted"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"rejected"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"reject_reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"seon not ok with it"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"when_submitted"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-03-17T11:42:00.010659+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"card_number_masked"</span><span class="p">:</span><span class="w"> </span><span class="s2">"498678******1000"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"card_holder_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EXAMPLE REDACTED"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div><h3 id='http-request-2'>HTTP Request</h3>
+<aside class="success"><b><code> POST /rpc/op_status </code></b></aside>
+<h3 id='request-json'>Request JSON</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>invoices_id</code></td>
+<td>UUID[]</td>
+<td>Array of payment UUID&#39;s to poll</td>
+<td>yes</td>
+</tr>
+</tbody></table>
+<h3 id='response-json'>Response JSON</h3>
+<p>Response is an array of objects in unspecified order, each object describing one payment&#39;s
+information. Invalid UUID&#39;s from request are silently skipped.</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>op_id</code></td>
+<td>UUID</td>
+<td>Payment Operation reference from request</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>String</td>
+<td>Operation status enum, see below</td>
+</tr>
+<tr>
+<td><code>credit_card_payment_attempt</code></td>
+<td>Object</td>
+<td>Description of the associated CC payment</td>
+</tr>
+</tbody></table>
+
+<p>The <code>status</code> field can assume the following values:</p>
+
+<table><thead>
+<tr>
+<th>Enum value</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>accepted</code></td>
+<td>Operation is finished, CC funds transfer complete</td>
+</tr>
+<tr>
+<td><code>rejected</code></td>
+<td>Operation is finished, CC funds transfer not done</td>
+</tr>
+<tr>
+<td><code>queued</code></td>
+<td>Transitional state, ON/RAMP is about to invoke Merchant callback</td>
+</tr>
+<tr>
+<td><code>waiting_merchant_confirmation</code></td>
+<td>Awaiting delayed <a href="#mark-operation">approval callback</a> from Merchant</td>
+</tr>
+<tr>
+<td><code>querying_merchant_for_confirmation</code></td>
+<td>Merchant approval callback in progress, no response yet</td>
+</tr>
+<tr>
+<td><code>waiting_user_confirmation</code></td>
+<td>Awaiting User, who might be filling out CC data, passing KYC or deciding to press the final &quot;Confirm&quot;</td>
+</tr>
+</tbody></table>
+
+<p>CC payment object fields:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>accepted</code></td>
+<td>Bool</td>
+<td><code>true</code> if CC funds transfer complete</td>
+</tr>
+<tr>
+<td><code>rejected</code></td>
+<td>Bool</td>
+<td><code>true</code> if CC funds transfer cancelled</td>
+</tr>
+<tr>
+<td><code>reject_reason</code></td>
+<td>String</td>
+<td><code>null</code> unless <code>rejected</code>, textual reason of rejection otherwise</td>
+</tr>
+<tr>
+<td><code>when_submitted</code></td>
+<td>Date</td>
+<td>Timestamp of CC operation creation</td>
+</tr>
+<tr>
+<td><code>card_number_masked</code></td>
+<td>String</td>
+<td>Masked CC number used in the payment</td>
+</tr>
+<tr>
+<td><code>card_holder_name</code></td>
+<td>String</td>
+<td>Cardholder Name used in the payment</td>
 </tr>
 </tbody></table>
 
