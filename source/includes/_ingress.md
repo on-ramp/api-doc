@@ -1,11 +1,5 @@
 # Ingress API
 
-Any of the endpoints below will return:
-
-- **200** http status if everything was ok.
-- **400** http status if some parameters were invalid (It may specify exactly which ones).
-- **500** http status if something unexpected happened on ON/RAMP's server.
-
 ## Create Ingress Invoice
 
 > Example Call
@@ -162,6 +156,8 @@ credit the user, then it should answer the callback with an http 200 status code
 credit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
 invoice link). **Any other status code** but 200 or 204 **will be treated as an internal error from the merchant side**,
 pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
+
+> IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET, either for `payment_ack_url` or `cancel_url`.
 
 ### Response JSON Fields
 
