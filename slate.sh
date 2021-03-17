@@ -1,27 +1,40 @@
 #!/usr/bin/env bash
 set -o errexit #abort if any command fails
+
 me=$(basename "$0")
 
 help_message="\
-Usage: $me [-c FILE] [<options>]
-Deploy generated files to a git branch.
+Usage: $me [<options>] <command> [<command-options>]
+Run commands related to the slate process.
 
-Options:
+Commands:
 
-  -h, --help               Show this help information.
-  -v, --verbose            Increase verbosity. Useful for debugging.
-  -e, --allow-empty        Allow deployment of an empty directory.
-  -m, --message MESSAGE    Specify the message used when committing on the
-                           deploy branch.
-  -n, --no-hash            Don't append the source commit's hash to the deploy
-                           commit's message.
-      --source-only        Only build but not push
-      --push-only          Only push but not build
+  serve                   Run the middleman server process, useful for
+                          development.
+  build                   Run the build process.
+  deploy                  Will build and deploy files to branch. Use
+                          --no-build to only deploy.
+
+Global Options:
+
+  -h, --help              Show this help information.
+  -v, --verbose           Increase verbosity. Useful for debugging.
+
+Deploy options:
+  -e, --allow-empty       Allow deployment of an empty directory.
+  -m, --message MESSAGE   Specify the message used when committing on the
+                          deploy branch.
+  -n, --no-hash           Don't append the source commit's hash to the deploy
+                          commit's message.
+  --no-build              Do not build the source files.
 "
 
 
+run_serve() {
+  exec bundle exec middleman serve --watcher-force-polling
+}
+
 run_build() {
-  #docker run --rm -ti -p 4567:4567 -v $PWD/source:/usr/src/app/source -w /usr/src/app/source -v $PWD/build:/usr/src/app/build coinweb/onramp-api-doc:latest bundle exec middleman build
   bundle exec middleman build --clean
 }
 
@@ -30,6 +43,8 @@ parse_args() {
   if [ -e ".env" ]; then
     source .env
   fi
+
+  command=
 
   # Parse arg flags
   # If something is exposed as an environment variable, set/overwrite it
@@ -50,19 +65,23 @@ parse_args() {
     elif [[ $1 = "-n" || $1 = "--no-hash" ]]; then
       GIT_DEPLOY_APPEND_HASH=false
       shift
-    elif [[ $1 = "--source-only" ]]; then
-      source_only=true
+    elif [[ $1 = "--no-build" ]]; then
+      no_build=true
       shift
-    elif [[ $1 = "--push-only" ]]; then
-      push_only=true
+    elif [[ $1 = "serve" || $1 = "build" || $1 = "deploy" ]]; then
+      if [ ! -z "${command}" ]; then
+        >&2 echo "You can only specify one command."
+        exit 1
+      fi
+      command=$1
       shift
-    else
+    elif [ -z $1 ]; then
       break
     fi
   done
 
-  if [ ${source_only} ] && [ ${push_only} ]; then
-    >&2 echo "You can only specify one of --source-only or --push-only"
+  if [ -z "${command}" ]; then
+    >&2 echo "Command not specified."
     exit 1
   fi
 
@@ -92,8 +111,8 @@ main() {
     return 1
   fi
 
-  commit_title="$(git log -n 1 --format="%s" HEAD)"
-  commit_hash="$(git log -n 1 --format="%H" HEAD)"
+  commit_title=`git log -n 1 --format="%s" HEAD`
+  commit_hash=` git log -n 1 --format="%H" HEAD`
 
   #default commit message uses last title if a custom one is not supplied
   if [[ -z $commit_message ]]; then
@@ -105,7 +124,7 @@ main() {
     commit_message="$commit_message"$'\n\n'"generated from commit $commit_hash"
   fi
 
-  previous_branch="$(git rev-parse --abbrev-ref HEAD)"
+  previous_branch=`git rev-parse --abbrev-ref HEAD`
 
   if [ ! -d "$deploy_directory" ]; then
     echo "Deploy directory '$deploy_directory' does not exist. Aborting." >&2
@@ -113,9 +132,8 @@ main() {
   fi
 
   # must use short form of flag in ls for compatibility with macOS and BSD
-  if [[ -z "$(ls -A "$deploy_directory" 2>/dev/null)" && -z $allow_empty ]]; then
-    echo "Deploy directory '$deploy_directory' is empty. Aborting." >&2
-    echo "If you're sure you want to deploy an empty tree, use the --allow-empty / -e flag." >&2
+  if [[ -z `ls -A "$deploy_directory" 2> /dev/null` && -z $allow_empty ]]; then
+    echo "Deploy directory '$deploy_directory' is empty. Aborting. If you're sure you want to deploy an empty tree, use the --allow-empty / -e flag." >&2
     return 1
   fi
 
@@ -156,10 +174,8 @@ incremental_deploy() {
     0) echo No changes to files in $deploy_directory. Skipping commit.;;
     1) commit+push;;
     *)
-      echo git diff exited with code "$diff". Aborting. >&2
-      echo Staying on branch $deploy_branch so you can debug. >&2
-      echo To switch back to master, use: 'git symbolic-ref HEAD refs/heads/master && git reset --mixed' >&2
-      return "$diff"
+      echo git diff exited with code $diff. Aborting. Staying on branch $deploy_branch so you can debug. To switch back to main, use: git symbolic-ref HEAD refs/heads/main && git reset --mixed >&2
+      return $diff
       ;;
   esac
 }
@@ -191,10 +207,10 @@ disable_expanded_output() {
 }
 
 set_user_id() {
-  if [[ -z "$(git config user.name)" ]]; then
+  if [[ -z `git config user.name` ]]; then
     git config user.name "$default_username"
   fi
-  if [[ -z "$(git config user.email)" ]]; then
+  if [[ -z `git config user.email` ]]; then
     git config user.email "$default_email"
   fi
 }
@@ -202,9 +218,9 @@ set_user_id() {
 restore_head() {
   if [[ $previous_branch = "HEAD" ]]; then
     #we weren't on any branch before, so just set HEAD back to the commit it was on
-    git update-ref --no-deref HEAD "$commit_hash" "$deploy_branch"
+    git update-ref --no-deref HEAD $commit_hash $deploy_branch
   else
-    git symbolic-ref HEAD refs/heads/"$previous_branch"
+    git symbolic-ref HEAD refs/heads/$previous_branch
   fi
 
   git reset --mixed
@@ -220,11 +236,13 @@ sanitize() {
 
 parse_args "$@"
 
-if [[ ${source_only} ]]; then
+if [ "${command}" = "serve" ]; then
+  run_serve
+elif [[ "${command}" = "build" ]]; then
   run_build
-elif [[ ${push_only} ]]; then
-  main "$@"
-else
-  run_build
+elif [[ ${command} = "deploy" ]]; then
+  if [[ ${no_build} != true ]]; then
+    run_build
+  fi
   main "$@"
 fi

@@ -1,11 +1,5 @@
 # Egress API
 
-Any of the endpoints below will return:
-
-- **200** http status if everything was ok.
-- **400** http status if some parameters were invalid (It may specify exactly which ones).
-- **500** http status if something unexpected happened on ON/RAMP's server.
-
 ## Create Egress Invoice (App redirection flow)
 
 
@@ -282,6 +276,7 @@ onramp_user_email | String          | The email the user has registered with ON/
 cancel_callback   | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed                                                | No
 accept_unregister_user | Bool       | If `false` egress to users without an **ON/RAMP** account at the moment the egress was created will be immediately rejected. Defaults to `false` | No  
 required_merchant_confirmation | Bool | If `true`, **ON/RAMP** will wait for a merchant confirmation before releasing the funds. Defaults to `true`                       | No
+
 ### Egress Skin
 
 Field             |   Type      | Description                                               | Required
@@ -342,43 +337,3 @@ message     | String  | **MIGHT NOT BE PRESENT**: Additional status if user is n
 
 In that case, merchant should inform the user about email account being invalid and show a link to sign up with **ON/RAMP** at [https://onrampwallet.com](https://onrampwallet.com).
 
-
-## Approve or Reject User Email Egress Invoice (User email flow)
-
-
-> Example Call
-
-```shell
-curl https://api.onramp.ltd/rpc/mark_operation                           \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"  \
-  -H "Content-Type: application/json"                                    \
-  -X POST -d '{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
-              , "accept" : true
-              }'
-```
-
-> Request JSON Body
-
-```json
-{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
-, "accept" : true
-}
-
-```
-
-> Response JSON
-
-```json
-null
-```
-
-### HTTP Request
-
-<aside class="success"><b><code> POST /rpc/mark_operation </code></b></aside>
-
-### Request JSON Fields
-
-Field             |   Type       | Description
------------------ | ------------ | ---------
-op_id             | String       | UUID reference that was returned from the `send_funds_to_email` endpoint.
-accept            | Boolean      | Either if the merchant wants to approve (true) or reject (false) the process.
