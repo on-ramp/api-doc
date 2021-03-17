@@ -12,6 +12,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
 includes:
   - ingress
   - egress
+  - lifecycle
 
 search: true
 
@@ -113,7 +114,7 @@ All callbacks invoked by ON/RAMP are made using **`POST`** method.
 
 1. Merchant accepts, rejects or postpones the egress payment.
 
-1. If postponed in the callback, merchant will have up to 3 days to [accept or reject it](#approve-or-reject-egress-invoice).
+1. If postponed in the callback, merchant will have up to 3 days to [accept or reject it](#mark-operation).
 
 1. The payment will get automatically rejected if merchant fails to approve or reject within
    the 72 hours timeout.
@@ -127,7 +128,7 @@ All callbacks invoked by ON/RAMP are made using **`POST`** method.
    Merchant can decide whether to accept any user or only users previously registered on
    **ON/RAMP** using the `accept_unregister_user` option.
    On success, the returned `invoice_id` reference shall be used by the Merchant
-   to [accept or reject](#approve-or-reject-egress-invoice) the payment.
+   to [accept or reject](#mark-operation) the payment.
 
 1. Merchants will have up to 3 days to accept or reject the payment, unless the option `required_merchant_confirmation`
    is set to `false`, in which case it will be always considered accepted by the merchant.
