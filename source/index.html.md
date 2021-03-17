@@ -44,6 +44,8 @@ Changes since v1.0:
  * Document structure streamlined and ToC nesting reduced.
  * Typos, convoluted wording & broken internal links fixed.
  * Previously undocumented `op_status` endpoint covered.
+ * Added Error Handling section.
+ * Added Webhook Callbacks section.
 
 
 # Calling **ON/RAMP** API endpoints
@@ -63,7 +65,7 @@ Where `AUTH_TOKEN` is replaced with merchant's API key.
 
 ## Error handling
 
-All ON/RAMP endpoints follow standard HTTP semantics. Errors can be detected from response
+All ON/RAMP endpoints respect standard HTTP semantics. Errors can be detected from response
 status code:
 
 Status code | Meaning
@@ -86,6 +88,8 @@ Some endpoints involve *callbacks:* ON/RAMP system will sometimes make requests 
 Merchant-provided URLs.
 
 All callbacks invoked by ON/RAMP are made using **`POST`** method.
+
+In callback response, any HTTP status code besides 200 **is treated as callback failure**.
 
 
 # API flows
