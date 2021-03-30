@@ -352,6 +352,10 @@ a:hover {
     padding-left: $main-padding + 15px;
   }
 
+  ul li ul li:last-child {
+    margin-bottom: 15px;
+  }
+
   // the div is the tocify hidden div for placeholding stuff
   &>h1, &>h2, &>div {
     clear:both;
