@@ -2,6 +2,8 @@
 
 This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP deposit iframe in any authorized merchant site.
 
+**IMPORTANT**: Before starting this integration, please let us know and we will add your domains to our code in order to trust them and allow the `window.postMessage` API communication between the iframe and your site work.
+
 ## Adding the iframe in a html page
 
 In order to display the deposit iframe it is as easy as adding the following code:
