@@ -13,6 +13,7 @@ includes:
   - ingress
   - egress
   - lifecycle
+  - iframe
 
 search: true
 
