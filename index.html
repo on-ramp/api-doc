@@ -282,7 +282,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-9bc0a4fb.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-697acf91.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-a9fde460.js"></script>
 
@@ -378,6 +378,17 @@
                   </li>
                   <li>
                     <a href="#poll-operation-status" class="toc-h2 toc-link" data-title="Poll Operation status">Poll Operation status</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#iframe-integration" class="toc-h1 toc-link" data-title="Iframe integration">Iframe integration</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#adding-the-iframe-in-a-html-page" class="toc-h2 toc-link" data-title="Adding the iframe in a html page">Adding the iframe in a html page</a>
+                  </li>
+                  <li>
+                    <a href="#communicating-with-the-iframe-events" class="toc-h2 toc-link" data-title="Communicating with the iframe events">Communicating with the iframe events</a>
                   </li>
               </ul>
           </li>
@@ -1771,7 +1782,175 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td>Cardholder Name used in the payment</td>
 </tr>
 </tbody></table>
+<h1 id='iframe-integration'>Iframe integration</h1>
+<p>This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP deposit iframe in any authorized merchant site.</p>
 
+<p><strong>IMPORTANT</strong>: Before starting this integration, please let us know and we will add your domains to our code in order to trust them and allow the <code>window.postMessage</code> API communication between the iframe and your site work.</p>
+<h2 id='adding-the-iframe-in-a-html-page'>Adding the iframe in a html page</h2>
+<p>In order to display the deposit iframe it is as easy as adding the following code:</p>
+
+<blockquote>
+<p>Example iframe tag</p>
+</blockquote>
+<div class="highlight"><pre class="highlight html tab-html"><code><span class="nt">&lt;iframe</span> <span class="na">id=</span><span class="s">"onramp-iframe"</span> <span class="na">src=</span><span class="s">"https://onrampwallet.com/embedded-ingressing"</span> <span class="na">style=</span><span class="s">"width: 100%; min-width: 320px; min-height: 560px;"</span><span class="nt">&gt;&lt;/iframe&gt;</span>
+</code></pre></div>
+<p>As it can be seen, there are only three main attributes to deal with:</p>
+
+<ul>
+<li><p><code>id</code>: An id to later identify the iframe. The value can be anything you want as long as it is unique. On this docs we will asume it is:</p>
+
+<ul>
+<li>&quot;onramp-iframe&quot;</li>
+</ul></li>
+<li><p><code>src</code>: The source of the iframe. There are two options to be used depending on the environment you are integrating with.</p>
+
+<ul>
+<li><strong>production</strong>: <a href="https://onrampwallet.com/embedded-ingressing">https://onrampwallet.com/embedded-ingressing</a></li>
+<li><strong>stage</strong>: <a href="https://stage-wallet.onramp.ltd/embedded-ingressing">https://stage-wallet.onramp.ltd/embedded-ingressing</a></li>
+</ul></li>
+<li><p><code>style</code>: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).</p>
+
+<ul>
+<li><code>width: 100%;</code>: This way the iframe occupies all available width from parent</li>
+<li><code>min-width: 320px;</code>: Below this mininum width, the iframe wouldn&#39;t display its contents correctly.</li>
+<li><code>min-height: 560px</code>: Although this one it is just recommended, having this minimum height will make scrollbars disappear.</li>
+</ul></li>
+</ul>
+<h2 id='communicating-with-the-iframe-events'>Communicating with the iframe events</h2>
+<p>The iframe contains both part of the implementation the merchant would have on their side as well as some implementation that usually happens on the wallet side.</p>
+
+<p>Merchant would usually need to gather from the users what fiat amount and fiat currency they want to deposit and send it to the ON/RAMP api using the <code>create_ingress_invoice</code> endpoint to later redirect the users to the redirection url they got as a response from ON/RAMP. However, in this integration, the iframe will deal with gathering the information from the user and redirecting the user to the ON/RAMP wallet only if the payment was successful.</p>
+
+<p>Given that, merchant and the iframe need a way to communicate certain events and this is achieve by using the <code>window.postMessage()</code> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">API</a>.</p>
+
+<ul>
+<li><p>Events sent from merchant:</p>
+
+<ul>
+<li><code>get_deposit_details</code></li>
+<li><code>create_ingress_invoice</code></li>
+</ul></li>
+<li><p>Events sent from iframe:</p>
+
+<ul>
+<li><code>get_deposit_details</code></li>
+<li><code>create_ingress_invoice</code></li>
+</ul></li>
+</ul>
+
+<p>Both of the events are going to be initiated by the iframe and the merchant will respond to them.</p>
+<h3 id='example-of-integration'>Example of integration</h3>
+<p>On the right side, there is a full example of an implementation any merchant could use in order to integrate our iframe.</p>
+
+<p>Please, note the following: </p>
+
+<ul>
+<li><p>There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the <code>window.postMessage</code> and <code>window.addEventListener</code> APIs.</p></li>
+<li><p>The example hardcode some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.</p></li>
+</ul>
+
+<blockquote>
+<p>Example of integration</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">postMessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">stringifiedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">#onramp-iframe</span><span class="dl">'</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">stringifiedMessage</span><span class="p">,</span> <span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">createMessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="na">event</span><span class="p">:</span> <span class="nx">eventName</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">,</span>
+        <span class="nx">error</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">postData</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">url</span> <span class="o">=</span> <span class="dl">''</span><span class="p">,</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+            <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// *GET, POST, PUT, DELETE, etc.</span>
+            <span class="na">mode</span><span class="p">:</span> <span class="dl">'</span><span class="s1">cors</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// no-cors, *cors, same-origin</span>
+            <span class="na">cache</span><span class="p">:</span> <span class="dl">'</span><span class="s1">no-cache</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// *default, no-cache, reload, force-cache, only-if-cached</span>
+            <span class="na">credentials</span><span class="p">:</span> <span class="dl">'</span><span class="s1">same-origin</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// include, *same-origin, omit</span>
+            <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+                <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span>
+                <span class="c1">// 'Content-Type': 'application/x-www-form-urlencoded',</span>
+            <span class="p">},</span>
+            <span class="na">redirect</span><span class="p">:</span> <span class="dl">'</span><span class="s1">follow</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// manual, *follow, error</span>
+            <span class="na">referrerPolicy</span><span class="p">:</span> <span class="dl">'</span><span class="s1">no-referrer</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url</span>
+            <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="c1">// body data type must match "Content-Type" header</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span><span class="c1">// parses JSON response into native JavaScript objects</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nx">error</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">getDepositDetails</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Here you should get from your server what are the deposit details</span>
+    <span class="c1">// For easiness on the docs we are going to have them hardcoded here</span>
+
+    <span class="kd">const</span> <span class="nx">fiatCurrency</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">EUR</span><span class="dl">'</span>
+    <span class="kd">const</span> <span class="nx">minFiatAmount</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="kd">const</span> <span class="nx">maxFiatAmount</span> <span class="o">=</span> <span class="mi">2500</span>
+
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">get_deposit_details</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">responseData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">fiatCurrency</span><span class="p">,</span>
+        <span class="nx">minFiatAmount</span><span class="p">,</span>
+        <span class="nx">maxFiatAmount</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">)</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">createIngressInvoice</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Here you should send the provided data to your API</span>
+    <span class="c1">// API should call the `create_ingress_invoice` endpoint on ON/RAMP API</span>
+    <span class="c1">// Then the response should be sent back to the iframe</span>
+    <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
+
+    <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">&lt;YOUR_API_URL&gt;</span><span class="dl">'</span>
+    <span class="c1">// data contains `fiat_amount`</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">create_ingress_invoice</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">responseData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">invoiceId</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">invoice_id</span><span class="p">,</span>
+        <span class="na">redirectionURL</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">redirection_url</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">)</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">message</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">trustedDomains</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">https://stage-wallet.onramp.ltd</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">https://onrampwallet.com</span><span class="dl">'</span><span class="p">]</span>
+    <span class="kd">const</span> <span class="nx">defaultError</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">default_error</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="kc">null</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">trustedDomains</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">trustedDomain</span> <span class="o">=&gt;</span> <span class="nx">trustedDomain</span> <span class="o">===</span> <span class="nx">event</span><span class="p">.</span><span class="nx">origin</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="kd">let</span> <span class="nx">parsedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+            <span class="nx">eventName</span> <span class="o">=</span> <span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">event</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">get_deposit_details</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">getDepositDetails</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">create_ingress_invoice</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">createIngressInvoice</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="nb">Error</span><span class="p">({</span><span class="na">message</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Default error</span><span class="dl">'</span><span class="p">})</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span> <span class="o">||</span> <span class="nx">default_error</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
+            <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
