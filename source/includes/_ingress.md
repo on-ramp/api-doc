@@ -8,12 +8,12 @@
 curl https://api.onramp.ltd/rpc/create_ingress_invoice                                    \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"                   \
   -H "Content-Type: application/json"                                                     \
-  -X POST -d '{ "fiat_amount"        : 3000
-              , "fiat_currency"      : "EUR"
-              , "payment_ack_url"    : "wwww.example.com"
-              , "user_redirect_url"  : "www.example.com?user_redirected"
-              , "timeout_in_sec"     : 3600
-              , "offer_skin"         :
+  -X POST -d '{ "fiat_amount"             : 3000
+              , "fiat_currency"           : "EUR"
+              , "payment_ack_url"         : "wwww.example.com"
+              , "user_redirect_url"       : "www.example.com?user_redirected"
+              , "timeout_in_sec"          : 3600
+              , "offer_skin"              :
                   { "title" : "The Nice merchant"
                   , "image" : "https://static.example.com/merchant-logo"
                   , "description": "Awesome green Pluff with handler"
@@ -41,21 +41,26 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
                   , "member_since"           : "2020-01-01 12:35:00.000000+00"
                   , "merchant_customer_id"   : "u2340112"
                   }
+              , "card_number"             : "4929421234600821"
+              , "card_expiry_date"        : "2030-12-01"
+              , "card_cvv"                : "356"
+              , "card_holder_first_name"  : "John"
+              , "card_holder_last_name"   : "Smith"
               }'
 ```
 
 > Request JSON Body
 
 ```json
-{ "fiat_amount"        : 3000
-, "fiat_currency"      : "EUR"
-, "payment_ack_url"    : "wwww.example.com"
-, "user_redirect_url"  : "www.example.com?user_redirected"
-, "timeout_in_sec"     : 3600
-, "offer_skin"         :
-    { "title"      : "The Nice merchant"
-    , "image"      : "https://static.example.com/merchant-logo"
-    , "description": "Awesome green Pluff with handler"
+{ "fiat_amount"             : 3000
+, "fiat_currency"           : "EUR"
+, "payment_ack_url"         : "wwww.example.com"
+, "user_redirect_url"       : "www.example.com?user_redirected"
+, "timeout_in_sec"          : 3600
+, "offer_skin"              :
+    { "title"        : "The Nice merchant"
+    , "image"        : "https://static.example.com/merchant-logo"
+    , "description"  : "Awesome green Pluff with handler"
     }
 , "billing_details"    :
     { "payer_email"            : "mrpayer.payerson@email.com"
@@ -80,6 +85,11 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
     , "member_since"           : "2020-01-01 12:35:00.000000+00"
     , "merchant_customer_id"   : "u2340112"
     }
+, "card_number"             : "4929421234600821"
+, "card_expiry_date"        : "2030-12-01"
+, "card_cvv"                : "356"
+, "card_holder_first_name"  : "John"
+, "card_holder_last_name"   : "Smith"
 }
 
 ```
@@ -101,16 +111,21 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 
 ### Request JSON Fields
 
-Field             |   Type          | Description                                                                                                                          | Required
------------------ | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
-fiat_amount       | Integer         | Amount to be paid denominated in cents .                                                                                             | Yes
-fiat_currency     | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
-payment_ack_url   | Url             | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                                | Yes
-user_redirect_url | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                    | Yes
-timeout_in_sec    | Integer         | When to expire the link if unused.                                                                                                   | Yes
-offer_skin        | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                               | Yes
-billing_details   | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
-cancel_callback   | Url             | Merchant callback endpoint to be called when an ingress payment couldn't be completed                                                | No
+Field                    |   Type          | Description                                                                                                                          | Required
+-----------------        | --------------- | ------------------------------------------------------------------------------------------------------------------------------------ | --------
+fiat_amount              | Integer         | Amount to be paid denominated in cents .                                                                                             | Yes
+fiat_currency            | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.  | Yes
+payment_ack_url          | Url             | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                                | Yes
+user_redirect_url        | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                    | Yes
+timeout_in_sec           | Integer         | When to expire the link if unused.                                                                                                   | Yes
+offer_skin               | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                               | Yes
+billing_details          | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.  | Yes
+cancel_callback          | Url             | Merchant callback endpoint to be called when an ingress payment couldn't be completed.                                               | No
+card_number              | String          | Credit card number to be used to attempt the payment. If not sent, no credit card details will be prefilled.                         | No       
+card_expiry_date         | String          | Credit card expiry date to be used to attempt the payment.                                                                           | No
+card_cvv                 | String          | Credit card CVV to be used to attempt the payment.                                                                                   | No
+card_holder_first_name   | String          | Credit card cardholder first name to be used to attempt the payment.                                                                 | No
+card_holder_last_name    | String          | Credit card cardholder last name to attempt the payment.                                                                             | No
 
 ### Ingress Skin
 
