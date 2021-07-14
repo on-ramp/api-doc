@@ -10,12 +10,13 @@ language_tabs: # must be one of https://git.io/vQNgJ
 #  - <a href='https://coinweb.io' target='_blank' rel='noopener'>Sign Up for a Developer Key</a>
 
 includes:
-   - ingress
-   - egress
-   - lifecycle
-   - iframe
-   - server_to_server
-   - quotes
+  - ingress
+  - egress
+  - lifecycle
+  - iframe
+  - crypto
+  - server_to_server
+  - quotes
 
 search: true
 
