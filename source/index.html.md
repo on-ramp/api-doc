@@ -14,6 +14,7 @@ includes:
   - egress
   - lifecycle
   - iframe
+  - crypto
 
 search: true
 
