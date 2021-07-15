@@ -40,84 +40,100 @@ Given that, merchant and the iframe need a way to communicate certain events and
 
 There are several methods the iframe works with and so the merchant will have to deal with them too. Except the "Crypto Ingress Configuration", in all the other ones, the merchant should just work as a proxy and forward and return the data.
 
-- Crypto Ingress Configuration
+### Crypto Ingress Configuration
 Requests for the merchant to customize the appearance and some parameters of the iframe.
 	
-	- crypto_ingress_config (sent by the iframe)  
+- crypto_ingress_config (sent by the iframe)  
+*No parameters*    
 
-	*No parameters*    
+- crypto_ingress_config_response (sent by the merchant)
 
-	- crypto_ingress_config_response (sent by the merchant)
+Main Parameters:
 
-	Field         |   Type             | Description                                            | Required | Default Value
-	------------- | ------------------ | ------------------------------------------------------ | -------- | -------------
-	min_amount    | Integer            | Short string containing merchant's or product's name.  | No       | 10
-	max_amount    | Integer            | image to stylize the offer.                            | No       | 1000
-	fiat          | String             | A text explaining what the user is purchasing.         | No       | EUR
-	user_info     | User Info          | A text explaining what the user is purchasing.         | Yes      | --
-	customization | Customization Info | A text explaining what the user is purchasing.         | No       | --
+Field         |   Type             | Description                                            | Required | Default Value
+------------- | ------------------ | ------------------------------------------------------ | -------- | -------------
+min_amount    | Integer            | Short string containing merchant's or product's name.  | No       | 10
+max_amount    | Integer            | image to stylize the offer.                            | No       | 1000
+fiat          | String             | A text explaining what the user is purchasing.         | No       | EUR
+user_info     | User Info          | A text explaining what the user is purchasing.         | Yes      | --
+customization | Customization Info | A text explaining what the user is purchasing.         | No       | --
 
-	User Info:
-	Field                   |   Type            | Description                                               | Required 
-	----------------------- | ----------------- | --------------------------------------------------------- | -------- 
-	merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
+User Info:
 
-	Customization Info:
-	Field            |   Type            | Description                                                | Required 
-	---------------- | ----------------- | ---------------------------------------------------------  | -------- 
-	primary_color    | String            | The main accent color that will be applied on UI elements. | No       
-	font_color       | String            | The font color that will be applied on texts.              | No       
-	font_color_type  | String            | Either if UI is light or dark.                             | No      
-	font_family      | String          	 | The font family name that will be applied in the whole UI. | No      
-	background_color | String 		     | The background color for the iframe.                       | No
+Field                   |   Type            | Description                                               | Required 
+----------------------- | ----------------- | --------------------------------------------------------- | -------- 
+merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
+
+Customization Info:
+
+Field            |   Type            | Description                                                | Required 
+---------------- | ----------------- | ---------------------------------------------------------  | -------- 
+primary_color    | String            | The main accent color that will be applied on UI elements. | No       
+font_color       | String            | The font color that will be applied on texts.              | No       
+font_color_type  | String            | Either if UI is light or dark.                             | No      
+font_family      | String          	 | The font family name that will be applied in the whole UI. | No      
+background_color | String 		     | The background color for the iframe.                       | No
 
 
-- Crypto Ingress Status
+### Crypto Ingress Status
 Requests for the iframe to know about the statuses of current open operations
 	
-	- crypto_op_status (sent by the iframe)
+- crypto_op_status (sent by the iframe)
 
-	Field                   |   Type            | Description                                               | Required 
-	----------------------- | ----------------- | --------------------------------------------------------- | -------- 
-	merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
+Main Parameters:
 
-	- crypto_op_status_response (sent by the merchant)
+Field                   |   Type            | Description                                               | Required 
+----------------------- | ----------------- | --------------------------------------------------------- | -------- 
+merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
 
-	Field                   |   Type            | Description                                                    | Required 
-	----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
-	data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+- crypto_op_status_response (sent by the merchant)
 
-- Crypto Ingress Adress
+Main Parameters:
+
+Field                   |   Type            | Description                                                    | Required 
+----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
+data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+
+### Crypto Ingress Adress
 Requests for the iframe to ask for a crypto address to send the funds
 
-	- get_address (sent by the iframe)
+- get_address (sent by the iframe)
 
-	Field                   |   Type            | Description                                               | Required 
-	----------------------- | ----------------- | --------------------------------------------------------- | -------- 
-	fiat_amount             | String            | The amount of fiat to get.                                | Yes 
-	fiat_currency           | String            | The currency of the fiat.                                 | Yes 
-	crypto_currency         | String            | The crypto currency to be used.                           | Yes 	
+Main Parameters:
 
-	- get_address_response (sent by the merchant)
+Field                   |   Type            | Description                                               | Required 
+----------------------- | ----------------- | --------------------------------------------------------- | -------- 
+fiat_amount             | String            | The amount of fiat to get.                                | Yes 
+fiat_currency           | String            | The currency of the fiat.                                 | Yes 
+crypto_currency         | String            | The crypto currency to be used.                           | Yes 	
 
-	Field                   |   Type            | Description                                                    | Required 
-	----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
-	data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+- get_address_response (sent by the merchant)
 
-- Crypto Ingress Cancelation
+Main Parameters:
+
+Field                   |   Type            | Description                                                    | Required 
+----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
+data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+
+### Crypto Ingress Cancelation
 Requests for the iframe to cancel an open operation
 
-	- crypto_op_cancel (sent by the iframe)
+- crypto_op_cancel (sent by the iframe)
 
-	Field                   |   Type            | Description                                               | Required 
-	----------------------- | ----------------- | --------------------------------------------------------- | -------- 
-	op_id                   | String            | The UUID of the operation to cancel.                      | Yes 
+Main Parameters:
 
-	- crypto_op_cancel_response (sent by the merchant)
+Field                   |   Type            | Description                                               | Required 
+----------------------- | ----------------- | --------------------------------------------------------- | -------- 
+op_id                   | String            | The UUID of the operation to cancel.                      | Yes 
 
-	Field                   |   Type            | Description                                                    | Required 
-	----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
-	data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+- crypto_op_cancel_response (sent by the merchant)
+
+Main Parameters:
+
+Field                   |   Type            | Description                                                    | Required 
+----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
+data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+
 
 ### Example of integration
 
