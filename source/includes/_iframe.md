@@ -1,12 +1,12 @@
-# Iframe integration
+# Ingress iframe integration
 
-This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP deposit iframe in any authorized merchant site.
+This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP **deposit iframe** in any authorized merchant site.
 
 **IMPORTANT**: Before starting this integration, please let us know and we will add your domains to our code in order to trust them and allow the `window.postMessage` API communication between the iframe and your site work.
 
 ## Adding the iframe in a html page
 
-In order to display the deposit iframe it is as easy as adding the following code:
+In order to display the deposit iframe it is as easy as adding the following code (displayed on the right side):
 
 > Example iframe tag
 
@@ -38,7 +38,7 @@ The iframe contains both part of the implementation the merchant would have on t
 
 Merchant would usually need to gather from the users what fiat amount and fiat currency they want to deposit and send it to the ON/RAMP api using the `create_ingress_invoice` endpoint to later redirect the users to the redirection url they got as a response from ON/RAMP. However, in this integration, the iframe will deal with gathering the information from the user and redirecting the user to the ON/RAMP wallet only if the payment was successful.
 
-Given that, merchant and the iframe need a way to communicate certain events and this is achieve by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
+Given that, merchant host page and the iframe need a way to communicate certain events and this is achieve by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
 
 - Events sent from merchant:
 	
@@ -60,7 +60,7 @@ Please, note the following:
 
 - There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the `window.postMessage` and `window.addEventListener` APIs.
 
-- The example hardcode some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.
+- The example hardcodes some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.
 
 > Example of integration
 
