@@ -6,7 +6,7 @@ This part of the docs provides a brief explananation and technical steps on how 
 
 ## Adding the iframe in a html page
 
-In order to display the deposit iframe it is as easy as adding the following code:
+In order to display the deposit iframe it is as easy as adding the following code (displayed on the right side):
 
 > Example iframe tag
 
@@ -41,7 +41,7 @@ The iframe contains both part of the implementation the merchant would have on t
 
 Merchant would usually need to gather from the users what fiat amount and fiat currency they want to deposit and send it to the ON/RAMP api using the `create_ingress_invoice` endpoint to later redirect the users to the redirection url they got as a response from ON/RAMP. However, in this integration, the iframe will deal with gathering the information from the user and redirecting the user to the ON/RAMP wallet only if the payment was successful.
 
-Given that, merchant and the iframe need a way to communicate certain events and this is achieve by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
+Given that, merchant host page and the iframe need a way to communicate certain events and this is achieve by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
 
 -   Events sent from merchant:
 
