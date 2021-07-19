@@ -6,12 +6,12 @@ This part of the docs provides a brief explananation and technical steps on how 
 
 ## Adding the iframe in a html page
 
-In order to display the crypto iframe it is as easy as adding the following code:
+In order to display the crypto iframe it is as easy as adding the following code (displayed on the right side):
 
 > Example iframe tag
 
 ```html
-<iframe id="crypto-iframe" src="https://crypto.onrampwallet.com" style="width: 100%; min-width: 320px; min-height: 500px;"></iframe>
+<iframe id="crypto-iframe" src="https://crypto.onramp.ltd" style="width: 100%; min-width: 320px; min-height: 500px;"></iframe>
 ```
 
 As it can be seen, there are only three main attributes to deal with:
@@ -22,41 +22,41 @@ As it can be seen, there are only three main attributes to deal with:
 
 - `src`: The source of the iframe. There are two options to be used depending on the environment you are integrating with.
 	
-	- **production**: [https://crypto.onrampwallet.com](https://crypto.onrampwallet.com)
+	- **production**: [https://crypto.onramp.ltd](https://crypto.onramp.ltd)
 	- **stage**: [https://crypto.stage-wallet.onramp.ltd](https://crypto.stage-wallet.onramp.ltd)
 
 - `style`: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).
 	
 	- `width: 100%;`: This way the iframe occupies all available width from parent
 	- `min-width: 320px;`: Below this mininum width, the iframe wouldn't display its contents correctly.
-	- `min-height: 560px`: Although this one it is just recommended, having this minimum height will make scrollbars disappear.
+	- `min-height: 500px`: Although this one it is just recommended, having this minimum height will make scrollbars disappear.
 
 
 ## Communicating with the iframe events
 
 The iframe just contains the code to display the information for the whole process, but in order to actually make the communications with the ON/RAMP server it relies on the host page to forward those. This is mainly because all the calls need to be authenticated and for that we are going to use the merchants API key and that can't be exposed on the frontend.
 
-Given that, merchant and the iframe need a way to communicate certain events and this is achieve by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
+Given that, merchant host page and the iframe need a way to communicate certain events and this is achieved by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
 
-There are several methods the iframe works with and so the merchant will have to deal with them too. Except the "Crypto Ingress Configuration", in all the other ones, the merchant should just work as a proxy and forward and return the data.
+There are several methods the iframe works with and so the merchant will have to deal with them too. Except the "Crypto Ingress Configuration", in all the other ones, the merchant should just work as a proxy and forward and return the data. The urls to be hit are the same detailed [on the first section of this doc](/#on-ramp-merchant-integration).
 
 ### Crypto Ingress Configuration
 Requests for the merchant to customize the appearance and some parameters of the iframe.
 	
-- crypto_ingress_config (sent by the iframe)  
+- `crypto_ingress_config` (sent by the iframe)  
 *No parameters*    
 
-- crypto_ingress_config_response (sent by the merchant)
+- `crypto_ingress_config_response` (returned by the merchant)
 
 Main Parameters:
 
-Field         |   Type             | Description                                            | Required | Default Value
-------------- | ------------------ | ------------------------------------------------------ | -------- | -------------
-min_amount    | Integer            | Short string containing merchant's or product's name.  | No       | 10
-max_amount    | Integer            | image to stylize the offer.                            | No       | 1000
-fiat          | String             | A text explaining what the user is purchasing.         | No       | EUR
-user_info     | User Info          | A text explaining what the user is purchasing.         | Yes      | --
-customization | Customization Info | A text explaining what the user is purchasing.         | No       | --
+Field         |   Type             | Description                                          | Required | Default Value
+------------- | ------------------ | ---------------------------------------------------- | -------- | -------------
+min_amount    | Integer            | Minimum fiat amount for the transaction.             | No       | 10
+max_amount    | Integer            | Maximum fiat amount for the transaction.             | No       | 1000
+fiat          | String             | ISO 3 digits fiat currency code.                     | No       | EUR
+user_info     | User Info          | A JSON object containing information about the user. | Yes      | --
+customization | Customization Info | A JSON object containing look and feel settings.     | No       | --
 
 User Info:
 
@@ -78,7 +78,7 @@ background_color | String 		     | The background color for the iframe.         
 ### Crypto Ingress Status
 Requests for the iframe to know about the statuses of current open operations
 	
-- crypto_op_status (sent by the iframe)
+- `crypto_op_status` (sent by the iframe)
 
 Main Parameters:
 
@@ -86,53 +86,53 @@ Field                   |   Type            | Description                       
 ----------------------- | ----------------- | --------------------------------------------------------- | -------- 
 merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
 
-- crypto_op_status_response (sent by the merchant)
+- `crypto_op_status_response` (sent by the merchant)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                                    | Required 
------------------------ | ----------------- | -------------------------------------------------------------- | -------- 
-data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+Field                   |   Type            | Description                                                     | Required 
+----------------------- | ----------------- | --------------------------------------------------------------- | -------- 
+data                    | JSON              | Just the forwarded response from `/crypto_op_status` endpoint.  | Yes 
 
 ### Crypto Ingress Adress
 Requests for the iframe to ask for a crypto address to send the funds
 
-- get_address (sent by the iframe)
+- `get_address` (sent by the iframe)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                               | Required 
------------------------ | ----------------- | --------------------------------------------------------- | -------- 
-fiat_amount             | String            | The amount of fiat to get.                                | Yes 
-fiat_currency           | String            | The currency of the fiat.                                 | Yes 
-crypto_currency         | String            | The crypto currency to be used.                           | Yes 	
+Field                   |   Type            | Description                     | Required 
+----------------------- | ----------------- | ------------------------------- | -------- 
+fiat_amount             | String            | The amount of fiat to get.      | Yes 
+fiat_currency           | String            | The currency of the fiat.       | Yes 
+crypto_currency         | String            | The crypto currency to be used. | Yes 	
 
-- get_address_response (sent by the merchant)
+- `get_address_response` (sent by the merchant)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                                    | Required 
------------------------ | ----------------- | -------------------------------------------------------------- | -------- 
-data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+Field                   |   Type            | Description                                                                         | Required 
+----------------------- | ----------------- | ----------------------------------------------------------------------------------- | -------- 
+data                    | JSON              | Just the forwarded response from `/blockchain/api/v1/{chain}/address/new` endpoint. | Yes 
 
 ### Crypto Ingress Cancelation
 Requests for the iframe to cancel an open operation
 
-- crypto_op_cancel (sent by the iframe)
+- `crypto_op_cancel` (sent by the iframe)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                               | Required 
------------------------ | ----------------- | --------------------------------------------------------- | -------- 
-op_id                   | String            | The UUID of the operation to cancel.                      | Yes 
+Field                   |   Type            | Description                          | Required 
+----------------------- | ----------------- | ------------------------------------ | -------- 
+op_id                   | String            | The UUID of the operation to cancel. | Yes 
 
-- crypto_op_cancel_response (sent by the merchant)
+- `crypto_op_cancel_response` (sent by the merchant)
 
 Main Parameters:
 
 Field                   |   Type            | Description                                                    | Required 
 ----------------------- | ----------------- | -------------------------------------------------------------- | -------- 
-data                    | JSON              | Just the forwarded response from `crypto_op_status` endpoint.  | Yes 
+data                    | JSON              | Just the forwarded response from `crypto_op_cancel` endpoint.  | Yes 
 
 
 ### Example of integration
@@ -143,7 +143,7 @@ Please, note the following:
 
 - There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the `window.postMessage` and `window.addEventListener` APIs.
 
-- The example hardcode some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.
+- The example hardcodes some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.
 
 > Example of integration
 
