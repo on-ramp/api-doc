@@ -94,7 +94,7 @@ Field                   |   Type            | Description                       
 ----------------------- | ----------------- | --------------------------------------------------------------- | -------- 
 data                    | JSON              | Just the forwarded response from `/crypto_op_status` endpoint.  | Yes 
 
-### Crypto Ingress Adress
+### Crypto Ingress Address
 Requests for the iframe to ask for a crypto address to send the funds
 
 - `get_address` (sent by the iframe)

@@ -15,6 +15,7 @@ includes:
   - lifecycle
   - iframe
   - crypto
+  - crypto_flow
   - server_to_server
   - quotes
 
