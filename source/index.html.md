@@ -14,6 +14,7 @@ includes:
   - egress
   - lifecycle
   - iframe
+  - server_to_server
 
 search: true
 
