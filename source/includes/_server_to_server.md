@@ -194,7 +194,7 @@ This table defines all the potential required fields for credit card as well as 
 | card_cvv               | The CVV value for the card                                                                                                | string | true            |
 | card_holder_first_name | The card first holder name as it appears on the card                                                                      | string | false           |
 | card_holder_last_name  | The card last holder name as it appears on the card                                                                       | string | false           |
-| email                  | Email of the user making the payment                                                                                      | string | false           |
+| email                  | Email of the user making the payment                                                                                      | string | true            |
 | street                 | Street of the user's billing address                                                                                      | string | false           |
 | city                   | City of the user's billing address                                                                                        | string | false           |
 | postal_code            | Postal code of the user's billing address                                                                                 | string | false           |
