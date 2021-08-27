@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/api-docs
   docker:
-    - image: circleci/ruby:2.6-node
+    - image: circleci/ruby@sha256:b15472647d2574e122c3b1d49e2da6534d8a2000241c42be741d80d6624b12d5
       environment:
         BUNDLE_JOBS: 3
         BUNDLE_RETRY: 3
