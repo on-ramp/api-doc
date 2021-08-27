@@ -152,7 +152,7 @@ city                  | String      | City from the billing address.            
 county                | String      | County from the billing address.                                      | No
 state                 | String      | State from the billing address.                                       | No
 prefecture            | String      | Prefecture from the billing address.                                  | No
-country               | String      | Country from the billing address. Should be a 3 letter ISO Code.      | No
+country               | String      | Country from the billing address. Should be a 3 letter ISO Code.      | Yes
 kyc_verified          | Date        | Date when the user was KYC verified.                                  | No
 kyc_document          | String      | Type of the document. Some examples would be Passport or National_ID. | No
 kyc_reference         | String      | A unique id of the KYC verification. Something like a UUID.           | No
