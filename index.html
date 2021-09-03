@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.2</title>
+    <title>ON/RAMP payment API v1.3</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.2</span>
+        <span class="toc-link">API v1.3</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -427,6 +427,17 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#quotes-api" class="toc-h1 toc-link" data-title="Quotes API">Quotes API</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#base-url" class="toc-h2 toc-link" data-title="Base URL">Base URL</a>
+                  </li>
+                  <li>
+                    <a href="#get-reference-prices" class="toc-h2 toc-link" data-title="Get reference prices">Get reference prices</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
@@ -434,7 +445,7 @@
       <div class="content">
         <h1 id='on-ramp-merchant-integration'>ON/RAMP merchant integration.</h1><h2 id='terminology-and-acronyms'>Terminology and Acronyms</h2>
 <ul>
-<li>Merchant: The service using <strong>ON/RAMP</strong> as payment processor.</li>
+<li> Merchant: The service using <strong>ON/RAMP</strong> as payment processor.</li>
 <li><p>User: The physical person who sends or receives funds to/from the merchant through <strong>ON/RAMP</strong>.</p></li>
 <li><p>CC: credit card.</p></li>
 </ul>
@@ -445,10 +456,16 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.2:</p>
+
+<ul>
+<li> Added Quotes API section</li>
+</ul>
+
 <p>Changes since v1.1:</p>
 
 <ul>
-<li>Updated required fields for Create Ingress Invoice endpoint</li>
+<li> Updated required fields for Create Ingress Invoice endpoint</li>
 </ul>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints</h1>
 <p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON
@@ -470,20 +487,20 @@ status code:</p>
 
 <table><thead>
 <tr>
-<th style="text-align: right">Status code</th>
+<th>Status code</th>
 <th>Meaning</th>
 </tr>
 </thead><tbody>
 <tr>
-<td style="text-align: right"><strong>200</strong></td>
+<td><strong>200</strong></td>
 <td>Everything was ok. Success.</td>
 </tr>
 <tr>
-<td style="text-align: right"><strong>400</strong></td>
+<td><strong>400</strong></td>
 <td>Invalid request parameters. See response body.</td>
 </tr>
 <tr>
-<td style="text-align: right"><strong>500</strong></td>
+<td><strong>500</strong></td>
 <td>Temporary ON/RAMP server malfunction.</td>
 </tr>
 </tbody></table>
@@ -2663,6 +2680,75 @@ Operation has been cancelled.</li>
 <li><p>Not to assume that objects with an unespecified contain will be either empty or not.</p></li>
 <li><p>Be able to answer unkown types of status change callbacks by answering <code>continue</code>.</p></li>
 </ul>
+<h1 id='quotes-api'>Quotes API</h1>
+<p>In case you are getting crypto in return of an <a href="/#ingress-api">ingress</a>, you can get the reference prices for it if you would like to display that to users at the beginning of the process.</p>
+<h2 id='base-url'>Base URL</h2>
+<p>Production and Test:
+<strong><a href="https://api.blockfort-exchange.io">https://api.blockfort-exchange.io</a></strong></p>
+<h2 id='get-reference-prices'>Get reference prices</h2>
+<blockquote>
+<p>Example Call</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="se">\</span>
+    <span class="s1">'https://api.blockfort-exchange.io/referenceTrade'</span> <span class="se">\</span>
+    <span class="nt">-H</span> <span class="s1">'x-api-key: QU0J2HfUMH0r2Yh3I3EhRyK4qRx30likZ7dBRsP8'</span> <span class="se">\</span>
+    <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+    <span class="nt">-d</span> <span class="s1">'{
+            "currency_lhs":"gbp",
+            "currency_rhs":"usdt",
+            "amount_lhs":-100
+        }'</span>
+</code></pre></div>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"currency_lhs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gbp"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"currency_rhs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usdt"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"amount_lhs"</span><span class="p">:</span><span class="w"> </span><span class="mi">-100</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"currency_lhs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gbp"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"currency_rhs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usdt"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"amount_lhs"</span><span class="p">:</span><span class="w"> </span><span class="mi">-100</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"amount_rhs"</span><span class="p">:</span><span class="w"> </span><span class="mf">134.37825813749998</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"exchange_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.343782581375</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"timestamp_utc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-09-03T04:16:14"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
+<aside class="success"><b><code> GET /referenceTrade </code></b></aside>
+<h3 id='request-json-fields'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency_lhs</td>
+<td>Integer</td>
+<td>Left hand side currency.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>currency_rhs</td>
+<td>Integer</td>
+<td>Right hand side currency.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>amount_lhs</td>
+<td>Integer</td>
+<td>Amount to buy (if positive) or sell (if negative) of the left hand side currency.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
 
       </div>
       <div class="dark-box">
