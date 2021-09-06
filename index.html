@@ -2696,7 +2696,8 @@ Operation has been cancelled.</li>
     <span class="nt">-d</span> <span class="s1">'{
             "currency_lhs":"gbp",
             "currency_rhs":"usdt",
-            "amount_lhs":-100
+            "amount_lhs":100,
+            "direction":"sell"
         }'</span>
 </code></pre></div>
 <blockquote>
@@ -2705,7 +2706,8 @@ Operation has been cancelled.</li>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"currency_lhs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gbp"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"currency_rhs"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usdt"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"amount_lhs"</span><span class="p">:</span><span class="w"> </span><span class="mi">-100</span><span class="w">
+    </span><span class="nl">"amount_lhs"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sell"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -2732,21 +2734,27 @@ Operation has been cancelled.</li>
 </thead><tbody>
 <tr>
 <td>currency_lhs</td>
-<td>Integer</td>
+<td>String</td>
 <td>Left hand side currency.</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>currency_rhs</td>
-<td>Integer</td>
+<td>String</td>
 <td>Right hand side currency.</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>amount_lhs</td>
 <td>Integer</td>
-<td>Amount to buy (if positive) or sell (if negative) of the left hand side currency.</td>
+<td>Amount to buy (if positive) or sell (if negative) of the left hand side currency. Sign will be ignored if the &quot;direction&quot; parameter is sent.</td>
 <td>Yes</td>
+</tr>
+<tr>
+<td>direction</td>
+<td>String</td>
+<td>Optional parameter that indicates if the results are going to be about buying or selling the left hand side currency.</td>
+<td>No</td>
 </tr>
 </tbody></table>
 
