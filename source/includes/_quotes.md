@@ -19,7 +19,8 @@ curl -X GET \
 	-d '{
 			"currency_lhs":"gbp",
 			"currency_rhs":"usdt",
-			"amount_lhs":-100
+			"amount_lhs":100,
+			"direction":"sell"
 		}'
 ```
 
@@ -29,7 +30,8 @@ curl -X GET \
 {
 	"currency_lhs": "gbp",
 	"currency_rhs": "usdt",
-	"amount_lhs": -100
+	"amount_lhs": 100,
+	"direction": "sell"
 }
 ```
 
@@ -52,8 +54,9 @@ curl -X GET \
 
 ### Request JSON Fields
 
-| Field        | Type    | Description                                                                       | Required |
-| ------------ | ------- | --------------------------------------------------------------------------------- | -------- |
-| currency_lhs | Integer | Left hand side currency.                                                          | Yes      |
-| currency_rhs | Integer | Right hand side currency.                                                         | Yes      |
-| amount_lhs   | Integer | Amount to buy (if positive) or sell (if negative) of the left hand side currency. | Yes      |
+| Field        | Type    | Description                                                                                                                                  | Required |
+| ------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| currency_lhs | String  | Left hand side currency.                                                                                                                     | Yes      |
+| currency_rhs | String  | Right hand side currency.                                                                                                                    | Yes      |
+| amount_lhs   | Integer | Amount to buy (if positive) or sell (if negative) of the left hand side currency. Sign will be ignored if the "direction" parameter is sent. | Yes      |
+| direction    | String  | Optional parameter that indicates if the results are going to be about buying or selling the left hand side currency.                        | No       |
