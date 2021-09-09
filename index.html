@@ -568,8 +568,8 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
   <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"             : 3000
               , "fiat_currency"           : "EUR"
-              , "payment_ack_url"         : "wwww.example.com"
-              , "user_redirect_url"       : "www.example.com?user_redirected"
+              , "payment_ack_url"         : "https://www.example.com"
+              , "user_redirect_url"       : "https://www.example.com?user_redirected"
               , "timeout_in_sec"          : 3600
               , "offer_skin"              :
                   { "title" : "The Nice merchant"
@@ -609,54 +609,57 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"payment_ack_url"</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"user_redirect_url"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"timeout_in_sec"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"offer_skin"</span><span class="w">              </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"title"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"image"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"card_number"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"4929421234600821"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"card_expiry_date"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"2030-12-01"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"card_cvv"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"356"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"card_holder_first_name"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"card_holder_last_name"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_document"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_doc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"player_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"member_since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"card_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4929421234600821"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_expiry_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2030-12-01"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_cvv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"356"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_holder_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_holder_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-
 </span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
 </span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_ingress_invoice </code></b></aside>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
@@ -955,8 +958,8 @@ pausing the user payment and prompting manual intervention, potentially delaying
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
   <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
-              , "payment_ack_url"    : "wwww.example.com"
-              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "payment_ack_url"    : "https://www.example.com"
+              , "user_redirect_url"  : "https://www.example.com?user_redirected"
               , "timeout_in_sec"     : 3600
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
@@ -991,49 +994,52 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"payment_ack_url"</span><span class="w">    </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"timeout_in_sec"</span><span class="w">     </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_document"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_doc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"player_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"member_since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-
 </span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f696e6772657373696e673f7265666572656e63653d65646361623662342d343464342d343763652d396261322d366636656562626661313567"</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/egressing?reference=cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f696e6772657373696e673f7265666572656e63653d65646361623662342d343464342d343763652d396261322d366636656562626661313567"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
 </span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/create_egress_invoice </code></b></aside>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
@@ -1302,7 +1308,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                         <span class="se">\</span>
   <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
               , "fiat_currency"      : "EUR"
-              , "user_redirect_url"  : "www.example.com?user_redirected"
+              , "user_redirect_url"  : "https://www.example.com?user_redirected"
               , "offer_skin"         :
                   { "title" : "The Nice merchant"
                   , "image" : "https://static.example.com/merchant-logo"
@@ -1337,48 +1343,51 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"user_redirect_url"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"www.example.com?user_redirected"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"offer_skin"</span><span class="w">         </span><span class="p">:</span><span class="w">     
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"title"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"image"</span><span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"onramp_user_email"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
-    </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"onramp_user_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_document"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_doc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"player_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"member_since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-
 </span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
 </span></code></pre></div><h3 id='http-request-2'>HTTP Request</h3>
 <aside class="success"><b><code> POST /rpc/send_funds_to_email </code></b></aside>
 <h3 id='request-json-fields-2'>Request JSON Fields</h3>
@@ -1386,7 +1395,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <tr>
 <th>Field</th>
 <th>Type</th>
-<th> Description</th>
+<th>Description</th>
 <th>Required</th>
 </tr>
 </thead><tbody>
@@ -1640,10 +1649,10 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <p>Response JSON</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"hint"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"details"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00001"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_CODE_UNKNOWN_USER_ACCOUNT"</span><span class="w">
+  </span><span class="nl">"hint"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"details"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00001"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_CODE_UNKNOWN_USER_ACCOUNT"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>In that case, merchant should inform the user about email account being invalid and show a link to sign up with <strong>ON/RAMP</strong> at <a href="https://onrampwallet.com">https://onrampwallet.com</a>.</p>
@@ -1663,10 +1672,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"accept"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
-</span><span class="p">}</span><span class="w">
-
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="p">,</span><span class="w"> </span><span class="nl">"accept"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
@@ -1713,13 +1719,15 @@ completion or query rejection reason.</p>
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="nl">"invoices_id"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-  </span><span class="s2">"eaed5195-b85c-41aa-9661-10693b65976e"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"0928b88d-372a-475e-8095-2f20a66cfa9f"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"5059dadc-4463-440b-9025-694355c0a941"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"73f4a88c-8591-4550-9b4d-dfa687d61a89"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"e59eeff7-5780-4707-b1f6-fa0a7e020ce0"</span><span class="w">
-</span><span class="p">]}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoices_id"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="s2">"eaed5195-b85c-41aa-9661-10693b65976e"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"0928b88d-372a-475e-8095-2f20a66cfa9f"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"5059dadc-4463-440b-9025-694355c0a941"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"73f4a88c-8591-4550-9b4d-dfa687d61a89"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"e59eeff7-5780-4707-b1f6-fa0a7e020ce0"</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
