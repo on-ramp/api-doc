@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.3
+title: ON/RAMP payment API v1.4
 
-version: 1.3
+version: 1.4
 
 language_tabs: # must be one of https://git.io/vQNgJ
    - shell: cURL
@@ -41,13 +41,13 @@ Test:
 
 ## Changelog
 
+Changes since v1.3:
+
+-  Update examples for op_status endpoint
+
 Changes since v1.2:
 
 -  Added Quotes API section
-
-Changes since v1.1:
-
--  Updated required fields for Create Ingress Invoice endpoint
 
 # Calling **ON/RAMP** API endpoints
 

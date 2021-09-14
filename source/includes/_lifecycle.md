@@ -76,7 +76,7 @@ curl https://api.onramp.ltd/rpc/op_status \
 ```json
 [
     {
-        "op_id": "5059dadc-4463-440b-9025-694355c0a941",
+        "op_id": "2f95c25e-389c-4b84-a78e-876f61069465",
         "status": "accepted",
         "credit_card_payment_attempt": {
             "accepted": true,
@@ -88,13 +88,65 @@ curl https://api.onramp.ltd/rpc/op_status \
         }
     },
     {
-        "op_id": "eaed5195-b85c-41aa-9661-10693b65976e",
+        "op_id": "67c39a53-cb5d-4e37-b56b-240fa93da416",
         "status": "waiting_user_confirmation",
         "credit_card_payment_attempt": {
             "accepted": false,
             "rejected": true,
             "reject_reason": "seon not ok with it",
             "when_submitted": "2021-03-17T11:42:00.010659+00:00",
+            "card_number_masked": "498678******1000",
+            "card_holder_name": "EXAMPLE REDACTED"
+        }
+    }
+]
+```
+
+
+> Example Call
+
+```shell
+curl https://api.onramp.ltd/rpc/op_status \
+  --header 'Content-Type: application/json' \
+  --header 'X-XCO-Authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+  -X POST -d '{"invoices_id": [
+                 "d3baca97-6edc-47cd-bc9f-67ae52863a01"]}'
+```
+
+> Request JSON Body
+
+```json
+{
+    "invoices_id": [
+        "d3baca97-6edc-47cd-bc9f-67ae52863a01"
+    ]
+}
+```
+
+> Response JSON
+
+```json
+[
+    {
+        "op_id": "6ac514bc-7fbe-4c39-9309-1d83a6a46868",
+        "status": "accepted",
+        "credit_card_payment_attempt": {
+            "accepted": true,
+            "rejected": false,
+            "reject_reason": null,
+            "when_submitted": "2021-03-17T11:43:00.000006+00:00",
+            "card_number_masked": "498678******1000",
+            "card_holder_name": "EXAMPLE REDACTED"
+        }
+    },
+    {
+        "op_id": "74a9a709-c5cd-4e05-bcaa-853c37267e8c",
+        "status": "waiting_user_confirmation",
+        "credit_card_payment_attempt": {
+            "accepted": false,
+            "rejected": true,
+            "reject_reason": "Decline for CVV2 failure",
+            "when_submitted": "2021-03-17T11:41:00.010659+00:00",
             "card_number_masked": "498678******1000",
             "card_holder_name": "EXAMPLE REDACTED"
         }
