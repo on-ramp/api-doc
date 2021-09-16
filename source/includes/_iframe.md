@@ -11,26 +11,29 @@ In order to display the deposit iframe it is as easy as adding the following cod
 > Example iframe tag
 
 ```html
-<iframe id="onramp-iframe" src="https://onrampwallet.com/embedded-ingressing" style="width: 100%; min-width: 320px; min-height: 560px;"></iframe>
+<iframe
+	id="onramp-iframe"
+	src="https://onrampwallet.com/embedded-ingressing"
+	style="width: 100%; min-width: 320px; min-height: 560px;"
+></iframe>
 ```
 
 As it can be seen, there are only three main attributes to deal with:
 
-- `id`: An id to later identify the iframe. The value can be anything you want as long as it is unique. On this docs we will asume it is:
+-   `id`: An id to later identify the iframe. The value can be anything you want as long as it is unique. On this docs we will asume it is:
 
-	- "onramp-iframe"
+    -   "onramp-iframe"
 
-- `src`: The source of the iframe. There are two options to be used depending on the environment you are integrating with.
-	
-	- **production**: [https://onrampwallet.com/embedded-ingressing](https://onrampwallet.com/embedded-ingressing)
-	- **stage**: [https://stage-wallet.onramp.ltd/embedded-ingressing](https://stage-wallet.onramp.ltd/embedded-ingressing)
+-   `src`: The source of the iframe. There are two options to be used depending on the environment you are integrating with.
 
-- `style`: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).
-	
-	- `width: 100%;`: This way the iframe occupies all available width from parent
-	- `min-width: 320px;`: Below this mininum width, the iframe wouldn't display its contents correctly.
-	- `min-height: 560px`: Although this one it is just recommended, having this minimum height will make scrollbars disappear.
+    -   **production**: [https://onrampwallet.com/embedded-ingressing](https://onrampwallet.com/embedded-ingressing)
+    -   **stage**: [https://stage-wallet.onramp.ltd/embedded-ingressing](https://stage-wallet.onramp.ltd/embedded-ingressing)
 
+-   `style`: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).
+
+    -   `width: 100%;`: This way the iframe occupies all available width from parent
+    -   `min-width: 320px;`: Below this mininum width, the iframe wouldn't display its contents correctly.
+    -   `min-height: 560px`: Although this one it is just recommended, having this minimum height will make scrollbars disappear.
 
 ## Communicating with the iframe events
 
@@ -40,83 +43,101 @@ Merchant would usually need to gather from the users what fiat amount and fiat c
 
 Given that, merchant and the iframe need a way to communicate certain events and this is achieve by using the `window.postMessage()` [API](https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage).
 
-- Events sent from merchant:
-	
-	- `get_deposit_details`
-	- `create_ingress_invoice`
+-   Events sent from merchant:
 
-- Events sent from iframe:
+    -   `get_deposit_details`
+    -   `create_ingress_invoice`
 
-	- `get_deposit_details`
-	- `create_ingress_invoice`
+-   Events sent from iframe:
+
+    -   `get_deposit_details`
+    -   `create_ingress_invoice`
 
 Both of the events are going to be initiated by the iframe and the merchant will respond to them.
+
+### Events
+
+-   `get_deposit_details` (response from merchant)
+
+| Field              | Type    | Description                                                                                                                                                                        | Required |
+| ------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| fiat_currency      | String  | 3 letter ISO code for the currency                                                                                                                                                 | No       |
+| fiat_amount        | Integer | Amount to be preset                                                                                                                                                                | No       |
+| minFiatAmount      | Integer | The minimum amount users will be able to deposit.                                                                                                                                  | No       |
+| maxFiatAmount      | Integer | The maximum amount users will be able to deposit.                                                                                                                                  | No       |
+| showBillingDetails | Boolean | Flag to indicate if the inputs for billing details should be shown or not. If this is later directly provided in the `create_ingress_invoice` request, then here it is not needed. | No       |
+| allowInputAmount   | Boolean | Flag to indicate if users should be able to change the requested amount.                                                                                                           | No       |
+
+-   `create_ingress_invoice` (response from merchant)
+
+Here, just forward and return wathever the response from Onramp API is.
 
 ### Example of integration
 
 On the right side, there is a full example of an implementation any merchant could use in order to integrate our iframe.
 
-Please, note the following: 
+Please, note the following:
 
-- There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the `window.postMessage` and `window.addEventListener` APIs.
+-   There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the `window.postMessage` and `window.addEventListener` APIs.
 
-- The example hardcode some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.
+-   The example hardcode some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.
 
 > Example of integration
 
 ```javascript
 const postMessage = (message) => {
-	const stringifiedMessage = JSON.stringify(message)
-	document.querySelector('#onramp-iframe').contentWindow.postMessage(stringifiedMessage, '*')
-}
+	const stringifiedMessage = JSON.stringify(message);
+	document
+		.querySelector("#onramp-iframe")
+		.contentWindow.postMessage(stringifiedMessage, "*");
+};
 
 const createMessage = (eventName, data, error) => {
 	return {
 		event: eventName,
 		data,
-		error
-	}
-}
+		error,
+	};
+};
 
-const postData = async (url = '', data = {}) => {
+const postData = async (url = "", data = {}) => {
 	try {
 		const response = await fetch(url, {
-			method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'cors', // no-cors, *cors, same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
+			method: "POST", // *GET, POST, PUT, DELETE, etc.
+			mode: "cors", // no-cors, *cors, same-origin
+			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: "same-origin", // include, *same-origin, omit
 			headers: {
-				'Content-Type': 'application/json'
+				"Content-Type": "application/json",
 				// 'Content-Type': 'application/x-www-form-urlencoded',
 			},
-			redirect: 'follow', // manual, *follow, error
-			referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-			body: JSON.stringify(data) // body data type must match "Content-Type" header
+			redirect: "follow", // manual, *follow, error
+			referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+			body: JSON.stringify(data), // body data type must match "Content-Type" header
 		});
-		return response.json();// parses JSON response into native JavaScript objects
+		return response.json(); // parses JSON response into native JavaScript objects
+	} catch (error) {
+		throw error;
 	}
-	catch (error) {
-		throw error
-	}
-}
+};
 
 const getDepositDetails = async () => {
 	// Here you should get from your server what are the deposit details
 	// For easiness on the docs we are going to have them hardcoded here
 
-	const fiatCurrency = 'EUR'
-	const minFiatAmount = 10
-	const maxFiatAmount = 2500
+	const fiatCurrency = "EUR";
+	const minFiatAmount = 10;
+	const maxFiatAmount = 2500;
 
-	let eventName = 'get_deposit_details'
+	let eventName = "get_deposit_details";
 	let responseData = {
 		fiatCurrency,
 		minFiatAmount,
-		maxFiatAmount
-	}
-	const message = createMessage(eventName, responseData)
-	postMessage(message)
-}
+		maxFiatAmount,
+	};
+	const message = createMessage(eventName, responseData);
+	postMessage(message);
+};
 
 const createIngressInvoice = async (data) => {
 	// Here you should send the provided data to your API
@@ -124,43 +145,49 @@ const createIngressInvoice = async (data) => {
 	// Then the response should be sent back to the iframe
 	// For easiness on the docs we are going to provide a standard implementation
 
-	const serverURL = '<YOUR_API_URL>'
+	const serverURL = "<YOUR_API_URL>";
 	// data contains `fiat_amount`
-	let response = await postData(serverURL, data)
+	let response = await postData(serverURL, data);
 
-	let eventName = 'create_ingress_invoice'
+	let eventName = "create_ingress_invoice";
 	let responseData = {
 		invoiceId: response.invoice_id,
-		redirectionURL: response.redirection_url
-	}
-	const message = createMessage(eventName, responseData)
-	postMessage(message)
-}
+		redirectionURL: response.redirection_url,
+	};
+	const message = createMessage(eventName, responseData);
+	postMessage(message);
+};
 
-window.addEventListener('message', async (event) => {
-	const trustedDomains = ['https://stage-wallet.onramp.ltd', 'https://onrampwallet.com']
-	const defaultError = 'default_error'
-	let eventName = null
+window.addEventListener("message", async (event) => {
+	const trustedDomains = [
+		"https://stage-wallet.onramp.ltd",
+		"https://onrampwallet.com",
+	];
+	const defaultError = "default_error";
+	let eventName = null;
 
-	if (trustedDomains.find(trustedDomain => trustedDomain === event.origin)) {
+	if (
+		trustedDomains.find((trustedDomain) => trustedDomain === event.origin)
+	) {
 		try {
-			let parsedMessage = JSON.parse(event.data)
-			eventName = parsedMessage.event
+			let parsedMessage = JSON.parse(event.data);
+			eventName = parsedMessage.event;
 
-			if (eventName === 'get_deposit_details') {
-				await getDepositDetails()
+			if (eventName === "get_deposit_details") {
+				await getDepositDetails();
+			} else if (eventName === "create_ingress_invoice") {
+				await createIngressInvoice(parsedMessage.data);
+			} else {
+				throw Error({ message: "Default error" });
 			}
-			else if (eventName === 'create_ingress_invoice') {
-				await createIngressInvoice(parsedMessage.data)
-			}
-			else {
-				throw Error({message: 'Default error'})
-			}
-		}
-		catch(error) {
-			const message = createMessage(eventName || default_error, undefined, error)
-			postMessage(message)
+		} catch (error) {
+			const message = createMessage(
+				eventName || default_error,
+				undefined,
+				error
+			);
+			postMessage(message);
 		}
 	}
-})
+});
 ```
