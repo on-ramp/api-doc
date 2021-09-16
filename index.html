@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4</title>
+    <title>ON/RAMP payment API v1.4.1</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.4</span>
+        <span class="toc-link">API v1.4.1</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -456,16 +456,16 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4:</p>
+
+<ul>
+<li> Update explanation for Ingress Iframe</li>
+</ul>
+
 <p>Changes since v1.3:</p>
 
 <ul>
 <li> Update examples for op_status endpoint</li>
-</ul>
-
-<p>Changes since v1.2:</p>
-
-<ul>
-<li> Added Quotes API section</li>
 </ul>
 <h1 id='calling-on-ramp-api-endpoints'>Calling <strong>ON/RAMP</strong> API endpoints</h1>
 <p><strong>ON/RAMP</strong> offers a simple REST API taking JSON values as request payload, and returning JSON
@@ -1936,7 +1936,11 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <blockquote>
 <p>Example iframe tag</p>
 </blockquote>
-<div class="highlight"><pre class="highlight html tab-html"><code><span class="nt">&lt;iframe</span> <span class="na">id=</span><span class="s">"onramp-iframe"</span> <span class="na">src=</span><span class="s">"https://onrampwallet.com/embedded-ingressing"</span> <span class="na">style=</span><span class="s">"width: 100%; min-width: 320px; min-height: 560px;"</span><span class="nt">&gt;&lt;/iframe&gt;</span>
+<div class="highlight"><pre class="highlight html tab-html"><code><span class="nt">&lt;iframe</span>
+    <span class="na">id=</span><span class="s">"onramp-iframe"</span>
+    <span class="na">src=</span><span class="s">"https://onrampwallet.com/embedded-ingressing"</span>
+    <span class="na">style=</span><span class="s">"width: 100%; min-width: 320px; min-height: 560px;"</span>
+<span class="nt">&gt;&lt;/iframe&gt;</span>
 </code></pre></div>
 <p>As it can be seen, there are only three main attributes to deal with:</p>
 
@@ -1944,20 +1948,20 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <li><p><code>id</code>: An id to later identify the iframe. The value can be anything you want as long as it is unique. On this docs we will asume it is:</p>
 
 <ul>
-<li>&quot;onramp-iframe&quot;</li>
+<li>  &quot;onramp-iframe&quot;</li>
 </ul></li>
 <li><p><code>src</code>: The source of the iframe. There are two options to be used depending on the environment you are integrating with.</p>
 
 <ul>
-<li><strong>production</strong>: <a href="https://onrampwallet.com/embedded-ingressing">https://onrampwallet.com/embedded-ingressing</a></li>
-<li><strong>stage</strong>: <a href="https://stage-wallet.onramp.ltd/embedded-ingressing">https://stage-wallet.onramp.ltd/embedded-ingressing</a></li>
+<li>  <strong>production</strong>: <a href="https://onrampwallet.com/embedded-ingressing">https://onrampwallet.com/embedded-ingressing</a></li>
+<li>  <strong>stage</strong>: <a href="https://stage-wallet.onramp.ltd/embedded-ingressing">https://stage-wallet.onramp.ltd/embedded-ingressing</a></li>
 </ul></li>
 <li><p><code>style</code>: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).</p>
 
 <ul>
-<li><code>width: 100%;</code>: This way the iframe occupies all available width from parent</li>
-<li><code>min-width: 320px;</code>: Below this mininum width, the iframe wouldn&#39;t display its contents correctly.</li>
-<li><code>min-height: 560px</code>: Although this one it is just recommended, having this minimum height will make scrollbars disappear.</li>
+<li>  <code>width: 100%;</code>: This way the iframe occupies all available width from parent</li>
+<li>  <code>min-width: 320px;</code>: Below this mininum width, the iframe wouldn&#39;t display its contents correctly.</li>
+<li>  <code>min-height: 560px</code>: Although this one it is just recommended, having this minimum height will make scrollbars disappear.</li>
 </ul></li>
 </ul>
 <h2 id='communicating-with-the-iframe-events'>Communicating with the iframe events</h2>
@@ -1971,22 +1975,78 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <li><p>Events sent from merchant:</p>
 
 <ul>
-<li><code>get_deposit_details</code></li>
-<li><code>create_ingress_invoice</code></li>
+<li>  <code>get_deposit_details</code></li>
+<li>  <code>create_ingress_invoice</code></li>
 </ul></li>
 <li><p>Events sent from iframe:</p>
 
 <ul>
-<li><code>get_deposit_details</code></li>
-<li><code>create_ingress_invoice</code></li>
+<li>  <code>get_deposit_details</code></li>
+<li>  <code>create_ingress_invoice</code></li>
 </ul></li>
 </ul>
 
 <p>Both of the events are going to be initiated by the iframe and the merchant will respond to them.</p>
+<h3 id='events'>Events</h3>
+<ul>
+<li>  <code>get_deposit_details</code> (response from merchant)</li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>3 letter ISO code for the currency</td>
+<td>No</td>
+</tr>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Amount to be preset</td>
+<td>No</td>
+</tr>
+<tr>
+<td>minFiatAmount</td>
+<td>Integer</td>
+<td>The minimum amount users will be able to deposit.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>maxFiatAmount</td>
+<td>Integer</td>
+<td>The maximum amount users will be able to deposit.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>showBillingDetails</td>
+<td>Boolean</td>
+<td>Flag to indicate if the inputs for billing details should be shown or not. If this is later directly provided in the <code>create_ingress_invoice</code> request, then here it is not needed.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>allowInputAmount</td>
+<td>Boolean</td>
+<td>Flag to indicate if users should be able to change the requested amount.</td>
+<td>No</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li>  <code>create_ingress_invoice</code> (response from merchant)</li>
+</ul>
+
+<p>Here, just forward and return wathever the response from Onramp API is.</p>
 <h3 id='example-of-integration'>Example of integration</h3>
 <p>On the right side, there is a full example of an implementation any merchant could use in order to integrate our iframe.</p>
 
-<p>Please, note the following: </p>
+<p>Please, note the following:</p>
 
 <ul>
 <li><p>There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the <code>window.postMessage</code> and <code>window.addEventListener</code> APIs.</p></li>
@@ -1997,57 +2057,58 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <p>Example of integration</p>
 </blockquote>
 <div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">postMessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">stringifiedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
-    <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">#onramp-iframe</span><span class="dl">'</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">stringifiedMessage</span><span class="p">,</span> <span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">)</span>
-<span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">stringifiedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+    <span class="nb">document</span>
+        <span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">"</span><span class="s2">#onramp-iframe</span><span class="dl">"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">stringifiedMessage</span><span class="p">,</span> <span class="dl">"</span><span class="s2">*</span><span class="dl">"</span><span class="p">);</span>
+<span class="p">};</span>
 
 <span class="kd">const</span> <span class="nx">createMessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">return</span> <span class="p">{</span>
         <span class="na">event</span><span class="p">:</span> <span class="nx">eventName</span><span class="p">,</span>
         <span class="nx">data</span><span class="p">,</span>
-        <span class="nx">error</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+        <span class="nx">error</span><span class="p">,</span>
+    <span class="p">};</span>
+<span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">postData</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">url</span> <span class="o">=</span> <span class="dl">''</span><span class="p">,</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">postData</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">url</span> <span class="o">=</span> <span class="dl">""</span><span class="p">,</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="k">try</span> <span class="p">{</span>
         <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
-            <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// *GET, POST, PUT, DELETE, etc.</span>
-            <span class="na">mode</span><span class="p">:</span> <span class="dl">'</span><span class="s1">cors</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// no-cors, *cors, same-origin</span>
-            <span class="na">cache</span><span class="p">:</span> <span class="dl">'</span><span class="s1">no-cache</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// *default, no-cache, reload, force-cache, only-if-cached</span>
-            <span class="na">credentials</span><span class="p">:</span> <span class="dl">'</span><span class="s1">same-origin</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// include, *same-origin, omit</span>
+            <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// *GET, POST, PUT, DELETE, etc.</span>
+            <span class="na">mode</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cors</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// no-cors, *cors, same-origin</span>
+            <span class="na">cache</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-cache</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// *default, no-cache, reload, force-cache, only-if-cached</span>
+            <span class="na">credentials</span><span class="p">:</span> <span class="dl">"</span><span class="s2">same-origin</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// include, *same-origin, omit</span>
             <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
-                <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span>
+                <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span><span class="p">,</span>
                 <span class="c1">// 'Content-Type': 'application/x-www-form-urlencoded',</span>
             <span class="p">},</span>
-            <span class="na">redirect</span><span class="p">:</span> <span class="dl">'</span><span class="s1">follow</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// manual, *follow, error</span>
-            <span class="na">referrerPolicy</span><span class="p">:</span> <span class="dl">'</span><span class="s1">no-referrer</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url</span>
-            <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="c1">// body data type must match "Content-Type" header</span>
+            <span class="na">redirect</span><span class="p">:</span> <span class="dl">"</span><span class="s2">follow</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// manual, *follow, error</span>
+            <span class="na">referrerPolicy</span><span class="p">:</span> <span class="dl">"</span><span class="s2">no-referrer</span><span class="dl">"</span><span class="p">,</span> <span class="c1">// no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url</span>
+            <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="c1">// body data type must match "Content-Type" header</span>
         <span class="p">});</span>
-        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span><span class="c1">// parses JSON response into native JavaScript objects</span>
+        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span> <span class="c1">// parses JSON response into native JavaScript objects</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nx">error</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">throw</span> <span class="nx">error</span>
-    <span class="p">}</span>
-<span class="p">}</span>
+<span class="p">};</span>
 
 <span class="kd">const</span> <span class="nx">getDepositDetails</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="c1">// Here you should get from your server what are the deposit details</span>
     <span class="c1">// For easiness on the docs we are going to have them hardcoded here</span>
 
-    <span class="kd">const</span> <span class="nx">fiatCurrency</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">EUR</span><span class="dl">'</span>
-    <span class="kd">const</span> <span class="nx">minFiatAmount</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="kd">const</span> <span class="nx">maxFiatAmount</span> <span class="o">=</span> <span class="mi">2500</span>
+    <span class="kd">const</span> <span class="nx">fiatCurrency</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">EUR</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">minFiatAmount</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+    <span class="kd">const</span> <span class="nx">maxFiatAmount</span> <span class="o">=</span> <span class="mi">2500</span><span class="p">;</span>
 
-    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">get_deposit_details</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">get_deposit_details</span><span class="dl">"</span><span class="p">;</span>
     <span class="kd">let</span> <span class="nx">responseData</span> <span class="o">=</span> <span class="p">{</span>
         <span class="nx">fiatCurrency</span><span class="p">,</span>
         <span class="nx">minFiatAmount</span><span class="p">,</span>
-        <span class="nx">maxFiatAmount</span>
-    <span class="p">}</span>
-    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">)</span>
-    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
-<span class="p">}</span>
+        <span class="nx">maxFiatAmount</span><span class="p">,</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">);</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
 
 <span class="kd">const</span> <span class="nx">createIngressInvoice</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="c1">// Here you should send the provided data to your API</span>
@@ -2055,45 +2116,51 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
     <span class="c1">// Then the response should be sent back to the iframe</span>
     <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
 
-    <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">&lt;YOUR_API_URL&gt;</span><span class="dl">'</span>
+    <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">;</span>
     <span class="c1">// data contains `fiat_amount`</span>
-    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
 
-    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">create_ingress_invoice</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">create_ingress_invoice</span><span class="dl">"</span><span class="p">;</span>
     <span class="kd">let</span> <span class="nx">responseData</span> <span class="o">=</span> <span class="p">{</span>
         <span class="na">invoiceId</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">invoice_id</span><span class="p">,</span>
-        <span class="na">redirectionURL</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">redirection_url</span>
-    <span class="p">}</span>
-    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">)</span>
-    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
-<span class="p">}</span>
+        <span class="na">redirectionURL</span><span class="p">:</span> <span class="nx">response</span><span class="p">.</span><span class="nx">redirection_url</span><span class="p">,</span>
+    <span class="p">};</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">);</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
 
-<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">message</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="kd">const</span> <span class="nx">trustedDomains</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">https://stage-wallet.onramp.ltd</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">https://onrampwallet.com</span><span class="dl">'</span><span class="p">]</span>
-    <span class="kd">const</span> <span class="nx">defaultError</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">default_error</span><span class="dl">'</span>
-    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="kc">null</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">message</span><span class="dl">"</span><span class="p">,</span> <span class="k">async</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">trustedDomains</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="dl">"</span><span class="s2">https://stage-wallet.onramp.ltd</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">https://onrampwallet.com</span><span class="dl">"</span><span class="p">,</span>
+    <span class="p">];</span>
+    <span class="kd">const</span> <span class="nx">defaultError</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">default_error</span><span class="dl">"</span><span class="p">;</span>
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
 
-    <span class="k">if</span> <span class="p">(</span><span class="nx">trustedDomains</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">trustedDomain</span> <span class="o">=&gt;</span> <span class="nx">trustedDomain</span> <span class="o">===</span> <span class="nx">event</span><span class="p">.</span><span class="nx">origin</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nx">trustedDomains</span><span class="p">.</span><span class="nx">find</span><span class="p">((</span><span class="nx">trustedDomain</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">trustedDomain</span> <span class="o">===</span> <span class="nx">event</span><span class="p">.</span><span class="nx">origin</span><span class="p">)</span>
+    <span class="p">)</span> <span class="p">{</span>
         <span class="k">try</span> <span class="p">{</span>
-            <span class="kd">let</span> <span class="nx">parsedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
-            <span class="nx">eventName</span> <span class="o">=</span> <span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">event</span>
+            <span class="kd">let</span> <span class="nx">parsedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+            <span class="nx">eventName</span> <span class="o">=</span> <span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">event</span><span class="p">;</span>
 
-            <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">get_deposit_details</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">await</span> <span class="nx">getDepositDetails</span><span class="p">()</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">get_deposit_details</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">getDepositDetails</span><span class="p">();</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">create_ingress_invoice</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">createIngressInvoice</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="nb">Error</span><span class="p">({</span> <span class="na">message</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Default error</span><span class="dl">"</span> <span class="p">});</span>
             <span class="p">}</span>
-            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">create_ingress_invoice</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">await</span> <span class="nx">createIngressInvoice</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
-            <span class="p">}</span>
-            <span class="k">else</span> <span class="p">{</span>
-                <span class="k">throw</span> <span class="nb">Error</span><span class="p">({</span><span class="na">message</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Default error</span><span class="dl">'</span><span class="p">})</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-        <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span> <span class="o">||</span> <span class="nx">default_error</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
-            <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span>
+                <span class="nx">eventName</span> <span class="o">||</span> <span class="nx">default_error</span><span class="p">,</span>
+                <span class="kc">undefined</span><span class="p">,</span>
+                <span class="nx">error</span>
+            <span class="p">);</span>
+            <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
-<span class="p">})</span>
+<span class="p">});</span>
 </code></pre></div><h1 id='server-to-server-s2s'>Server to Server (S2S)</h1><h2 id='steps'>Steps</h2>
 <ol>
 <li>Merchant makes a request to <code>create_operation</code> endpoint.</li>
