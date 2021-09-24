@@ -173,6 +173,26 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 > IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET, either for `payment_ack_url` or `cancel_url`.
 
+> Request JSON Body
+
+```json
+  {
+    "reference":"ac400127-93a9-4b9c-9612-c23a3c078933"
+  }
+```
+
+>OR
+
+```json
+  {
+    "reference":"ac400127-93a9-4b9c-9612-c23a3c078933",
+    "crypto_info": {
+      "currency": "USDT",
+      "amount": 100.00
+    }
+  }
+```
+
 ### Response JSON Fields
 
 | Field          | Type   | Description                                           |
