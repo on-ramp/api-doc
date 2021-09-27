@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.2
+title: ON/RAMP payment API v1.4.3
 
-version: 1.4.2
+version: 1.4.3
 
 language_tabs: # must be one of https://git.io/vQNgJ
    - shell: cURL
@@ -41,13 +41,13 @@ Test:
 
 ## Changelog
 
+Changes since v1.4.2:
+
+-  Add fee_rate field for payment_ack_url payload example
+
 Changes since v1.4.1:
 
 -  Update payment_ack_url payload example
-
-Changes since v1.4:
-
--  Update explanation for Ingress Iframe
 
 
 # Calling **ON/RAMP** API endpoints
