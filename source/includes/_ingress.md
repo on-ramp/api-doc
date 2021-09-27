@@ -188,7 +188,8 @@ pausing the user payment and prompting manual intervention, potentially delaying
     "reference":"ac400127-93a9-4b9c-9612-c23a3c078933",
     "crypto_info": {
       "currency": "USDT",
-      "amount": 100.00
+      "amount": 100.00,
+      "fee_rate": 0.065
     }
   }
 ```
