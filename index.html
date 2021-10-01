@@ -382,13 +382,38 @@
               </ul>
           </li>
           <li>
-            <a href="#iframe-integration" class="toc-h1 toc-link" data-title="Iframe integration">Iframe integration</a>
+            <a href="#ingress-iframe-integration" class="toc-h1 toc-link" data-title="Ingress iframe integration">Ingress iframe integration</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#adding-the-iframe-in-a-html-page" class="toc-h2 toc-link" data-title="Adding the iframe in a html page">Adding the iframe in a html page</a>
                   </li>
                   <li>
                     <a href="#communicating-with-the-iframe-events" class="toc-h2 toc-link" data-title="Communicating with the iframe events">Communicating with the iframe events</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#crypto-iframe-integration" class="toc-h1 toc-link" data-title="Crypto iframe integration">Crypto iframe integration</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#adding-the-iframe-in-a-html-page" class="toc-h2 toc-link" data-title="Adding the iframe in a html page">Adding the iframe in a html page</a>
+                  </li>
+                  <li>
+                    <a href="#communicating-with-the-iframe-events" class="toc-h2 toc-link" data-title="Communicating with the iframe events">Communicating with the iframe events</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#crypto-ingress-flow" class="toc-h1 toc-link" data-title="Crypto Ingress Flow">Crypto Ingress Flow</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#user-request-a-crypto-address" class="toc-h2 toc-link" data-title="User request a Crypto Address">User request a Crypto Address</a>
+                  </li>
+                  <li>
+                    <a href="#on-ramp-notify-merchant-on-new-crypto-funds" class="toc-h2 toc-link" data-title="ON/RAMP notify Merchant on new Crypto Funds">ON/RAMP notify Merchant on new Crypto Funds</a>
+                  </li>
+                  <li>
+                    <a href="#merchant-create-new-crypto-invoice" class="toc-h2 toc-link" data-title="Merchant Create new Crypto Invoice">Merchant Create new Crypto Invoice</a>
                   </li>
               </ul>
           </li>
@@ -1943,12 +1968,12 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td>Cardholder Name used in the payment</td>
 </tr>
 </tbody></table>
-<h1 id='iframe-integration'>Iframe integration</h1>
-<p>This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP deposit iframe in any authorized merchant site.</p>
+<h1 id='ingress-iframe-integration'>Ingress iframe integration</h1>
+<p>This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP <strong>deposit iframe</strong> in any authorized merchant site.</p>
 
 <p><strong>IMPORTANT</strong>: Before starting this integration, please let us know and we will add your domains to our code in order to trust them and allow the <code>window.postMessage</code> API communication between the iframe and your site work.</p>
 <h2 id='adding-the-iframe-in-a-html-page'>Adding the iframe in a html page</h2>
-<p>In order to display the deposit iframe it is as easy as adding the following code:</p>
+<p>In order to display the deposit iframe it is as easy as adding the following code (displayed on the right side):</p>
 
 <blockquote>
 <p>Example iframe tag</p>
@@ -1986,7 +2011,7 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 
 <p>Merchant would usually need to gather from the users what fiat amount and fiat currency they want to deposit and send it to the ON/RAMP api using the <code>create_ingress_invoice</code> endpoint to later redirect the users to the redirection url they got as a response from ON/RAMP. However, in this integration, the iframe will deal with gathering the information from the user and redirecting the user to the ON/RAMP wallet only if the payment was successful.</p>
 
-<p>Given that, merchant and the iframe need a way to communicate certain events and this is achieve by using the <code>window.postMessage()</code> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">API</a>.</p>
+<p>Given that, merchant host page and the iframe need a way to communicate certain events and this is achieve by using the <code>window.postMessage()</code> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">API</a>.</p>
 
 <ul>
 <li><p>Events sent from merchant:</p>
@@ -2178,7 +2203,929 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre></div><h1 id='server-to-server-s2s'>Server to Server (S2S)</h1><h2 id='steps'>Steps</h2>
+</code></pre></div><h1 id='crypto-iframe-integration'>Crypto iframe integration</h1>
+<p>This part of the docs provides a brief explananation and technical steps on how to integrate the ON/RAMP <strong>crypto iframe</strong> in any authorized merchant site.</p>
+
+<p><strong>IMPORTANT</strong>: Before starting this integration, please let us know and we will add your domains to our code in order to trust them and allow the <code>window.postMessage</code> API communication between the iframe and your site work.</p>
+<h2 id='adding-the-iframe-in-a-html-page'>Adding the iframe in a html page</h2>
+<p>In order to display the crypto iframe it is as easy as adding the following code (displayed on the right side):</p>
+
+<blockquote>
+<p>Example iframe tag</p>
+</blockquote>
+<div class="highlight"><pre class="highlight html tab-html"><code><span class="nt">&lt;iframe</span> <span class="na">id=</span><span class="s">"crypto-iframe"</span> <span class="na">src=</span><span class="s">"https://crypto.onramp.ltd"</span> <span class="na">style=</span><span class="s">"width: 100%; min-width: 320px; min-height: 500px;"</span><span class="nt">&gt;&lt;/iframe&gt;</span>
+</code></pre></div>
+<p>As it can be seen, there are only three main attributes to deal with:</p>
+
+<ul>
+<li><p><code>id</code>: An id to later identify the iframe. The value can be anything you want as long as it is unique. On this docs we will asume it is:</p>
+
+<ul>
+<li>&quot;crypto-iframe&quot;</li>
+</ul></li>
+<li><p><code>src</code>: The source of the iframe. There are two options to be used depending on the environment you are integrating with.</p>
+
+<ul>
+<li><strong>production</strong>: <a href="https://crypto.onramp.ltd">https://crypto.onramp.ltd</a></li>
+<li><strong>stage</strong>: <a href="https://crypto.stage-wallet.onramp.ltd">https://crypto.stage-wallet.onramp.ltd</a></li>
+</ul></li>
+<li><p><code>style</code>: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).</p>
+
+<ul>
+<li><code>width: 100%;</code>: This way the iframe occupies all available width from parent</li>
+<li><code>min-width: 320px;</code>: Below this mininum width, the iframe wouldn&#39;t display its contents correctly.</li>
+<li><code>min-height: 500px</code>: Although this one it is just recommended, having this minimum height will make scrollbars disappear.</li>
+</ul></li>
+</ul>
+<h2 id='communicating-with-the-iframe-events'>Communicating with the iframe events</h2>
+<p>The iframe just contains the code to display the information for the whole process, but in order to actually make the communications with the ON/RAMP server it relies on the host page to forward those. This is mainly because all the calls need to be authenticated and for that we are going to use the merchants API key and that can&#39;t be exposed on the frontend.</p>
+
+<p>Given that, merchant host page and the iframe need a way to communicate certain events and this is achieved by using the <code>window.postMessage()</code> <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/postMessage">API</a>.</p>
+
+<p>There are several methods the iframe works with and so the merchant will have to deal with them too. Except the &quot;Crypto Ingress Configuration&quot;, in all the other ones, the merchant should just work as a proxy and forward and return the data. The urls to be hit are the same detailed <a href="/#on-ramp-merchant-integration">on the first section of this doc</a>.</p>
+<h3 id='crypto-ingress-configuration'>Crypto Ingress Configuration</h3>
+<p>Requests for the merchant to customize the appearance and some parameters of the iframe.</p>
+
+<ul>
+<li><p><code>crypto_ingress_config</code> (sent by the iframe)<br>
+<em>No parameters</em>    </p></li>
+<li><p><code>crypto_ingress_config_response</code> (returned by the merchant)</p></li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+<th>Default Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>min_amount</td>
+<td>Integer</td>
+<td>Minimum fiat amount for the transaction.</td>
+<td>No</td>
+<td>10</td>
+</tr>
+<tr>
+<td>max_amount</td>
+<td>Integer</td>
+<td>Maximum fiat amount for the transaction.</td>
+<td>No</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>fiat</td>
+<td>String</td>
+<td>ISO 3 digits fiat currency code.</td>
+<td>No</td>
+<td>EUR</td>
+</tr>
+<tr>
+<td>user_info</td>
+<td>User Info</td>
+<td>A JSON object containing information about the user.</td>
+<td>Yes</td>
+<td>--</td>
+</tr>
+<tr>
+<td>customization</td>
+<td>Customization Info</td>
+<td>A JSON object containing look and feel settings.</td>
+<td>No</td>
+<td>--</td>
+</tr>
+</tbody></table>
+
+<p>User Info:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<p>Customization Info:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>primary_color</td>
+<td>String</td>
+<td>The main accent color that will be applied on UI elements.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>font_color</td>
+<td>String</td>
+<td>The font color that will be applied on texts.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>font_color_type</td>
+<td>String</td>
+<td>Either if UI is light or dark.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>font_family</td>
+<td>String</td>
+<td>The font family name that will be applied in the whole UI.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>background_color</td>
+<td>String</td>
+<td>The background color for the iframe.</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h3 id='crypto-ingress-status'>Crypto Ingress Status</h3>
+<p>Requests for the iframe to know about the statuses of current open operations</p>
+
+<ul>
+<li><code>crypto_op_status</code> (sent by the iframe)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>crypto_op_status_response</code> (sent by the merchant)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>JSON</td>
+<td>Just the forwarded response from <code>/crypto_op_status</code> endpoint.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='crypto-ingress-address'>Crypto Ingress Address</h3>
+<p>Requests for the iframe to ask for a crypto address to send the funds</p>
+
+<ul>
+<li><code>get_address</code> (sent by the iframe)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_amount</td>
+<td>String</td>
+<td>The amount of fiat to get.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>The currency of the fiat.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>crypto_currency</td>
+<td>String</td>
+<td>The crypto currency to be used.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>get_address_response</code> (sent by the merchant)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>JSON</td>
+<td>Just the forwarded response from <code>/blockchain/api/v1/{chain}/address/new</code> endpoint.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='crypto-ingress-cancelation'>Crypto Ingress Cancelation</h3>
+<p>Requests for the iframe to cancel an open operation</p>
+
+<ul>
+<li><code>crypto_op_cancel</code> (sent by the iframe)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>op_id</td>
+<td>String</td>
+<td>The UUID of the operation to cancel.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>crypto_op_cancel_response</code> (sent by the merchant)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>JSON</td>
+<td>Just the forwarded response from <code>crypto_op_cancel</code> endpoint.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='example-of-integration'>Example of integration</h3>
+<p>On the right side, there is a full example of an implementation any merchant could use in order to integrate our iframe.</p>
+
+<p>Please, note the following: </p>
+
+<ul>
+<li><p>There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the <code>window.postMessage</code> and <code>window.addEventListener</code> APIs.</p></li>
+<li><p>The example hardcodes some values and that is marked with commments. In order to make this fully functional according tou your server and API, you will need to implement or adapt calls to store the deposits and make secure connections to the ON/RAMP API using your API key.</p></li>
+</ul>
+
+<blockquote>
+<p>Example of integration</p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">postMessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">stringifiedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="dl">'</span><span class="s1">#crypto-iframe</span><span class="dl">'</span><span class="p">).</span><span class="nx">contentWindow</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">(</span><span class="nx">stringifiedMessage</span><span class="p">,</span> <span class="dl">'</span><span class="s1">*</span><span class="dl">'</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">createMessage</span> <span class="o">=</span> <span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="na">event</span><span class="p">:</span> <span class="nx">eventName</span><span class="p">,</span>
+        <span class="nx">data</span><span class="p">,</span>
+        <span class="nx">error</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">postData</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">url</span> <span class="o">=</span> <span class="dl">''</span><span class="p">,</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">{})</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="p">{</span>
+        <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="p">{</span>
+            <span class="na">method</span><span class="p">:</span> <span class="dl">'</span><span class="s1">POST</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// *GET, POST, PUT, DELETE, etc.</span>
+            <span class="na">mode</span><span class="p">:</span> <span class="dl">'</span><span class="s1">cors</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// no-cors, *cors, same-origin</span>
+            <span class="na">cache</span><span class="p">:</span> <span class="dl">'</span><span class="s1">no-cache</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// *default, no-cache, reload, force-cache, only-if-cached</span>
+            <span class="na">credentials</span><span class="p">:</span> <span class="dl">'</span><span class="s1">same-origin</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// include, *same-origin, omit</span>
+            <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
+                <span class="dl">'</span><span class="s1">Content-Type</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">application/json</span><span class="dl">'</span>
+                <span class="c1">// 'Content-Type': 'application/x-www-form-urlencoded',</span>
+            <span class="p">},</span>
+            <span class="na">redirect</span><span class="p">:</span> <span class="dl">'</span><span class="s1">follow</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// manual, *follow, error</span>
+            <span class="na">referrerPolicy</span><span class="p">:</span> <span class="dl">'</span><span class="s1">no-referrer</span><span class="dl">'</span><span class="p">,</span> <span class="c1">// no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url</span>
+            <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="c1">// body data type must match "Content-Type" header</span>
+        <span class="p">});</span>
+        <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">();</span><span class="c1">// parses JSON response into native JavaScript objects</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="nx">error</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">getCryptoIngressConfig</span> <span class="o">=</span> <span class="k">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Here you should get from your server what are the config details</span>
+    <span class="c1">// For easiness on the docs we are going to have them hardcoded here</span>
+
+    <span class="kd">const</span> <span class="nx">minAmount</span> <span class="o">=</span> <span class="mf">1.01</span>
+    <span class="kd">const</span> <span class="nx">maxAmount</span> <span class="o">=</span> <span class="mi">5000</span>
+    <span class="kd">const</span> <span class="nx">fiatCurrency</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">EUR</span><span class="dl">'</span>
+    <span class="kd">const</span> <span class="nx">userInfo</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">merchant_customer_id</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="na">email</span><span class="p">:</span> <span class="dl">'</span><span class="s1">roger@coinweb.io</span><span class="dl">'</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">customization</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">primary_color</span><span class="p">:</span> <span class="dl">'</span><span class="s1">rgb(80, 0, 151)</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">font_color</span><span class="p">:</span> <span class="dl">'</span><span class="s1">#ffffff</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">font_color_type</span><span class="p">:</span> <span class="dl">'</span><span class="s1">dark</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">font_family</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Nunito, sans-serif</span><span class="dl">'</span><span class="p">,</span>
+        <span class="na">background_color</span><span class="p">:</span> <span class="dl">'</span><span class="s1">rgb(23, 3, 47)</span><span class="dl">'</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">crypto_ingress_config_response</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">responseData</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="na">min_amount</span><span class="p">:</span> <span class="nx">minAmount</span><span class="p">,</span>
+        <span class="na">max_amount</span><span class="p">:</span> <span class="nx">maxAmount</span><span class="p">,</span>
+        <span class="na">fiat</span><span class="p">:</span> <span class="nx">fiatCurrency</span><span class="p">,</span>
+        <span class="na">user_info</span><span class="p">:</span> <span class="nx">userInfo</span><span class="p">,</span>
+        <span class="na">customization</span><span class="p">:</span> <span class="nx">customization</span>
+    <span class="p">}</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">responseData</span><span class="p">)</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">getCryptoOpStatus</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Here you should send the provided data to your API</span>
+    <span class="c1">// API should call the `crypto_op_status` endpoint on ON/RAMP API</span>
+    <span class="c1">// Then the response should be sent back to the iframe</span>
+    <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
+
+    <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">&lt;YOUR_API_URL&gt;</span><span class="dl">'</span>
+    <span class="c1">// data contains a list of open operations</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">crypto_op_status_response</span><span class="dl">'</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">getAddress</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Here you should send the provided data to your API</span>
+    <span class="c1">// API should call the `blockchain/api/v1/{chain}/address/new` endpoint on ON/RAMP API</span>
+    <span class="c1">// Then the response should be sent back to the iframe</span>
+    <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
+
+    <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">&lt;YOUR_API_URL&gt;</span><span class="dl">'</span>
+    <span class="c1">// data contains a new address to be funded</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">get_address_response</span><span class="dl">'</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">const</span> <span class="nx">getCryptoOpCancel</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="c1">// Here you should send the provided data to your API</span>
+    <span class="c1">// API should call the `crypto_op_cancel` endpoint on ON/RAMP API</span>
+    <span class="c1">// Then the response should be sent back to the iframe</span>
+    <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
+
+    <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">&lt;YOUR_API_URL&gt;</span><span class="dl">'</span>
+    <span class="c1">// data contains success or failure to the cancel</span>
+    <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">crypto_op_cancel_response</span><span class="dl">'</span>
+    <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span>
+    <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">'</span><span class="s1">message</span><span class="dl">'</span><span class="p">,</span> <span class="k">async</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kd">const</span> <span class="nx">trustedDomains</span> <span class="o">=</span> <span class="p">[</span><span class="dl">'</span><span class="s1">https://stage-wallet.onramp.ltd</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">https://onrampwallet.com</span><span class="dl">'</span><span class="p">]</span>
+    <span class="kd">const</span> <span class="nx">defaultError</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">default_error</span><span class="dl">'</span>
+    <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="kc">null</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">trustedDomains</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">trustedDomain</span> <span class="o">=&gt;</span> <span class="nx">trustedDomain</span> <span class="o">===</span> <span class="nx">event</span><span class="p">.</span><span class="nx">origin</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="kd">let</span> <span class="nx">parsedMessage</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+            <span class="nx">eventName</span> <span class="o">=</span> <span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">event</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">crypto_ingress_config</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">getCryptoIngressConfig</span><span class="p">()</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">crypto_op_status</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">getCryptoOpStatus</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">get_address</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">getAddress</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">'</span><span class="s1">crypto_op_cancel</span><span class="dl">'</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">await</span> <span class="nx">getCryptoOpCancel</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="p">{</span>
+                <span class="k">throw</span> <span class="nb">Error</span><span class="p">({</span><span class="na">message</span><span class="p">:</span> <span class="dl">'</span><span class="s1">Default error</span><span class="dl">'</span><span class="p">})</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">catch</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span> <span class="o">||</span> <span class="nx">default_error</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">error</span><span class="p">)</span>
+            <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></div><h1 id='crypto-ingress-flow'>Crypto Ingress Flow</h1>
+<p>This documentation contains the main endpoints that participate in the Crypto Ingress Flow. Most of them are called directly from the <strong>iframe</strong>
+integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
+
+<p>From the User point of view, there are mainly 3 steps in the flow:</p>
+
+<ol>
+<li>User requests a new Crypto Address (<em>BTC or BCH</em>) to transfer coins into.</li>
+<li>Once we verify that the user has transferred coins to that address, we notify back to the Merchant that there are new funds available from this user.</li>
+<li>On this notification, the Merchant should request to initiate a new Invoice to transfer the Startpoints to them as in other Payments Methods.</li>
+</ol>
+
+<p>Steps <strong>2 and 3</strong> should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer. </p>
+<h2 id='user-request-a-crypto-address'>User request a Crypto Address</h2>
+<p>As it is mentioned in <a href="#crypto-iframe-integration">Crypto Iframe Integration</a>, this is done by calling the endpoint in the <strong>iframe</strong> <code>get_address</code>. This is forwarding the call to the public endpoint:</p>
+
+<aside class="success"><b><code>POST /blockchain/api/v1/{chain}/address/new</code></b></aside>
+
+<blockquote>
+<p>Example cURL </p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span> <span class="nt">-d</span> <span class="s1">'{"merchant_customer_id": "123","fiat_amount": 10000, "fiat_currency": "EUR", "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done" }'</span> http://localhost:7000/blockchain/api/v1/btc/address/new
+</code></pre></div>
+<blockquote>
+<p>ReqAddress</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="p">,</span><span class="w"> 
+    </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w"> 
+    </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w"> 
+    </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="w"> 
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>AddressResponse</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ADDRESS_BASE58_OR_SPECIFIC_BLOCKCHAIN_ENCODING"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"qr_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BASE_64_IMAGE_OF_ADDRESS"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>ErrorResponse (Status 400)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_ADDRESS_ALREADY_IN_USE"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"in_use_addr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ADDRESS"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_NOT_CONFIGURED_YET"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_API_KEY"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>ErrorResponse (Status 401)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_WRONG_API_KEY"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"api_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_API_KEY"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>ErrorResponse (Status 500)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_CANNOT_CREATE_QR_CODE"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some message"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_UNKNOWN_ERROR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some message"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='authentication'>Authentication</h3>
+<table><thead>
+<tr>
+<th>type</th>
+<th>Header Key</th>
+<th>Header Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Header</td>
+<td><code>x-xco-authorization</code></td>
+<td><code>Bearer merchant_api_key</code></td>
+</tr>
+</tbody></table>
+<h3 id='parameters'>Parameters</h3>
+<table><thead>
+<tr>
+<th>name</th>
+<th>type</th>
+<th>values</th>
+<th>description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chain</td>
+<td>enum</td>
+<td><code>btc, bch</code></td>
+<td>Blockchain the user requested ingress to</td>
+</tr>
+</tbody></table>
+<h3 id='body'>Body</h3>
+<table><thead>
+<tr>
+<th>Content Type</th>
+<th>Data Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>application/json</code></td>
+<td><code>ReqAddress</code></td>
+</tr>
+</tbody></table>
+<h3 id='responses'>Responses</h3>
+<table><thead>
+<tr>
+<th>http code</th>
+<th>content-type</th>
+<th>response</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>200</code></td>
+<td><code>application/json</code></td>
+<td><code>AddressResponse</code></td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td><code>application/json</code></td>
+<td><code>ErrorResponse</code></td>
+</tr>
+<tr>
+<td><code>401</code></td>
+<td><code>application/json</code></td>
+<td><code>ErrorResponse</code></td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td><code>application/json</code></td>
+<td><code>ErrorResponse</code></td>
+</tr>
+</tbody></table>
+<h2 id='on-ramp-notify-merchant-on-new-crypto-funds'>ON/RAMP notify Merchant on new Crypto Funds</h2>
+<p>As we have seen in the previous endpoint the Merchant is going to provide some URL to notify back when there is some new funds from some user.</p>
+
+<blockquote>
+<p><strong><em>IMPORTANT</em></strong>: This is not the same as <code>payment_ack_url</code> because up to this point we don&#39;t know how much money the user is going to transfer and if in fact the user is going to transfer or not. This SHOULD NOT be consider as an INVOICE.</p>
+</blockquote>
+
+<p>When we are ready to do the callback notifying about new Crypto funds we are going to do the following call:</p>
+
+<aside class="success"><b><code>POST `notify_new_funds_url`</code></b></aside>
+
+<blockquote>
+<p>Example cURL </p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span> <span class="nt">-d</span> <span class="s1">'{"crypto_tx_ref": "123"}'</span> http://SOME_URL_SENT_IN_NOTIFY_NEW_FUNDS_URL
+</code></pre></div>
+<blockquote>
+<p>Request</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+    </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"</span><span class="p">,</span><span class="w"> 
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='authentication-2'>Authentication</h3>
+<table><thead>
+<tr>
+<th>type</th>
+<th>Header Key</th>
+<th>Header Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Header</td>
+<td><code>x-xco-authorization</code></td>
+<td><code>Bearer merchant_api_key</code></td>
+</tr>
+</tbody></table>
+<h3 id='responses-2'>Responses</h3>
+<table><thead>
+<tr>
+<th>http code</th>
+<th>content-type</th>
+<th>response</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>200</code></td>
+<td><code>application/json</code></td>
+<td>If Ok</td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td><code>application/json</code></td>
+<td>If Error</td>
+</tr>
+</tbody></table>
+<h2 id='merchant-create-new-crypto-invoice'>Merchant Create new Crypto Invoice</h2>
+<p>Once the Merchant receives the notification on new crypto funds it should call the following endpoint to initiate the invoice and transfer of startpoints. Similar to <a href="#ingress-api">Ingress API</a>.</p>
+
+<aside class="success"><b><code>POST `https://api.onramp.ltd/rpc/create_crypto_ingress_invoice`</code></b></aside>
+
+<blockquote>
+<p>Example cURL </p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span>                     <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                   <span class="se">\</span>
+<span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "crypto_tx_ref"             : "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS"
+              , "payment_ack_url"         : "wwww.example.com"
+              , "timeout_in_sec"          : 3600
+              , "billing_details"    :
+                  { "payer_email"            : "mrpayer.payerson@email.com"
+                  , "payer_first_name"       : "MrPayer"
+                  , "payer_last_name"        : "Payerson"
+                  , "payer_phone"            : "0034666444446"
+                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
+                  , "street"                 : "Main Street"
+                  , "unit"                   : "Floor 7 12B"
+                  , "postal_code"            : "0000001"
+                  , "city"                   : "Big Town"
+                  , "county"                 : "Big Town county"
+                  , "state"                  : "CA"
+                  , "prefecture"             : "Prefecture-ku"
+                  , "country"                : "GBR"
+                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
+                  , "kyc_document"           : "Passport"
+                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
+                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
+                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
+                  , "player_level"           : "New"
+                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
+                  , "merchant_customer_id"   : "u2340112"
+                  }
+              }'</span>
+</code></pre></div>
+<blockquote>
+<p>Request</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="nl">"crypto_tx_ref"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS"</span><span class="w">
+              </span><span class="p">,</span><span class="w"> </span><span class="nl">"payment_ack_url"</span><span class="w">         </span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="w">
+              </span><span class="p">,</span><span class="w"> </span><span class="nl">"timeout_in_sec"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="w">
+              </span><span class="p">,</span><span class="w"> </span><span class="nl">"billing_details"</span><span class="w">    </span><span class="p">:</span><span class="w">
+                  </span><span class="p">{</span><span class="w"> </span><span class="nl">"payer_email"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_first_name"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_last_name"</span><span class="w">        </span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"payer_phone"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"birth_date"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"street"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"unit"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"postal_code"</span><span class="w">            </span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"city"</span><span class="w">                   </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"county"</span><span class="w">                 </span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"state"</span><span class="w">                  </span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"prefecture"</span><span class="w">             </span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"country"</span><span class="w">                </span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_verified"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_document"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"kyc_reference"</span><span class="w">          </span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_verified"</span><span class="w">       </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"address_doc_reference"</span><span class="w">  </span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"player_level"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"member_since"</span><span class="w">           </span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="w">
+                  </span><span class="p">,</span><span class="w"> </span><span class="nl">"merchant_customer_id"</span><span class="w">   </span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+                  </span><span class="p">}</span><span class="w">
+              </span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='authentication-3'>Authentication</h3>
+<table><thead>
+<tr>
+<th>type</th>
+<th>Header Key</th>
+<th>Header Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Header</td>
+<td><code>x-xco-authorization</code></td>
+<td><code>Bearer merchant_api_key</code></td>
+</tr>
+</tbody></table>
+
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-json-fields'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>crypto_tx_ref</td>
+<td>String</td>
+<td>Reference returned by the <code>notify_new_funds_url</code> callback.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>payment_ack_url</td>
+<td>Url</td>
+<td>Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>timeout_in_sec</td>
+<td>Integer</td>
+<td>When to expire the link if unused.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>billing_details</td>
+<td>Billing Details</td>
+<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='billing-details'>Billing Details</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payer_email</td>
+<td>Email</td>
+<td>Email of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>payer_first_name</td>
+<td>String</td>
+<td>First name of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>payer_last_name</td>
+<td>String</td>
+<td>Last name of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>payer_phone</td>
+<td>String</td>
+<td>Including country code, without spaces or separators.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>birth_date</td>
+<td>Date</td>
+<td>Date of birth of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>street</td>
+<td>String</td>
+<td>Street from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>unit</td>
+<td>String</td>
+<td>Unit from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>postal_code</td>
+<td>String</td>
+<td>Postal code from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>city</td>
+<td>String</td>
+<td>City from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>county</td>
+<td>String</td>
+<td>County from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>state</td>
+<td>String</td>
+<td>State from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>prefecture</td>
+<td>String</td>
+<td>Prefecture from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>country</td>
+<td>String</td>
+<td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>kyc_verified</td>
+<td>Date</td>
+<td>Date when the user was KYC verified.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>kyc_document</td>
+<td>String</td>
+<td>Type of the document. Some examples would be Passport or National_ID.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>kyc_reference</td>
+<td>String</td>
+<td>A unique id of the KYC verification. Something like a UUID.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>address_verified</td>
+<td>Date</td>
+<td>Date when the address was verified.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>address_doc_reference</td>
+<td>String</td>
+<td>A unique id of the address document reference.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>player_level</td>
+<td>String</td>
+<td>Your internal player level. Something like New, Normal, VIP, ...</td>
+<td>No</td>
+</tr>
+<tr>
+<td>member_since</td>
+<td>Date</td>
+<td>The date since that user is a member of yours.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h1 id='server-to-server-s2s'>Server to Server (S2S)</h1><h2 id='steps'>Steps</h2>
 <ol>
 <li>Merchant makes a request to <code>create_operation</code> endpoint.</li>
 <li>Merchant gets <code>op_id</code> in the response and stores it for further usage if needed.</li>
