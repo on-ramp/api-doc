@@ -130,7 +130,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 
 ### Ingress Skin
 
-| Field       | Type   |  Description                                          | Required |
+| Field       | Type   | Description                                           | Required |
 | ----------- | ------ | ----------------------------------------------------- | -------- |
 | title       | String | Short string containing merchant's or product's name. | Yes      |
 | image       | Url    | image to stylize the offer.                           | Yes      |
@@ -138,29 +138,45 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 
 ### Billing Details
 
-| Field                 | Type   |  Description                                                          | Required |
-| --------------------- | ------ | --------------------------------------------------------------------- | -------- |
-| payer_email           | Email  | Email of the user making the payment.                                 | Yes      |
-| payer_first_name      | String | First name of the user making the payment.                            | No       |
-| payer_last_name       | String | Last name of the user making the payment.                             | No       |
-| payer_phone           | String | Including country code, without spaces or separators.                 | No       |
-| birth_date            | Date   | Date of birth of the user making the payment.                         | No       |
-| street                | String | Street from the billing address.                                      | No       |
-| unit                  | String | Unit from the billing address.                                        | No       |
-| postal_code           | String | Postal code from the billing address.                                 | No       |
-| city                  | String | City from the billing address.                                        | No       |
-| county                | String | County from the billing address.                                      | No       |
-| state                 | String | State from the billing address.                                       | No       |
-| prefecture            | String | Prefecture from the billing address.                                  | No       |
-| country               | String | Country from the billing address. Should be a 3 letter ISO Code.      | Yes      |
-| kyc_verified          | Date   | Date when the user was KYC verified.                                  | No       |
-| kyc_document          | String | Type of the document. Some examples would be Passport or National_ID. | No       |
-| kyc_reference         | String | A unique id of the KYC verification. Something like a UUID.           | No       |
-| address_verified      | Date   | Date when the address was verified.                                   | No       |
-| address_doc_reference | String | A unique id of the address document reference.                        | No       |
-| player_level          | String | Your internal player level. Something like New, Normal, VIP, ...      | No       |
-| member_since          | Date   | The date since that user is a member of yours.                        | No       |
-| merchant_customer_id  | String | The merchant customer id.                                             | Yes      |
+| Field                 | Type   | Description                                                                     | Required |
+| --------------------- | ------ | ------------------------------------------------------------------------------- | -------- |
+| payer_email           | Email  | Email of the user making the payment.                                           | Yes      |
+| payer_first_name      | String | First name of the user making the payment.                                      | No       |
+| payer_last_name       | String | Last name of the user making the payment.                                       | No       |
+| payer_phone           | String | Including country code, without spaces or separators.                           | No       |
+| birth_date            | Date   | Date of birth of the user making the payment.                                   | No       |
+| street                | String | Street from the billing address.                                                | No       |
+| unit                  | String | Unit from the billing address.                                                  | No       |
+| postal_code           | String | Postal code from the billing address.                                           | No       |
+| city                  | String | City from the billing address.                                                  | No       |
+| county                | String | County from the billing address.                                                | No       |
+| state                 | String | State from the billing address.                                                 | No       |
+| prefecture            | String | Prefecture from the billing address.                                            | No       |
+| country               | String | Country from the billing address. Should be a 3 letter ISO Code.                | Yes      |
+| kyc_verified          | Date   | Date when the user was KYC verified. **Important: Please check section below.** | No       |
+| kyc_document          | String | Type of the document. Some examples would be Passport or National_ID.           | No       |
+| kyc_reference         | String | A unique id of the KYC verification. Something like a UUID.                     | No       |
+| address_verified      | Date   | Date when the address was verified.                                             | No       |
+| address_doc_reference | String | A unique id of the address document reference.                                  | No       |
+| player_level          | String | Your internal player level. Something like New, Normal, VIP, ...                | No       |
+| member_since          | Date   | The date since that user is a member of yours.                                  | No       |
+| merchant_customer_id  | String | The merchant customer id.                                                       | Yes      |
+
+### Verified vs Unverified traffic
+
+**One of the most important things to be defined when communicating with the ON/RAMP API is if the traffic you are sending is verified or unverified.**
+
+In order to let us know if that specific user you are sending us for a transaction has been KYC verified is to send a valid date on the `kyc_verified` parameter inside the `billing_details` object.
+
+So the 2 potential cases are:
+
+- Verified traffic
+
+  - You need to send us the `kyc_verified` parameter with a valid date.
+
+- Unverified traffic
+
+  - You can either not send the `kyc_verified` parameter or send it with a `null` value.
 
 ### Callback Ingress Invoice
 
@@ -176,22 +192,22 @@ pausing the user payment and prompting manual intervention, potentially delaying
 > Request JSON Body
 
 ```json
-  {
-    "reference":"ac400127-93a9-4b9c-9612-c23a3c078933"
-  }
+{
+  "reference": "ac400127-93a9-4b9c-9612-c23a3c078933"
+}
 ```
 
->OR
+> OR
 
 ```json
-  {
-    "reference":"ac400127-93a9-4b9c-9612-c23a3c078933",
-    "crypto_info": {
-      "currency": "USDT",
-      "amount": 100.00,
-      "fee_rate": 0.065
-    }
+{
+  "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
+  "crypto_info": {
+    "currency": "USDT",
+    "amount": 100.0,
+    "fee_rate": 0.065
   }
+}
 ```
 
 ### Response JSON Fields
