@@ -780,7 +780,7 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <tr>
 <th>Field</th>
 <th>Type</th>
-<th> Description</th>
+<th>Description</th>
 <th>Required</th>
 </tr>
 </thead><tbody>
@@ -808,7 +808,7 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <tr>
 <th>Field</th>
 <th>Type</th>
-<th> Description</th>
+<th>Description</th>
 <th>Required</th>
 </tr>
 </thead><tbody>
@@ -893,7 +893,7 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <tr>
 <td>kyc_verified</td>
 <td>Date</td>
-<td>Date when the user was KYC verified.</td>
+<td>Date when the user was KYC verified. <strong>Important: Please check section below.</strong></td>
 <td>No</td>
 </tr>
 <tr>
@@ -939,6 +939,25 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <td>Yes</td>
 </tr>
 </tbody></table>
+<h3 id='verified-vs-unverified-traffic'>Verified vs Unverified traffic</h3>
+<p><strong>One of the most important things to be defined when communicating with the ON/RAMP API is if the traffic you are sending is verified or unverified.</strong></p>
+
+<p>In order to let us know if that specific user you are sending us for a transaction has been KYC verified is to send a valid date on the <code>kyc_verified</code> parameter inside the <code>billing_details</code> object.</p>
+
+<p>So the 2 potential cases are:</p>
+
+<ul>
+<li><p>Verified traffic</p>
+
+<ul>
+<li>You need to send us the <code>kyc_verified</code> parameter with a valid date.</li>
+</ul></li>
+<li><p>Unverified traffic</p>
+
+<ul>
+<li>You can either not send the <code>kyc_verified</code> parameter or send it with a <code>null</code> value.</li>
+</ul></li>
+</ul>
 <h3 id='callback-ingress-invoice'>Callback Ingress Invoice</h3>
 <p>Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
 when the user transaction should be consider done and credited at merchant&#39;s side</strong>. If the merchant was able to
@@ -952,21 +971,21 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"reference"</span><span class="p">:</span><span class="s2">"ac400127-93a9-4b9c-9612-c23a3c078933"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ac400127-93a9-4b9c-9612-c23a3c078933"</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
 <p>OR</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"reference"</span><span class="p">:</span><span class="s2">"ac400127-93a9-4b9c-9612-c23a3c078933"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"crypto_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.00</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"fee_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.065</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ac400127-93a9-4b9c-9612-c23a3c078933"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"crypto_info"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"USDT"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fee_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.065</span><span class="w">
   </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
