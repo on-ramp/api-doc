@@ -162,6 +162,14 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 | member_since          | Date   | The date since that user is a member of yours.                                  | No       |
 | merchant_customer_id  | String | The merchant customer id.                                                       | Yes      |
 
+### Response JSON Fields
+
+| Field          | Type   | Description                                           |
+| -------------- | ------ | ----------------------------------------------------- |
+| invoice_id     | String | Internal **ON/RAMP**'s Invoice Identifier.            |
+| invoice_url    | Url    | Url where to redirect user.                           |
+| invoice_url_qr | Url    | Source Url for an image with QR-encoded `invoice_url` |
+
 ### Verified vs Unverified traffic
 
 **One of the most important things to be defined when communicating with the ON/RAMP API is if the traffic you are sending is verified or unverified.**
@@ -209,11 +217,3 @@ pausing the user payment and prompting manual intervention, potentially delaying
   }
 }
 ```
-
-### Response JSON Fields
-
-| Field          | Type   | Description                                           |
-| -------------- | ------ | ----------------------------------------------------- |
-| invoice_id     | String | Internal **ON/RAMP**'s Invoice Identifier.            |
-| invoice_url    | Url    | Url where to redirect user.                           |
-| invoice_url_qr | Url    | Source Url for an image with QR-encoded `invoice_url` |
