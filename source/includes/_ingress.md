@@ -201,7 +201,8 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 ```json
 {
-  "reference": "ac400127-93a9-4b9c-9612-c23a3c078933"
+  "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
+  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2"
 }
 ```
 
@@ -210,6 +211,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 ```json
 {
   "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
+  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
   "crypto_info": {
     "currency": "USDT",
     "amount": 100.0,
