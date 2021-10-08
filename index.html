@@ -939,6 +939,30 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <td>Yes</td>
 </tr>
 </tbody></table>
+<h3 id='response-json-fields'>Response JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s Invoice Identifier.</td>
+</tr>
+<tr>
+<td>invoice_url</td>
+<td>Url</td>
+<td>Url where to redirect user.</td>
+</tr>
+<tr>
+<td>invoice_url_qr</td>
+<td>Url</td>
+<td>Source Url for an image with QR-encoded <code>invoice_url</code></td>
+</tr>
+</tbody></table>
 <h3 id='verified-vs-unverified-traffic'>Verified vs Unverified traffic</h3>
 <p><strong>One of the most important things to be defined when communicating with the ON/RAMP API is if the traffic you are sending is verified or unverified.</strong></p>
 
@@ -986,31 +1010,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
     </span><span class="nl">"fee_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.065</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='response-json-fields'>Response JSON Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>invoice_id</td>
-<td>String</td>
-<td>Internal <strong>ON/RAMP</strong>&#39;s Invoice Identifier.</td>
-</tr>
-<tr>
-<td>invoice_url</td>
-<td>Url</td>
-<td>Url where to redirect user.</td>
-</tr>
-<tr>
-<td>invoice_url_qr</td>
-<td>Url</td>
-<td>Source Url for an image with QR-encoded <code>invoice_url</code></td>
-</tr>
-</tbody></table>
-<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
+</span></code></pre></div><h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
