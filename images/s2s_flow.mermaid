@@ -1,0 +1,23 @@
+graph TD
+  Pending[pending];
+  Waiting[waiting_user_to_be_redirected];
+  Redirected[user_redirected];
+  Cancel[cancelled];
+  Processing[processing_user_payment];
+  Accepted[accepted];
+  Rejected[rejected];
+
+  Waiting --> Cancel;
+  Waiting --> Redirected;
+
+  Processing --> Accepted;
+  Processing --> Rejected;
+  Processing --> |at most once| Waiting;
+
+  Redirected --> Cancel;
+  Redirected --> Processing;
+
+  Pending --> Waiting;
+  Pending --> Processing;
+  Pending --> Accepted;
+  Pending --> Rejected;

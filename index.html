@@ -421,34 +421,28 @@
             <a href="#server-to-server-s2s" class="toc-h1 toc-link" data-title="Server to Server (S2S)">Server to Server (S2S)</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#steps" class="toc-h2 toc-link" data-title="Steps">Steps</a>
+                    <a href="#flow" class="toc-h2 toc-link" data-title="Flow">Flow</a>
                   </li>
                   <li>
                     <a href="#authentication" class="toc-h2 toc-link" data-title="Authentication">Authentication</a>
                   </li>
                   <li>
-                    <a href="#status-definition" class="toc-h2 toc-link" data-title="Status definition">Status definition</a>
+                    <a href="#creating-an-operation" class="toc-h2 toc-link" data-title="Creating an operation">Creating an operation</a>
                   </li>
                   <li>
                     <a href="#callbacks" class="toc-h2 toc-link" data-title="Callbacks">Callbacks</a>
                   </li>
                   <li>
-                    <a href="#get-credit-card-fields" class="toc-h2 toc-link" data-title="Get credit card fields">Get credit card fields</a>
+                    <a href="#retrieving-operation-statuses" class="toc-h2 toc-link" data-title="Retrieving operation statuses">Retrieving operation statuses</a>
                   </li>
                   <li>
-                    <a href="#create-operation" class="toc-h2 toc-link" data-title="Create Operation">Create Operation</a>
-                  </li>
-                  <li>
-                    <a href="#operation-status" class="toc-h2 toc-link" data-title="Operation status">Operation status</a>
-                  </li>
-                  <li>
-                    <a href="#update-operation" class="toc-h2 toc-link" data-title="Update Operation">Update Operation</a>
+                    <a href="#updating-an-operation" class="toc-h2 toc-link" data-title="Updating an operation">Updating an operation</a>
                   </li>
                   <li>
                     <a href="#testing" class="toc-h2 toc-link" data-title="Testing">Testing</a>
                   </li>
                   <li>
-                    <a href="#api-changes-amp-backward-compatibility" class="toc-h2 toc-link" data-title="API changes &amp; backward compatibility:">API changes &amp; backward compatibility:</a>
+                    <a href="#api-changes-amp-backwards-compatibility" class="toc-h2 toc-link" data-title="API changes &amp; backwards compatibility:">API changes &amp; backwards compatibility:</a>
                   </li>
               </ul>
           </li>
@@ -3146,33 +3140,22 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <td>Yes</td>
 </tr>
 </tbody></table>
-<h1 id='server-to-server-s2s'>Server to Server (S2S)</h1><h2 id='steps'>Steps</h2>
+<h1 id='server-to-server-s2s'>Server to Server (S2S)</h1><h2 id='flow'>Flow</h2>
 <ol>
-<li>Merchant makes a request to <code>create_operation</code> endpoint.</li>
+<li>Merchant makes a request to <code>/rpc/create_operation</code> endpoint.</li>
 <li>Merchant gets <code>op_id</code> in the response and stores it for further usage if needed.</li>
-<li>At that moment, we start calling <code>callback_url</code> with the different possible status.</li>
-<li>When merchant receives <code>WAITING_USER_TO_BE_REDIRECTED</code>, they redirect the user to the 3DS url.</li>
-<li>The user is redirected first to a url of our server in order for us to update the status of the operation and then it gets to the actual 3DS page.</li>
-<li>User completes 3DS (with success or fail) and gets redirected to our webhook.</li>
-<li>Our webhook updates the operation and redirects the user to the url provided on <code>user_redirect_url</code>.</li>
-<li>After that we continue calling <code>callback_url</code> whenever we have an update on the status. Alternatively, merchant could call operation_status.</li>
-<li>Once the merchant receives either <code>ACCEPTED</code> or <code>REJECTED</code>, the process finishes.</li>
+<li><code>callback_url</code> starts receiving statuses.</li>
+<li>When merchant receives <code>WAITING_USER_TO_BE_REDIRECTED</code>, they redirect the user to the provided url.</li>
+<li>User follows the url, completes 3DS and gets redirected to <code>user_redirect_url</code>.</li>
+<li>Steps 4 and 5 might be repeated one additional time if the acquirer deems it necessary.</li>
+<li>Once the merchant receives a status that is <code>ACCEPTED</code> or <code>REJECTED</code>, the process finishes.</li>
 </ol>
-<h2 id='authentication'>Authentication</h2>
-<blockquote>
-<p>Header Based</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="nl">"Authorization"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer &lt;API_KEY&gt;"</span><span class="w">
-</span></code></pre></div>
-<p>Each API Key is associated to a specific MID.</p>
-
-<p>Operations created under a specific API key will only be visible with the same API key.</p>
-<h2 id='status-definition'>Status definition</h2>
-<p>Here is the list of all the existing status and their definition.</p>
+<h3 id='status-overview'>Status overview</h3>
+<p>Here is the list of all the existing statuses and their definitions.</p>
 
 <ul>
 <li>  <code>PENDING</code>:
-Operation has only been created and it is waiting for a response to get a 3DS url or an error.</li>
+Operation has just been created.</li>
 <li>  <code>WAITING_USER_TO_BE_REDIRECTED</code>:
 3DS url has been created and user should be redirected to that.</li>
 <li>  <code>USER_REDIRECTED</code>:
@@ -3186,551 +3169,619 @@ The payment has been rejected by the bank.</li>
 <li>  <code>CANCELLED</code>:
 Operation has been cancelled.</li>
 </ul>
-
-<p>Diagram for visual explanation of the flow:</p>
-
-<p><img src="images/s2s_flow-accb897f.png" alt="" /></p>
-<h2 id='callbacks'>Callbacks</h2>
-<p>Whenever there&#39;s a change on a operation status, a status-change callback will be triggered.</p>
-
-<p>Status-change callbacks will be retried with exponential decay until they get correctly answered.</p>
-
-<p>It will be a POST to the callback_url with the following payload in json format:</p>
-
-<p><strong>WARNING</strong>: in rare cases, it might be possible for status-change callbacks to be duplicated or received out of order, therefore we recommend to check the <code>date</code> field to detect this anomalities.</p>
-<h3 id='http-callback-request'>HTTP Callback Request</h3>
-<aside class="success"><b><code> POST callback_url</code></b></aside>
-
-<p><code>callback_url</code>: URL sent as value in <code>create_operation</code> endpoint</p>
-
+<h3 id='flow-diagram'>Flow diagram</h3>
+<p><img src="images/s2s_flow-066986ed.svg" alt="" /></p>
+<h2 id='authentication'>Authentication</h2>
 <blockquote>
-<p>Example Call</p>
+<p>Header</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://CALLBACK_URL                                    <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{
-        "op_id": "c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba",
-            "status": {
-                "waiting_user_to_be_redirected": {
-                    "url": "https://api.onramp.ltd/rpc/deposit"
-                }
-            },
-            "date": 1626971748
-        }'</span>
-</code></pre></div>
-<blockquote>
-<p>Request Json Example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"waiting_user_to_be_redirected"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-                </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/rpc/deposit"</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="mi">1626971748</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='request-callback-json-fields'>Request Callback JSON Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>op_id</td>
-<td>To which operation this status change refers to</td>
-<td>uuid</td>
-</tr>
-<tr>
-<td>status</td>
-<td>The new status the operation is currently at</td>
-<td>Status</td>
-</tr>
-<tr>
-<td>date</td>
-<td>Timestamp of the creation of the new status</td>
-<td>timestamp</td>
-</tr>
-</tbody></table>
-<h3 id='status-field'>Status Field</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>pending</td>
-<td>initial state</td>
-<td>Object</td>
-</tr>
-<tr>
-<td>waiting_user_to_be_redirected</td>
-<td>Merchant shall redirect the user to the given url.</td>
-<td>RedirectObj</td>
-</tr>
-<tr>
-<td>user_redirected</td>
-<td>Waiting user to complete 3DS step.</td>
-<td>Object</td>
-</tr>
-<tr>
-<td>processing_user_payment</td>
-<td>Waiting acquirer answer.</td>
-<td>Object</td>
-</tr>
-<tr>
-<td>accepted</td>
-<td>Operation completed. Final state</td>
-<td>Object</td>
-</tr>
-<tr>
-<td>rejected</td>
-<td>Operation was cancel on aquarier side. Final state</td>
-<td>ErrorObj</td>
-</tr>
-<tr>
-<td>cancelled</td>
-<td>Operation was cancel on our side. Final state</td>
-<td>CancelObj</td>
-</tr>
-</tbody></table>
-<h3 id='redirectobj'>RedirectObj</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>url</td>
-<td>where to redirect the user to.</td>
-<td>url</td>
-</tr>
-</tbody></table>
-<h3 id='errorobj'>ErrorObj</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>error_code</td>
-<td>original specific aquarier error identifier.</td>
-<td>string</td>
-</tr>
-<tr>
-<td>error_reason</td>
-<td>Enum of common error reasons.</td>
-<td>ErrorType</td>
-</tr>
-</tbody></table>
-<h3 id='errortype'>ErrorType</h3>
-<ul>
-<li><code>&#39;ISSUER_OFFLINE&#39;</code>.</li>
-<li><code>&#39;UNSUPPORTED_CARD_COUNTRY&#39;</code>.</li>
-<li><code>&#39;INSUFICIENT_FUNDS&#39;</code>.</li>
-<li><code>&#39;UNSUPPORTED_CARD_TYPE&#39;</code>.</li>
-<li><code>&#39;UNSUPPORTED_CURRENCY&#39;</code>.</li>
-<li><code>&#39;INVALID_CARDNUMBER&#39;</code>.</li>
-<li><code>&#39;CVV2_FAILURE&#39;</code>.</li>
-<li><code>&#39;UNSPECIFIED_CC_ERR&#39;</code>.</li>
-</ul>
-<h3 id='cancelobj'>CancelObj</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>reason</td>
-<td>Description of the merchant or user action after which the operation was cancel.</td>
-<td>string</td>
-</tr>
-</tbody></table>
-<h3 id='merchant-response'>Merchant Response</h3><h3 id='http-status-200'>HTTP Status 200</h3><h3 id='response-json-fields'>Response Json Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>op_id</td>
-<td>ID of the operation to be updated</td>
-<td>uuid</td>
-</tr>
-<tr>
-<td>action</td>
-<td>Action to be performed</td>
-<td>Action</td>
-</tr>
-</tbody></table>
-<h3 id='action'>Action</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>request_attempt_cancel</td>
-<td>We&#39;ll try to cancel the operation, but it should not assumed it will happen.</td>
-<td>object</td>
-</tr>
-<tr>
-<td>continue</td>
-<td>Merchant acknowledges it has received the callback.</td>
-<td>object</td>
-</tr>
-</tbody></table>
-
-<blockquote>
-<p>Response Json Example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"request_attempt_cancel"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="nl">"x-xco-authorization"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Bearer &lt;API_KEY&gt;"</span><span class="w">
 </span></code></pre></div>
-<blockquote>
-<p><em>Note: If an unknown status is sent, merchant should respond with <code>continue</code></em></p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"continue"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='card-fields'>Card fields</h3>
-<p>This table defines all the potential required fields for credit card as well as some required only sometimes. To see which one applies to your MID, check the <code>credit_card_fields</code> endpoint.</p>
+<p>Each API Key is associated with a specific MID.</p>
 
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-<th>Always Required</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>card_number</td>
-<td>Valid card number</td>
-<td>string</td>
-<td>true</td>
-</tr>
-<tr>
-<td>card_expiry_month</td>
-<td>The expiry month on the credit card. With the format of MM.</td>
-<td>string</td>
-<td>true</td>
-</tr>
-<tr>
-<td>card_expiry_year</td>
-<td>The expiry year on the credit card. With the format of YY.</td>
-<td>string</td>
-<td>true</td>
-</tr>
-<tr>
-<td>card_cvv</td>
-<td>The CVV value for the card</td>
-<td>string</td>
-<td>true</td>
-</tr>
-<tr>
-<td>card_holder_first_name</td>
-<td>The card first holder name as it appears on the card</td>
-<td>string</td>
-<td>false</td>
-</tr>
-<tr>
-<td>card_holder_last_name</td>
-<td>The card last holder name as it appears on the card</td>
-<td>string</td>
-<td>false</td>
-</tr>
-<tr>
-<td>email</td>
-<td>Email of the user making the payment</td>
-<td>string</td>
-<td>true</td>
-</tr>
-<tr>
-<td>street</td>
-<td>Street of the user&#39;s billing address</td>
-<td>string</td>
-<td>false</td>
-</tr>
-<tr>
-<td>city</td>
-<td>City of the user&#39;s billing address</td>
-<td>string</td>
-<td>false</td>
-</tr>
-<tr>
-<td>postal_code</td>
-<td>Postal code of the user&#39;s billing address</td>
-<td>string</td>
-<td>false</td>
-</tr>
-<tr>
-<td>state</td>
-<td>State of the user&#39;s billing address</td>
-<td>string</td>
-<td>false</td>
-</tr>
-<tr>
-<td>country</td>
-<td>Country of the user&#39;s billing address. It should be <a href="https://www.iso.org/iso-3166-country-codes.html">ISO 3166 complaint</a></td>
-<td>string</td>
-<td>false</td>
-</tr>
-</tbody></table>
-<h2 id='get-credit-card-fields'>Get credit card fields</h2>
-<aside class="success"><b><code>GET /rpc/credit_card_fields</code></b></aside>
-
-<p>Get the list of required credit-card fields for the current API Key. Notice different API keys might required a different set of fields to be provided.</p>
+<p>Operations created under a specific API key will only be visible with that API key.</p>
+<h2 id='creating-an-operation'>Creating an operation</h2>
+<aside class="success"><b><code>POST /rpc/create_operation</code></b></aside>
 
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://BASE_URL/rpc/credit_card_fields                                    <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-</code></pre></div><h3 id='http-request'>HTTP Request</h3>
-<ul>
-<li>No Body</li>
-</ul>
-<h3 id='http-response'>HTTP Response</h3>
-<ul>
-<li>Status 200</li>
-</ul>
-<h3 id='http-response-fields'>HTTP Response Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>fields</td>
-<td>List of available credit card fields</td>
-<td>CreditCardField -&gt; FieldDescrtiption</td>
-</tr>
-</tbody></table>
-<h3 id='creditcardfield'>CreditCardField</h3>
-<p>One of:</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/rpc/create_operation                           <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                   <span class="se">\</span>
+  <span class="nt">-X</span> POST                                                               <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{ "fiat_amount": "1000"
+      , "fiat_currency": "EUR"
+      , "callback_url": "https://api.example.com/deposit-webhook"
+      , "user_redirect_url": "https://example.com/user/deposits"
+      , "card_details":
+          { "card_number": "4242424242424242"
+          , "card_expiry_month": "12"
+          , "card_expiry_year": "21"
+          , "card_cvv": "356"
+          }
+      }'</span>
+</code></pre></div><h3 id='request'>Request</h3>
+<aside class="notice">
+  Fields marked <b>For 3DSv2</b> need to <b>all</b> be present if you
+  wish for a 3DSv2 transaction to occur.</aside>
 
-<ul>
-<li>  <code>&#39;credit_card_number&#39;</code></li>
-<li>  <code>&#39;credit_card_name&#39;</code></li>
-<li>  ... see previous <a href="#card-fields"><em>Card fields</em></a> section.</li>
-</ul>
-
-<p><a href="#card-fields">See credit card fields section</a></p>
-<h3 id='fielddescription'>FieldDescription</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>description</td>
-<td>Description about the field</td>
-<td>string</td>
-</tr>
-<tr>
-<td>regex</td>
-<td>Regular expression to validate the field</td>
-<td>string</td>
-</tr>
-<tr>
-<td>optional</td>
-<td>Boolean flag to know if the field is optional</td>
-<td>boolean</td>
-</tr>
-<tr>
-<td>examples</td>
-<td>List of example values</td>
-<td>array</td>
-</tr>
-</tbody></table>
-
-<blockquote>
-<p>Request Json Example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"fields"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"credit_card_number"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The credit card number"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"regex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35d{3})d{11})$"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"optional"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"examples"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"4242424242424242"</span><span class="p">,</span><span class="w"> </span><span class="s2">"3700 0000 0000 002"</span><span class="p">]</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="nl">"credit_card_expiry_month"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The month when the credit card expires"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"regex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^0[1-9]|1[0-2]$"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"optional"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"examples"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"01"</span><span class="p">,</span><span class="w"> </span><span class="s2">"12"</span><span class="p">]</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h2 id='create-operation'>Create Operation</h2>
-<aside class="success"><b><code> POST /rpc/create_operation</code></b></aside>
-
-<p>This endpoint is meant to be used to start a payment once all the user the details for the operation has been gathered from the user (amount, currency, credit card details, ...).</p>
-
-<p><strong>*To be noted</strong>: if you receive a specific error about incorrect credit card details (code <code>ERR_CODE_INVALID_CARD_DETAILS</code>), please first make a call to <code>credit_card_fields</code> to get the new valid ones and repeat the operaiton with those.*</p>
-
-<blockquote>
-<p>Example Call</p>
-</blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://BASE_URL/rpc/create_operation                                    <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-    <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{
-    "fiat_amount": "1000",
-    "fiat_currency": "EUR",
-    "callback_url": "https://api.betway.com/deposit-webhook",
-    "user_redirect_url": "https://betway.api/user/deposits",
-    "card_details": {
-        "card_number": "4242424242424242",
-        "card_expiry_month": "12",
-        "card_expiry_year": "21",
-        "card_cvv": "356"
-    }
-}'</span>
-</code></pre></div><h3 id='http-request-fields'>HTTP Request Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>fiat_amount</td>
-<td>Integer between a min value and a max value, in cents.</td>
-<td>string</td>
-</tr>
-<tr>
-<td>fiat_currency</td>
-<td>ISO 4127 currency 3 digits code. https://www.iso.org/iso-4217-currency-codes.html</td>
-<td>string</td>
-</tr>
-<tr>
-<td>callback_url</td>
-<td>URL to be called by us to inform about updates on the operation status.</td>
-<td>string</td>
-</tr>
-<tr>
-<td>user_redirect_url</td>
-<td>URL to use to redirect the user after 3DS on the operation status.</td>
-<td>string</td>
-</tr>
-<tr>
-<td>card_details</td>
-<td>Object of credit card details</td>
-<td>Credit-Card-Field</td>
-</tr>
-</tbody></table>
-
-<blockquote>
-<p>Request Json Example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1000"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"callback_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.betway.com/deposit-webhook"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://betway.api/user/deposits"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"card_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"card_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4242424242424242"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"card_expiry_month"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"card_expiry_year"</span><span class="p">:</span><span class="w"> </span><span class="s2">"21"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"card_cvv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"356"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='http-response-2'>HTTP Response</h3>
-<ul>
-<li>Status 200</li>
-</ul>
-<h3 id='http-response-fields-2'>HTTP Response Fields</h3>
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Description</th>
-<th>Type</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>op_id</td>
-<td>ID of the operation to be used as a reference.</td>
-<td>Array[uuid][1]</td>
-</tr>
-</tbody></table>
+<table>
+  <tr>
+    <th colspan=2>Field</th>
+    <th colspan=2>Description</th>
+    <th colspan=2>Type</th>
+    <th colspan=2>Required</th>
+  </tr>
+  <tr>
+    <td colspan=2>fiat_amount</td>
+    <td colspan=2>Transaction amount, in <a href="https://en.wikipedia.org/wiki/ISO_4217#Minor_units_of_currency">minor unit</a> form</td>
+    <td colspan=2>Positive integer</td>
+    <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>fiat_currency</td>
+    <td colspan=2>Transaction currency</td>
+    <td colspan=2><a href="https://en.wikipedia.org/wiki/ISO_4217#Active_codes">ISO 4217</a> alpha code</td>
+    <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>callback_url</td>
+    <td colspan=2>URL we will return status updates to</td>
+    <td colspan=2>HTTP URL</td>
+    <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>user_redirect_url</td>
+    <td colspan=2>URL the user will be redirected to after completing 3DS</td>
+    <td colspan=2>HTTP URL</td>
+    <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>card_details</td>
+    <td colspan=2></td>
+    <td colspan=2>Object</td>
+    <td colspan=2></td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>card_number</td>
+    <td></td>
+    <td><a href="https://en.wikipedia.org/wiki/Payment_card_number">Valid</a> credit card number</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Always</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>card_expiry_month</td>
+    <td></td>
+    <td>Credit card expiry month</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Always</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>card_expiry_year</td>
+    <td></td>
+    <td>Last two digits of the credit card expiry year</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Always</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>card_cvv</td>
+    <td></td>
+    <td>Card CVV</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Always</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>card_holder_first_name</td>
+    <td></td>
+    <td>Card holder's first name as it appears on the card</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>card_holder_last_name</td>
+    <td></td>
+    <td>Card holder's last name as it appears on the card</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>email</td>
+    <td></td>
+    <td>Users email</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Always</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>street</td>
+    <td></td>
+    <td>Billing address street</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>city</td>
+    <td></td>
+    <td>Billing address city</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>postal_code</td>
+    <td></td>
+    <td>Billing address postcode</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>state</td>
+    <td></td>
+    <td>Billing address state</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>country</td>
+    <td></td>
+    <td>Merchant's location</td>
+    <td></td>
+    <td><a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166</a> alpha-3 code</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr>
+    <td colspan=2>ip</td>
+    <td colspan=2>Users IP address</td>
+    <td colspan=2><a href="https://en.wikipedia.org/wiki/IP_address#IPv4_addresses">IPv4</a> address</td>
+    <td colspan=2>For 3DSv2</td>
+  </tr>
+  <tr>
+    <td colspan=2>three_ds_data</td>
+    <td colspan=2>Users session-specific browser data</td>
+    <td colspan=2>Object
+    <td colspan=2>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>accept_header</td>
+    <td></td>
+    <td>Accept header from users browser</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>challenge_window</td>
+    <td></td>
+    <td>Size of the authentication iframe presented to the user.
+        <br>Acceptable values are:
+        <br>&emsp;1 – 250 x 400
+        <br>&emsp;2 – 390 x 400
+        <br>&emsp;3 – 500 x 600
+        <br>&emsp;4 – 600 x 400
+        <br>&emsp;5 – Full screen
+        <br>The default varies based on the acquirer.
+    </td>
+    <td></td>
+    <td>Integer</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>java_enabled</td>
+    <td></td>
+    <td>Whether users browser can execute Java</td>
+    <td></td>
+    <td>Boolean</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>javascript_enabled</td>
+    <td></td>
+    <td>Whether users browser can execute JavaScript</td>
+    <td></td>
+    <td>Boolean</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>language</td>
+    <td></td>
+    <td>Users browser language</td>
+    <td></td>
+    <td><a href="https://en.wikipedia.org/wiki/IETF_language_tag">Language tag</a></td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>os</td>
+    <td></td>
+    <td>Users operating system</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>screen_color_depth</td>
+    <td></td>
+    <td>Users screen bit depth of the color palette
+        <br>Accepted values are 1, 4, 8, 15, 16, 24, 32 and 48.
+    </td>
+    <td></td>
+    <td>Integer</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>screen_height</td>
+    <td></td>
+    <td>Users screen height in pixels</td>
+    <td></td>
+    <td>Integer</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>screen_width</td>
+    <td></td>
+    <td>Users screen width in pixels</td>
+    <td></td>
+    <td>Integer</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>timezone</td>
+    <td></td>
+    <td>Difference between UTC and users local time <b>in minutes</b>.
+        <br>This will be negative if users local time is ahead of UTC.</td>
+    <td></td>
+    <td>Integer</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">three_ds_data.</span>user_agent</td>
+    <td></td>
+    <td>UserAgent header from users browser</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>For 3DSv2</td>
+  </tr>
+</table>
+<h3 id='response'>Response</h3>
+<aside class="success">HTTP 200</aside>
 
 <blockquote>
 <p>Response Json Example</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7ffb7577-e4f9-4980-89d0-a1936f9088f4"</span><span class="w"> </span><span class="p">}]</span><span class="w">
-</span></code></pre></div><h2 id='operation-status'>Operation status</h2>
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>op_id</td>
+<td>Operation ID to be used as a reference</td>
+<td>UUID</td>
+</tr>
+</tbody></table>
+<h2 id='callbacks'>Callbacks</h2>
+<aside class="notice">Callbacks are sent to <code>callback_url</code> provided in the <code>POST /rpc/create_operation</code> call</aside>
+
+<p>Whenever there&#39;s a change on a operation status, a status change callback will be triggered.</p>
+
+<p>Status change callbacks will be retried with exponential decay until they get answered.</p>
+
+<p><strong>WARNING</strong>: in rare cases, it might be possible for status change callbacks to be duplicated or received
+out of order, therefore we recommend checking the <code>date</code> field to detect these anomalies.</p>
+<h3 id='request-2'>Request</h3>
+<blockquote>
+<p>Callback example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="mi">1626971748</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"status"</span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"waiting_user_to_be_redirected"</span><span class="p">:</span><span class="w">
+        </span><span class="p">{</span><span class="w"> </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/rpc/deposit"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table>
+  <tr>
+    <th>Field</th>
+    <th>Description</th>
+    <th>Type</th>
+  </tr>
+  <tr>
+    <td>op_id</td>
+    <td>Operation this status change refers to</td>
+    <td>UUID</td>
+  </tr>
+  <tr>
+    <td>date</td>
+    <td>Status creation timestamp</td>
+    <td>Unix time</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td></td>
+    <td>Object</td>
+  </tr>
+</table>
+<h3 id='status-field-one-of-the-following'>Status field (one of the following)</h3>
+<table>
+  <tr>
+    <th colspan=2>Field</th>
+    <th colspan=2>Description</th>
+    <th colspan=2>Type</th>
+  </tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td colspan=2>pending</td>
+    <td colspan=2>Initial state</td>
+    <td colspan=2>Object</td>
+  </tr>
+  </tr>
+  <tr>
+    <td colspan=2>waiting_user_to_be_redirected</td>
+    <td colspan=2>Waiting for merchant to redirect the user</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">waiting_user_to_be_redirected.</span>number</td>
+    <td></td>
+    <td>Increments every time a new redirection is requested. Starts at 1.</td>
+    <td></td>
+    <td>HTTP URL</td>
+  </tr>
+  <tr></tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td></td>
+    <td><span style="color:gray">waiting_user_to_be_redirected.</span>url</td>
+    <td></td>
+    <td>URL to redirect the user to</td>
+    <td></td>
+    <td>HTTP URL</td>
+  </tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td colspan=2>user_redirected</td>
+    <td colspan=2>Waiting for the user to complete 3DS</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td colspan=2>processing_user_payment</td>
+    <td colspan=2>Processing the payment</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td colspan=2>accepted</td>
+    <td colspan=2>Operation completed</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr>
+    <td colspan=2>rejected</td>
+    <td colspan=2>Operation was rejected by the bank/acquirer</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">rejected.</span>error_code</td>
+    <td></td>
+    <td>Bank/acquirer error identifier</td>
+    <td></td>
+    <td>String</td>
+  </tr>
+  <tr></tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td></td>
+    <td><span style="color:gray">rejected.</span>error_reason</td>
+    <td></td>
+    <td>Common error reason.
+        <br>One of the following:
+          <br>&ensp;<code>DO_NOT_HONOR</code>
+          <br>&ensp;<code>3DS_DECLINED</code>
+          <br>&ensp;<code>EXPIRED_CARD</code>
+          <br>&ensp;<code>TRANSACTION_NOT_PERMITTED_TO_CARDHOLDER</code>
+          <br>&ensp;<code>ISSUER_OFFLINE</code>
+          <br>&ensp;<code>UNSUPPORTED_CARD_COUNTRY</code>
+          <br>&ensp;<code>INSUFFICIENT_FUNDS</code>
+          <br>&ensp;<code>UNSUPPORTED_CARD_TYPE</code>
+          <br>&ensp;<code>UNSUPPORTED_CURRENCY</code>
+          <br>&ensp;<code>INVALID_CARDNUMBER</code>
+          <br>&ensp;<code>CVV2_FAILURE</code>
+          <br>&ensp;<code>UNSPECIFIED_CC_ERR</code>
+    </td>
+    <td></td>
+    <td>String</td>
+  <tr>
+    <td colspan=2>cancelled</td>
+    <td colspan=2>Operation was cancelled on our side</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">cancelled.</span>reason</td>
+    <td></td>
+    <td>Action that caused the operation cancellation.
+        <br>One of the following:
+          <br>&ensp;<code>MANUAL_CANCELLATION</code>
+    </td>
+    <td></td>
+    <td>String</td>
+  </tr>
+
+</table>
+<h3 id='response-2'>Response</h3>
+<aside class="success">HTTP 200</aside>
+
+<blockquote>
+<p>Response Json Example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"action"</span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"request_attempt_cancel"</span><span class="p">:</span><span class="w">
+        </span><span class="p">{}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Note: If an unknown status is sent, merchant should respond with <code>continue</code></p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"action"</span><span class="p">:</span><span class="w">
+    </span><span class="p">{</span><span class="w"> </span><span class="nl">"continue"</span><span class="p">:</span><span class="w">
+        </span><span class="p">{}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Type</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>action</td>
+<td></td>
+<td>Object</td>
+</tr>
+</tbody></table>
+<h3 id='action-one-of-the-following'>Action (one of the following)</h3>
+<table>
+  <tr>
+    <th>Field</th>
+    <th>Description</th>
+    <th>Type</th>
+  </tr>
+  <tr style="border-bottom:0.5px dashed gray">
+    <td>request_attempt_cancel</td>
+    <td>Attempt to cancel the operation.
+        This is not guaranteed to succeed.</td>
+    <td>Object</td>
+  </tr>
+  <tr>
+    <td>continue</td>
+    <td>Simply acknowledge the callback has been received.</td>
+    <td>Object</td>
+  </tr>
+</table>
+<h2 id='retrieving-operation-statuses'>Retrieving operation statuses</h2>
 <aside class="success"><b><code>GET /rpc/operation_status?op_id={op_id}</code></b></aside>
 
-<p>This endpoint can be used both to know about the status of an operation or as an alternative to callbacks. At any moment, if you would like to know about the status of an operation, you can make a request here to know about it.</p>
+<p>This endpoint can be used to query the status of an operation.</p>
 
-<p>It returns the list of status-changes related to the given event.</p>
-
-<blockquote>
-<p>Example Call</p>
-</blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://BASE_URL/rpc/operation_status?op_id<span class="o">=</span>7ffb7577-e4f9-4980-89d0-a1936f9088f4     <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-<span class="o">}</span><span class="s1">'
-</span></code></pre></div><h3 id='http-request-fields-2'>HTTP Request Fields</h3>
-<ul>
-<li>No body</li>
-</ul>
-<h3 id='http-response-3'>HTTP Response</h3>
-<ul>
-<li>Status 200</li>
-</ul>
-<h3 id='http-response-fields-3'>HTTP Response Fields</h3>
-<ul>
-<li><a href="#callbacks">See callback status section</a></li>
-</ul>
-<h2 id='update-operation'>Update Operation</h2>
-<aside class="success"><b><code> POST /rpc/update_operation</code></b></aside>
-
-<p>Send an action to a given operation, this action will be executed as if it were responsed on a status-change event callback.</p>
+<p>It returns the list of status changes related to the given event.</p>
 
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://BASE_URL/rpc/update_operation                                    <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/rpc/operation_status?op_id<span class="o">=</span>7ffb7577-e4f9-4980-89d0-a1936f9088f4  <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-    <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{
-    "op_id": "5b99dfb2-ef07-4fb7-9d20-62d63ce0f737",
-    "action": {
-        "request_attempt_cancel": {}
-    }
-}'</span>
-</code></pre></div><h3 id='http-request-fields-3'>HTTP Request Fields</h3>
+</code></pre></div><h3 id='request-3'>Request</h3>
+<aside class="notice">Empty body</aside>
+<h3 id='response-3'>Response</h3>
+<aside class="success">HTTP 200</aside>
+
+<p>Returns a list of <a href="#callbacks">callbacks</a>.</p>
+<h2 id='updating-an-operation'>Updating an operation</h2>
+<aside class="success"><b><code>POST /rpc/update_operation</code></b></aside>
+
+<p>Send an action to a given operation.</p>
+
+<blockquote>
+<p>Example Call</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/rpc/update_operation                           <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                   <span class="se">\</span>
+  <span class="nt">-X</span> POST                                                               <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{ "op_id": "5b99dfb2-ef07-4fb7-9d20-62d63ce0f737"
+      , "action":
+          { "request_attempt_cancel":
+              {}
+          }
+      }'</span>
+</code></pre></div><h3 id='request-4'>Request</h3>
 <table><thead>
 <tr>
 <th>Field</th>
@@ -3741,52 +3792,36 @@ Operation has been cancelled.</li>
 <tr>
 <td>op_id</td>
 <td>ID of the operation to be updated.</td>
-<td>uuid</td>
+<td>UUID</td>
 </tr>
 <tr>
 <td>action</td>
-<td>Action to be performed. Please see, <a href="https://hackmd.io/m7zCvFtkSNGdrsKNYcTu4A#Callbacks">callbacks section</a></td>
-<td>Action</td>
+<td>Same action as in the response part of the <a href="#callbacks">callbacks section</a></td>
+<td>Object</td>
 </tr>
 </tbody></table>
+<h3 id='response-4'>Response</h3>
+<aside class="success">HTTP 200</aside>
 
-<blockquote>
-<p>Request Json Example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5b99dfb2-ef07-4fb7-9d20-62d63ce0f737"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"request_attempt_cancel"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='http-response-4'>HTTP Response</h3>
-<ul>
-<li>Status 200</li>
-</ul>
-<h3 id='http-response-5'>HTTP Response</h3>
-<ul>
-<li>Empty Json</li>
-</ul>
+<aside class="notice">Empty body</aside>
+<h2 id='testing'>Testing</h2>
+<p>On the testing environment several CVVs behave differently:</p>
 
-<blockquote>
-<p>Response Json Example</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{}</span><span class="w">
-</span></code></pre></div><h2 id='testing'>Testing</h2><h3 id='unstable-environment-testing'>Unstable environment testing:</h3>
-<p>While testing on this environment set <code>CVV</code> to:</p>
+<p>&emsp;<code>001</code> — payment is immediately accepted;</p>
+
+<p>&emsp;<code>002</code> — payment goes through mocked 3DSv1 detached from any payment system;</p>
+
+<p>&emsp;<code>003</code> — payment is immediately rejected.</p>
+
+<p>&emsp;<code>004</code> — payment goes through mocked 3DSv2 detached from any payment system;</p>
+
+<aside class="notice">These test cases jump certain status change callbacks, notably <code>pending</code> and <code>processing_user_payment</code>, but they will still be visible on <b><code>GET /rpc/operation_status</code></b></aside>
+<h2 id='api-changes-amp-backwards-compatibility'>API changes &amp; backwards compatibility:</h2>
+<p>To keep flexibility for future new features without losing backward compatibility, we ask you:</p>
 
 <ul>
-<li><p><code>001</code> to immediate accept the CC payment.</p></li>
-<li><p><code>002</code> for 3DS.</p></li>
-<li><p><code>003</code> to immediate reject the CC payment.</p></li>
-</ul>
-<h2 id='api-changes-amp-backward-compatibility'>API changes &amp; backward compatibility:</h2>
-<p>To keep flexibility for future new features, while not loosing backward compatibility, merchants using this API are requested to:</p>
-
-<ul>
-<li><p>Assume that any Json could contain extra fields not specified on this document.</p></li>
-<li><p>Not to assume that objects with an unespecified contain will be either empty or not.</p></li>
-<li><p>Be able to answer unkown types of status change callbacks by answering <code>continue</code>.</p></li>
+<li><p>To assume that any JSON could contain extra fields not specified within this document;</p></li>
+<li><p>To answer unknown types of status changes with <code>continue</code>.</p></li>
 </ul>
 <h1 id='quotes-api'>Quotes API</h1>
 <p>In case you are getting crypto in return of an <a href="/#ingress-api">ingress</a>, you can get the reference prices for it if you would like to display that to users at the beginning of the process.</p>
