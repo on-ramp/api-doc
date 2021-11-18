@@ -8,7 +8,7 @@ Production:
 **[https://api.blockfort-exchange.io](https://api.blockfort-exchange.io)**
 
 Test:
-**[https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com/](https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com/referenceTrade)**
+**[https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com](https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com)**
 
 ## Get reference prices
 
@@ -17,7 +17,7 @@ Test:
 ```shell
 curl -X GET \
 	'https://api.blockfort-exchange.io/referenceTrade' \
-	-H 'x-api-key: QU0J2HfUMH0r2Yh3I3EhRyK4qRx30likZ7dBRsP8' \
+	-H 'x-api-key: 0000000000000000000000000000000000000000' \
 	-H 'Content-Type: application/json' \
 	-d '{
 			"currency_lhs":"gbp",
