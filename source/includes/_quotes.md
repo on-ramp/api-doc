@@ -4,8 +4,11 @@ In case you are getting crypto in return of an [ingress](/#ingress-api), you can
 
 ## Base URL
 
-Production and Test:
+Production:
 **[https://api.blockfort-exchange.io](https://api.blockfort-exchange.io)**
+
+Test:
+**[https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com/](https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com/referenceTrade)**
 
 ## Get reference prices
 
@@ -28,10 +31,10 @@ curl -X GET \
 
 ```json
 {
-	"currency_lhs": "gbp",
-	"currency_rhs": "usdt",
-	"amount_lhs": 100,
-	"direction": "sell"
+  "currency_lhs": "gbp",
+  "currency_rhs": "usdt",
+  "amount_lhs": 100,
+  "direction": "sell"
 }
 ```
 
@@ -39,12 +42,12 @@ curl -X GET \
 
 ```json
 {
-	"currency_lhs": "gbp",
-	"currency_rhs": "usdt",
-	"amount_lhs": -100,
-	"amount_rhs": 134.37825813749998,
-	"exchange_rate": 1.343782581375,
-	"timestamp_utc": "2021-09-03T04:16:14"
+  "currency_lhs": "gbp",
+  "currency_rhs": "usdt",
+  "amount_lhs": -100,
+  "amount_rhs": 134.37825813749998,
+  "exchange_rate": 1.343782581375,
+  "timestamp_utc": "2021-09-03T04:16:14"
 }
 ```
 
