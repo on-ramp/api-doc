@@ -3140,7 +3140,9 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <td>Yes</td>
 </tr>
 </tbody></table>
-<h1 id='server-to-server-s2s'>Server to Server (S2S)</h1><h2 id='flow'>Flow</h2>
+<h1 id='server-to-server-s2s'>Server to Server (S2S)</h1>
+<p><strong>Note:</strong> This API is restricted and you should only use it with previous authorization.</p>
+<h2 id='flow'>Flow</h2>
 <ol>
 <li>Merchant makes a request to <code>/rpc/create_operation</code> endpoint.</li>
 <li>Merchant gets <code>op_id</code> in the response and stores it for further usage if needed.</li>
@@ -3154,19 +3156,19 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <p>Here is the list of all the existing statuses and their definitions.</p>
 
 <ul>
-<li>  <code>PENDING</code>:
+<li><code>PENDING</code>:
 Operation has just been created.</li>
-<li>  <code>WAITING_USER_TO_BE_REDIRECTED</code>:
+<li><code>WAITING_USER_TO_BE_REDIRECTED</code>:
 3DS url has been created and user should be redirected to that.</li>
-<li>  <code>USER_REDIRECTED</code>:
+<li><code>USER_REDIRECTED</code>:
 User has been redirected to the 3DS page.</li>
-<li>  <code>PROCESSING_USER_PAYMENT</code>:
+<li><code>PROCESSING_USER_PAYMENT</code>:
 User has completed 3DS and the payment is being processed.</li>
-<li>  <code>ACCEPTED</code>:
+<li><code>ACCEPTED</code>:
 The payment has been accepted.</li>
-<li>  <code>REJECTED</code>:
+<li><code>REJECTED</code>:
 The payment has been rejected by the bank.</li>
-<li>  <code>CANCELLED</code>:
+<li><code>CANCELLED</code>:
 Operation has been cancelled.</li>
 </ul>
 <h3 id='flow-diagram'>Flow diagram</h3>
@@ -3554,13 +3556,14 @@ out of order, therefore we recommend checking the <code>date</code> field to det
 <blockquote>
 <p>Callback example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba"</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="mi">1626971748</span><span class="w">
-</span><span class="p">,</span><span class="w"> </span><span class="nl">"status"</span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"waiting_user_to_be_redirected"</span><span class="p">:</span><span class="w">
-        </span><span class="p">{</span><span class="w"> </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/rpc/deposit"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="mi">1626971748</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"waiting_user_to_be_redirected"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/rpc/deposit"</span><span class="w">
     </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <table>
@@ -3697,20 +3700,12 @@ out of order, therefore we recommend checking the <code>date</code> field to det
 <blockquote>
 <p>Response Json Example</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"action"</span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"request_attempt_cancel"</span><span class="p">:</span><span class="w">
-        </span><span class="p">{}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"request_attempt_cancel"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
 <p>Note: If an unknown status is sent, merchant should respond with <code>continue</code></p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"action"</span><span class="p">:</span><span class="w">
-    </span><span class="p">{</span><span class="w"> </span><span class="nl">"continue"</span><span class="p">:</span><span class="w">
-        </span><span class="p">{}</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nl">"continue"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <table><thead>
 <tr>
@@ -3868,7 +3863,7 @@ out of order, therefore we recommend checking the <code>date</code> field to det
   </span><span class="nl">"timestamp_utc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-09-03T04:16:14"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
-<aside class="success"><b><code> GET /referenceTrade </code></b></aside>
+<aside class="success"><b><code> POST /referenceTrade </code></b></aside>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
 <tr>
