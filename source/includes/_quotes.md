@@ -15,7 +15,7 @@ Test:
 > Example Call
 
 ```shell
-curl -X GET \
+curl -X POST \
 	'https://api.blockfort-exchange.io/referenceTrade' \
 	-H 'x-api-key: 0000000000000000000000000000000000000000' \
 	-H 'Content-Type: application/json' \
