@@ -1,5 +1,7 @@
 # Server to Server (S2S)
 
+**Note:** This API is restricted and you should only use it with previous authorization.
+
 ## Flow
 
 1. Merchant makes a request to `/rpc/create_operation` endpoint.
@@ -14,20 +16,20 @@
 
 Here is the list of all the existing statuses and their definitions.
 
--   `PENDING`:
-    Operation has just been created.
--   `WAITING_USER_TO_BE_REDIRECTED`:
-    3DS url has been created and user should be redirected to that.
--   `USER_REDIRECTED`:
-    User has been redirected to the 3DS page.
--   `PROCESSING_USER_PAYMENT`:
-    User has completed 3DS and the payment is being processed.
--   `ACCEPTED`:
-    The payment has been accepted.
--   `REJECTED`:
-    The payment has been rejected by the bank.
--   `CANCELLED`:
-    Operation has been cancelled.
+- `PENDING`:
+  Operation has just been created.
+- `WAITING_USER_TO_BE_REDIRECTED`:
+  3DS url has been created and user should be redirected to that.
+- `USER_REDIRECTED`:
+  User has been redirected to the 3DS page.
+- `PROCESSING_USER_PAYMENT`:
+  User has completed 3DS and the payment is being processed.
+- `ACCEPTED`:
+  The payment has been accepted.
+- `REJECTED`:
+  The payment has been rejected by the bank.
+- `CANCELLED`:
+  Operation has been cancelled.
 
 ### Flow diagram
 
@@ -44,7 +46,6 @@ Here is the list of all the existing statuses and their definitions.
 Each API Key is associated with a specific MID.
 
 Operations created under a specific API key will only be visible with that API key.
-
 
 ## Creating an operation
 
@@ -391,7 +392,6 @@ curl https://example.com/rpc/create_operation                           \
   </tr>
 </table>
 
-
 ### Response
 
 <aside class="success">HTTP 200</aside>
@@ -402,11 +402,9 @@ curl https://example.com/rpc/create_operation                           \
 [{ "op_id": "7ffb7577-e4f9-4980-89d0-a1936f9088f4" }]
 ```
 
-Field | Description                            | Type
------ | -------------------------------------- | ---------------
-op_id | Operation ID to be used as a reference | UUID
-
-
+| Field | Description                            | Type |
+| ----- | -------------------------------------- | ---- |
+| op_id | Operation ID to be used as a reference | UUID |
 
 ## Callbacks
 
@@ -424,13 +422,14 @@ out of order, therefore we recommend checking the `date` field to detect these a
 > Callback example
 
 ```json
-{ "op_id": "c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba"
-, "date": 1626971748
-, "status":
-    { "waiting_user_to_be_redirected":
-        { "url": "https://api.onramp.ltd/rpc/deposit"
-        }
+{
+  "op_id": "c6cce9a4-af6d-4572-a0ab-d7bc2ad159ba",
+  "date": 1626971748,
+  "status": {
+    "waiting_user_to_be_redirected": {
+      "url": "https://api.onramp.ltd/rpc/deposit"
     }
+  }
 }
 ```
 
@@ -565,8 +564,6 @@ out of order, therefore we recommend checking the `date` field to detect these a
 
 </table>
 
-
-
 ### Response
 
 <aside class="success">HTTP 200</aside>
@@ -574,27 +571,18 @@ out of order, therefore we recommend checking the `date` field to detect these a
 > Response Json Example
 
 ```json
-{ "action":
-    { "request_attempt_cancel":
-        {}
-    }
-}
+{ "action": { "request_attempt_cancel": {} } }
 ```
 
 > Note: If an unknown status is sent, merchant should respond with `continue`
 
 ```json
-{ "action":
-    { "continue":
-        {}
-    }
-}
+{ "action": { "continue": {} } }
 ```
 
-Field  | Description                       | Type
------- | --------------------------------- | ------
-action |                                   | Object
-
+| Field  | Description | Type   |
+| ------ | ----------- | ------ |
+| action |             | Object |
 
 ### Action (one of the following)
 
@@ -625,7 +613,6 @@ This endpoint can be used to query the status of an operation.
 
 It returns the list of status changes related to the given event.
 
-
 > Example Call
 
 ```shell
@@ -643,7 +630,6 @@ curl https://example.com/rpc/operation_status?op_id=7ffb7577-e4f9-4980-89d0-a193
 <aside class="success">HTTP 200</aside>
 
 Returns a list of [callbacks](#callbacks).
-
 
 ## Updating an operation
 
@@ -668,17 +654,16 @@ curl https://example.com/rpc/update_operation                           \
 
 ### Request
 
-Field  | Description                                                                | Type
------- | -------------------------------------------------------------------------- | ------
-op_id  | ID of the operation to be updated.                                         | UUID
-action | Same action as in the response part of the [callbacks section](#callbacks) | Object
+| Field  | Description                                                                | Type   |
+| ------ | -------------------------------------------------------------------------- | ------ |
+| op_id  | ID of the operation to be updated.                                         | UUID   |
+| action | Same action as in the response part of the [callbacks section](#callbacks) | Object |
 
 ### Response
 
 <aside class="success">HTTP 200</aside>
 
 <aside class="notice">Empty body</aside>
-
 
 ## Testing
 

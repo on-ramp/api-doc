@@ -53,7 +53,7 @@ curl -X POST \
 
 ### HTTP Request
 
-<aside class="success"><b><code> GET /referenceTrade </code></b></aside>
+<aside class="success"><b><code> POST /referenceTrade </code></b></aside>
 
 ### Request JSON Fields
 
