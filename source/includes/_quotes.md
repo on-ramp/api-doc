@@ -5,7 +5,7 @@ In case you are getting crypto in return of an [ingress](/#ingress-api), you can
 ## Base URL
 
 Production:
-**[https://api.blockfort-exchange.io](https://api.blockfort-exchange.io)**
+**[https://web.blockfort-exchange.io](https://web.blockfort-exchange.io)**
 
 Test:
 **[https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com](https://kac8t1chv8.execute-api.eu-west-2.amazonaws.com)**
@@ -16,7 +16,7 @@ Test:
 
 ```shell
 curl -X POST \
-	'https://api.blockfort-exchange.io/referenceTrade' \
+	'https://web.blockfort-exchange.io/referenceTrade' \
 	-H 'x-api-key: 0000000000000000000000000000000000000000' \
 	-H 'Content-Type: application/json' \
 	-d '{
