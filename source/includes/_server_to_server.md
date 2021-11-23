@@ -33,7 +33,7 @@ Here is the list of all the existing statuses and their definitions.
 
 ### Flow diagram
 
-![](./images/s2s_flow.svg)
+![](../images/s2s_flow.svg)
 
 ## Authentication
 
