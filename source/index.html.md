@@ -1,10 +1,10 @@
 ---
-title: ON/RAMP payment API v1.4.3
+title: ON/RAMP payment API v1.4.4
 
-version: 1.4.3
+version: 1.4.4
 
 language_tabs: # must be one of https://git.io/vQNgJ
-   - shell: cURL
+  - shell: cURL
 
 #toc_footers:
 #  - <a href='https://coinweb.io' target='_blank' rel='noopener'>Sign Up for a Developer Key</a>
@@ -16,7 +16,6 @@ includes:
   - iframe
   - crypto
   - crypto_flow
-  - server_to_server
   - quotes
 
 search: true
@@ -28,10 +27,9 @@ code_clipboard: true
 
 ## Terminology and Acronyms
 
--  Merchant: The service using **ON/RAMP** as payment processor.
--  User: The physical person who sends or receives funds to/from the merchant through **ON/RAMP**.
-
--  CC: credit card.
+- Merchant: The service using **ON/RAMP** as payment processor.
+- User: The physical person who sends or receives funds to/from the merchant through **ON/RAMP**.
+- CC: credit card.
 
 ## Base URL
 
@@ -43,14 +41,9 @@ Test:
 
 ## Changelog
 
-Changes since v1.4.2:
+Changes since v1.4.3:
 
--  Add fee_rate field for payment_ack_url payload example
-
-Changes since v1.4.1:
-
--  Update payment_ack_url payload example
-
+- Updated docs structure
 
 # Calling **ON/RAMP** API endpoints
 
@@ -61,9 +54,9 @@ All calls shall be made using **`POST`** method.
 
 Every call shall include the headers:
 
--  `Content-Type: application/json`
+- `Content-Type: application/json`
 
--  `X-XCO-Authorization: Bearer AUTH_TOKEN`
+- `X-XCO-Authorization: Bearer AUTH_TOKEN`
 
 Where `AUTH_TOKEN` is replaced with merchant's API key.
 
