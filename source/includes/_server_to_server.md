@@ -62,6 +62,7 @@ curl https://example.com/rpc/create_operation                           \
       , "fiat_currency": "EUR"
       , "callback_url": "https://api.example.com/deposit-webhook"
       , "user_redirect_url": "https://example.com/user/deposits"
+      , "customer_id": "ffeeddcc-bbaa-9988-7766-554433221100"
       , "session_id": "00112233-4455-6677-8899-aabbccddeeff"
       , "card_details":
           { "card_number": "4242424242424242"
