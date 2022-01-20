@@ -62,11 +62,20 @@ curl https://example.com/rpc/create_operation                           \
       , "fiat_currency": "EUR"
       , "callback_url": "https://api.example.com/deposit-webhook"
       , "user_redirect_url": "https://example.com/user/deposits"
+      , "customer_id": "ffeeddcc-bbaa-9988-7766-554433221100"
+      , "session_id": "00112233-4455-6677-8899-aabbccddeeff"
       , "card_details":
           { "card_number": "4242424242424242"
           , "card_expiry_month": "12"
           , "card_expiry_year": "21"
           , "card_cvv": "356"
+          , "card_holder_name": "John Doe"
+          , "email": "example@example.com"
+          , "first_name": "John"
+          , "last_name": "Doe"
+          , "country": "GBR"
+          , "city": "London"
+          , "street": "Charing Cross Road 5"
           }
       }'
 ```
@@ -106,6 +115,18 @@ curl https://example.com/rpc/create_operation                           \
     <td colspan=2>user_redirect_url</td>
     <td colspan=2>URL the user will be redirected to after completing 3DS</td>
     <td colspan=2>HTTP URL</td>
+    <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>customer_id</td>
+    <td colspan=2>User identifier</td>
+    <td colspan=2>String</td>
+    <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>session_id</td>
+    <td colspan=2>Unique ID of users browsing session</td>
+    <td colspan=2>String</td>
     <td colspan=2>Always</td>
   </tr>
   <tr>
@@ -161,24 +182,35 @@ curl https://example.com/rpc/create_operation                           \
   <tr></tr>
   <tr>
     <td></td>
-    <td><span style="color:gray">card_details.</span>card_holder_first_name</td>
+    <td><span style="color:gray">card_details.</span>card_holder_name</td>
     <td></td>
-    <td>Card holder's first name as it appears on the card</td>
+    <td>Card holder's name as it appears on the card</td>
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
     <td></td>
-    <td><span style="color:gray">card_details.</span>card_holder_last_name</td>
+    <td><span style="color:gray">card_details.</span>first_name</td>
     <td></td>
-    <td>Card holder's last name as it appears on the card</td>
+    <td>Users first name</td>
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>last_name</td>
+    <td></td>
+    <td>Users last name</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
@@ -200,7 +232,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
@@ -211,7 +243,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
@@ -240,11 +272,11 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td><span style="color:gray">card_details.</span>country</td>
     <td></td>
-    <td>Merchant's location</td>
+    <td>Billing address country</td>
     <td></td>
     <td><a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-3">ISO 3166</a> alpha-3 code</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr>
     <td colspan=2>ip</td>
@@ -330,7 +362,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>For 3DSv2</td>
   </tr>
   <tr></tr>
   <tr>
