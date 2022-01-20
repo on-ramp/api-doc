@@ -120,7 +120,7 @@ curl https://example.com/rpc/create_operation                           \
     <td colspan=2>customer_id</td>
     <td colspan=2>User identifier</td>
     <td colspan=2>String</td>
-    <td colspan=2>Optional</td>
+    <td colspan=2>Always</td>
   </tr>
   <tr>
     <td colspan=2>session_id</td>
