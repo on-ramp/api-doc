@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.4
+title: ON/RAMP payment API v1.4.5
 
-version: 1.4.4
+version: 1.4.5
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
