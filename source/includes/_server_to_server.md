@@ -74,8 +74,6 @@ curl https://example.com/rpc/create_operation                           \
           , "first_name": "John"
           , "last_name": "Doe"
           , "country": "GBR"
-          , "city": "London"
-          , "street": "Charing Cross Road 5"
           }
       }'
 ```
@@ -232,7 +230,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Optional</td>
   </tr>
   <tr></tr>
   <tr>
@@ -243,7 +241,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Optional</td>
   </tr>
   <tr></tr>
   <tr>
