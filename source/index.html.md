@@ -41,6 +41,10 @@ Test:
 
 ## Changelog
 
+Changes since v1.4.4:
+
+- Updated docs styling
+
 Changes since v1.4.3:
 
 - Updated docs structure
