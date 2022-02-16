@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.5
+title: ON/RAMP payment API v1.4.6
 
-version: 1.4.5
+version: 1.4.6
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,10 @@ Test:
 **[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.5:
+
+- Updated some fields for 3DS
 
 Changes since v1.4.4:
 

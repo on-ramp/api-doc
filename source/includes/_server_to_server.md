@@ -252,7 +252,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
@@ -316,7 +316,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>Integer</td>
     <td></td>
-    <td>Optional</td>
+    <td>For 3DSv2</td>
   </tr>
   <tr></tr>
   <tr>
