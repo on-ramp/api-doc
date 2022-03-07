@@ -452,7 +452,7 @@ Merchant-provided URLs.</p>
 <p><strong>Note:</strong> This API is restricted and you should only use it with previous authorization.</p>
 <h2 id='flow'>Flow</h2>
 <ol>
-<li>Merchant makes a request to <code>/rpc/create_operation</code> endpoint.</li>
+<li>Merchant makes a request to <code>/s2s/create_operation</code> endpoint.</li>
 <li>Merchant gets <code>op_id</code> in the response and stores it for further usage if needed.</li>
 <li><code>callback_url</code> starts receiving statuses.</li>
 <li>When merchant receives <code>WAITING_USER_TO_BE_REDIRECTED</code>, they redirect the user to the provided url.</li>
@@ -491,12 +491,12 @@ Operation has been cancelled.</li>
 
 <p>Operations created under a specific API key will only be visible with that API key.</p>
 <h2 id='creating-an-operation'>Creating an operation</h2>
-<aside class="success"><b><code>POST /rpc/create_operation</code></b></aside>
+<aside class="success"><b><code>POST /s2s/create_operation</code></b></aside>
 
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/rpc/create_operation                           <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/s2s/create_operation                           <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span> <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                   <span class="se">\</span>
   <span class="nt">-X</span> POST                                                               <span class="se">\</span>
@@ -892,7 +892,7 @@ Operation has been cancelled.</li>
 </tr>
 </tbody></table>
 <h2 id='callbacks'>Callbacks</h2>
-<aside class="notice">Callbacks are sent to <code>callback_url</code> provided in the <code>POST /rpc/create_operation</code> call</aside>
+<aside class="notice">Callbacks are sent to <code>callback_url</code> provided in the <code>POST /s2s/create_operation</code> call</aside>
 
 <p>Whenever there&#39;s a change on a operation status, a status change callback will be triggered.</p>
 
@@ -909,7 +909,7 @@ out of order, therefore we recommend checking the <code>date</code> field to det
   </span><span class="nl">"date"</span><span class="p">:</span><span class="w"> </span><span class="mi">1626971748</span><span class="p">,</span><span class="w">
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"waiting_user_to_be_redirected"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/rpc/deposit"</span><span class="w">
+      </span><span class="nl">"url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/s2s/deposit"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1088,7 +1088,7 @@ out of order, therefore we recommend checking the <code>date</code> field to det
   </tr>
 </table>
 <h2 id='retrieving-operation-statuses'>Retrieving operation statuses</h2>
-<aside class="success"><b><code>GET /rpc/operation_status?op_id={op_id}</code></b></aside>
+<aside class="success"><b><code>GET /s2s/operation_status?op_id={op_id}</code></b></aside>
 
 <p>This endpoint can be used to query the status of an operation.</p>
 
@@ -1097,7 +1097,7 @@ out of order, therefore we recommend checking the <code>date</code> field to det
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/rpc/operation_status?op_id<span class="o">=</span>7ffb7577-e4f9-4980-89d0-a1936f9088f4  <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/s2s/operation_status?op_id<span class="o">=</span>7ffb7577-e4f9-4980-89d0-a1936f9088f4  <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
 </code></pre></div><h3 id='request-3'>Request</h3>
@@ -1107,14 +1107,14 @@ out of order, therefore we recommend checking the <code>date</code> field to det
 
 <p>Returns a list of <a href="#callbacks">callbacks</a>.</p>
 <h2 id='updating-an-operation'>Updating an operation</h2>
-<aside class="success"><b><code>POST /rpc/update_operation</code></b></aside>
+<aside class="success"><b><code>POST /s2s/update_operation</code></b></aside>
 
 <p>Send an action to a given operation.</p>
 
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/rpc/update_operation                           <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://example.com/s2s/update_operation                           <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span> <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                   <span class="se">\</span>
   <span class="nt">-X</span> POST                                                               <span class="se">\</span>
@@ -1158,7 +1158,7 @@ out of order, therefore we recommend checking the <code>date</code> field to det
 
 <p>&emsp;<code>004</code> — payment goes through mocked 3DSv2 detached from any payment system;</p>
 
-<aside class="notice">These test cases jump certain status change callbacks, notably <code>pending</code> and <code>processing_user_payment</code>, but they will still be visible on <b><code>GET /rpc/operation_status</code></b></aside>
+<aside class="notice">These test cases jump certain status change callbacks, notably <code>pending</code> and <code>processing_user_payment</code>, but they will still be visible on <b><code>GET /s2s/operation_status</code></b></aside>
 <h2 id='api-changes-amp-backwards-compatibility'>API changes &amp; backwards compatibility:</h2>
 <p>To keep flexibility for future new features without losing backward compatibility, we ask you:</p>
 
