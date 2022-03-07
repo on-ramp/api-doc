@@ -4,7 +4,7 @@
 
 ## Flow
 
-1. Merchant makes a request to `/rpc/create_operation` endpoint.
+1. Merchant makes a request to `/s2s/create_operation` endpoint.
 2. Merchant gets `op_id` in the response and stores it for further usage if needed.
 3. `callback_url` starts receiving statuses.
 4. When merchant receives `WAITING_USER_TO_BE_REDIRECTED`, they redirect the user to the provided url.
@@ -49,12 +49,12 @@ Operations created under a specific API key will only be visible with that API k
 
 ## Creating an operation
 
-<aside class="success"><b><code>POST /rpc/create_operation</code></b></aside>
+<aside class="success"><b><code>POST /s2s/create_operation</code></b></aside>
 
 > Example Call
 
 ```shell
-curl https://example.com/rpc/create_operation                           \
+curl https://example.com/s2s/create_operation                           \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000" \
   -H "Content-Type: application/json"                                   \
   -X POST                                                               \
@@ -448,7 +448,7 @@ curl https://example.com/rpc/create_operation                           \
 
 ## Callbacks
 
-<aside class="notice">Callbacks are sent to <code>callback_url</code> provided in the <code>POST /rpc/create_operation</code> call</aside>
+<aside class="notice">Callbacks are sent to <code>callback_url</code> provided in the <code>POST /s2s/create_operation</code> call</aside>
 
 Whenever there's a change on a operation status, a status change callback will be triggered.
 
@@ -467,7 +467,7 @@ out of order, therefore we recommend checking the `date` field to detect these a
   "date": 1626971748,
   "status": {
     "waiting_user_to_be_redirected": {
-      "url": "https://api.onramp.ltd/rpc/deposit"
+      "url": "https://api.onramp.ltd/s2s/deposit"
     }
   }
 }
@@ -647,7 +647,7 @@ out of order, therefore we recommend checking the `date` field to detect these a
 
 ## Retrieving operation statuses
 
-<aside class="success"><b><code>GET /rpc/operation_status?op_id={op_id}</code></b></aside>
+<aside class="success"><b><code>GET /s2s/operation_status?op_id={op_id}</code></b></aside>
 
 This endpoint can be used to query the status of an operation.
 
@@ -656,7 +656,7 @@ It returns the list of status changes related to the given event.
 > Example Call
 
 ```shell
-curl https://example.com/rpc/operation_status?op_id=7ffb7577-e4f9-4980-89d0-a1936f9088f4  \
+curl https://example.com/s2s/operation_status?op_id=7ffb7577-e4f9-4980-89d0-a1936f9088f4  \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"                   \
   -H "Content-Type: application/json"                                                     \
 ```
@@ -673,14 +673,14 @@ Returns a list of [callbacks](#callbacks).
 
 ## Updating an operation
 
-<aside class="success"><b><code>POST /rpc/update_operation</code></b></aside>
+<aside class="success"><b><code>POST /s2s/update_operation</code></b></aside>
 
 Send an action to a given operation.
 
 > Example Call
 
 ```shell
-curl https://example.com/rpc/update_operation                           \
+curl https://example.com/s2s/update_operation                           \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000" \
   -H "Content-Type: application/json"                                   \
   -X POST                                                               \
@@ -717,7 +717,7 @@ On the testing environment several CVVs behave differently:
 
 &emsp;`004` — payment goes through mocked 3DSv2 detached from any payment system;
 
-<aside class="notice">These test cases jump certain status change callbacks, notably <code>pending</code> and <code>processing_user_payment</code>, but they will still be visible on <b><code>GET /rpc/operation_status</code></b></aside>
+<aside class="notice">These test cases jump certain status change callbacks, notably <code>pending</code> and <code>processing_user_payment</code>, but they will still be visible on <b><code>GET /s2s/operation_status</code></b></aside>
 
 ## API changes & backwards compatibility:
 
