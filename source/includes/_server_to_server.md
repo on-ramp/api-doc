@@ -221,6 +221,16 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>Always</td>
   </tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">card_details.</span>phone_number</td>
+    <td></td>
+    <td>Users phone number</td>
+    <td></td>
+    <td>String</td>
+    <td></td>
+    <td>Optional</td>
+  </tr>
   <tr></tr>
   <tr>
     <td></td>
@@ -263,7 +273,7 @@ curl https://example.com/rpc/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>

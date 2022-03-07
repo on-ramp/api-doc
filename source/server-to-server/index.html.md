@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.6
+title: ON/RAMP payment API v1.4.7
 
-version: 1.4.6
+version: 1.4.7
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -35,6 +35,10 @@ Test:
 
 ## Changelog
 
+Changes since v1.4.6:
+
+- Updated some fields for 3DS
+
 Changes since v1.4.5:
 
 - Updated some fields for 3DS
@@ -42,10 +46,6 @@ Changes since v1.4.5:
 Changes since v1.4.4:
 
 - Updated 3ds values
-
-Changes since v1.4.3:
-
-- Updated docs structure
 
 # Calling **ON/RAMP** API endpoints
 
