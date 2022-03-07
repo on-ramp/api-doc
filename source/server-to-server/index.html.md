@@ -28,10 +28,10 @@ code_clipboard: true
 ## Base URL
 
 Production:
-**[https://api.onramp.ltd/rpc](https://api.onramp.ltd)**
+**[https://api.onramp.ltd/s2s](https://api.onramp.ltd)**
 
 Test:
-**[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
+**[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
 
