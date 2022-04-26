@@ -58,7 +58,8 @@ curl https://example.com/s2s/create_operation                           \
   -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000" \
   -H "Content-Type: application/json"                                   \
   -X POST                                                               \
-  -d '{ "fiat_amount": "1000"
+  -d '{ "op_id": "00112233-4455-6677-8899-aabbccddeeff"
+      , "fiat_amount": "1000"
       , "fiat_currency": "EUR"
       , "callback_url": "https://api.example.com/deposit-webhook"
       , "user_redirect_url": "https://example.com/user/deposits"
@@ -90,6 +91,12 @@ curl https://example.com/s2s/create_operation                           \
     <th colspan=2>Description</th>
     <th colspan=2>Type</th>
     <th colspan=2>Required</th>
+  </tr>
+  <tr>
+    <td colspan=2>op_id</td>
+    <td colspan=2>Unique ID to identify the operation. If not provided, it will be automatically generated</td>
+    <td colspan=2>UUID</td>
+    <td colspan=2>Optional</td>
   </tr>
   <tr>
     <td colspan=2>fiat_amount</td>
