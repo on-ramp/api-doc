@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.7
+title: ON/RAMP payment API v1.4.8
 
-version: 1.4.7
+version: 1.4.8
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,10 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.7:
+
+- Docummented the addition of `op_id` for `create_operation` endpoint
 
 Changes since v1.4.6:
 

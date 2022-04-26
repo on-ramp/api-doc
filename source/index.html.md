@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.7
+title: ON/RAMP payment API v1.4.8
 
-version: 1.4.7
+version: 1.4.8
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -40,6 +40,14 @@ Test:
 **[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.7:
+
+- Updated docs styling
+
+Changes since v1.4.6:
+
+- Updated docs styling
 
 Changes since v1.4.5:
 
