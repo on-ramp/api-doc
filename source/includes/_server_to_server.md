@@ -297,7 +297,7 @@ curl https://example.com/s2s/create_operation                           \
     <td colspan=2>ip</td>
     <td colspan=2>Users IP address</td>
     <td colspan=2><a href="https://en.wikipedia.org/wiki/IP_address#IPv4_addresses">IPv4</a> address</td>
-    <td colspan=2>For 3DSv2</td>
+    <td colspan=2>Always</td>
   </tr>
   <tr>
     <td colspan=2>three_ds_data</td>
