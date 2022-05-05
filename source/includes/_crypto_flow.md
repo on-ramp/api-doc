@@ -9,7 +9,7 @@ From the User point of view, there are mainly 3 steps in the flow:
 2. Once we verify that the user has transferred coins to that address, we notify back to the Merchant that there are new funds available from this user.
 3. On this notification, the Merchant should request to initiate a new Invoice to transfer the Startpoints to them as in other Payments Methods.
 
-Steps **2 and 3** should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer. 
+Steps **2 and 3** should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer.
 
 ## User request a Crypto Address
 
@@ -17,7 +17,7 @@ As it is mentioned in [Crypto Iframe Integration](#crypto-iframe-integration), t
 
 <aside class="success"><b><code>POST /blockchain/api/v1/{chain}/address/new</code></b></aside>
 
-> Example cURL 
+> Example cURL
 
 ```shell
 curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer MERCHANT_API_KEY" -d '{"merchant_customer_id": "123","fiat_amount": 10000, "fiat_currency": "EUR", "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done" }' http://localhost:7000/blockchain/api/v1/btc/address/new
@@ -26,18 +26,18 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 > ReqAddress
 
 ```json
-{ 
-    "merchant_customer_id": "merchant_customer_id", 
-    "fiat_amount": 10000, 
-    "fiat_currency": "EUR", 
-    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done" 
+{
+    "merchant_customer_id": "merchant_customer_id",
+    "fiat_amount": 10000,
+    "fiat_currency": "EUR",
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
 }
 ```
 
 > AddressResponse
 
 ```json
-{ 
+{
     "address": "ADDRESS_BASE58_OR_SPECIFIC_BLOCKCHAIN_ENCODING",
     "chain": "btc",
     "qr_base64": "BASE_64_IMAGE_OF_ADDRESS"
@@ -47,14 +47,14 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 > ErrorResponse (Status 400)
 
 ```json
-{ 
+{
     "error_code": "ERROR_ADDRESS_ALREADY_IN_USE",
     "in_use_addr": "ADDRESS"
 }
 ```
 
 ```json
-{ 
+{
     "error_code": "ERROR_MERCHANT_NOT_CONFIGURED_YET",
     "merchant_id": "MERCHANT_API_KEY"
 }
@@ -63,7 +63,7 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 > ErrorResponse (Status 401)
 
 ```json
-{ 
+{
     "error_code": "ERROR_MERCHANT_WRONG_API_KEY",
     "api_key": "MERCHANT_API_KEY"
 }
@@ -72,14 +72,14 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 > ErrorResponse (Status 500)
 
 ```json
-{ 
+{
     "error_code": "ERROR_CANNOT_CREATE_QR_CODE",
     "message": "Some message"
 }
 ```
 
 ```json
-{ 
+{
     "error_code": "ERROR_UNKNOWN_ERROR",
     "message": "Some message"
 }
@@ -100,7 +100,7 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 
 ### Body
 
-| Content Type     | Data Type               | 
+| Content Type     | Data Type               |
 |-----------|-----------|
 | `application/json`      | `ReqAddress` |
 
@@ -123,7 +123,7 @@ When we are ready to do the callback notifying about new Crypto funds we are goi
 
 <aside class="success"><b><code>POST `notify_new_funds_url`</code></b></aside>
 
-> Example cURL 
+> Example cURL
 
 ```shell
 curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer MERCHANT_API_KEY" -d '{"crypto_tx_ref": "123"}' http://SOME_URL_SENT_IN_NOTIFY_NEW_FUNDS_URL
@@ -132,8 +132,8 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 > Request
 
 ```json
-{ 
-    "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE", 
+{
+    "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE",
 }
 ```
 
@@ -155,10 +155,11 @@ curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer
 ## Merchant Create new Crypto Invoice
 
 Once the Merchant receives the notification on new crypto funds it should call the following endpoint to initiate the invoice and transfer of startpoints. Similar to [Ingress API](#ingress-api).
+The main difference with this endpoint is that it is provided the real amount of fiat that the user deposits at the moment that the crypto transaction was confirm. Because the end user cannot be forced to deposit a specific amount of crypto, we cannot rely on what the user input as fiat amount in the beginning of the transaction, because the user can deposit less or more in crypto and due to the variability of the price of this kind of assets.
 
 <aside class="success"><b><code>POST `https://api.onramp.ltd/rpc/create_crypto_ingress_invoice`</code></b></aside>
 
-> Example cURL 
+> Example cURL
 
 ```shell
 curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           \
@@ -238,6 +239,8 @@ curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           \
 { "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2"
 , "invoice_url": "https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"
 , "invoice_url_qr": "https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"
+, "fiat_amount": 1000
+, "fiat_currency": "EUR"
 }
 ```
 
@@ -278,4 +281,10 @@ member_since          | Date        | The date since that user is a member of yo
 merchant_customer_id  | String      | The merchant customer id.                                             | Yes
 
 
+### Response JSON Fields
+
+Field     |   Type   | Description
+---       | -------- | -----------
+fiat_amount  | Integer | Fiat amount in cents denomination after exchange with the current rate of crypto transaction confirmation time.
+fiat_currency  | String | Fiat currency. It is the same that the user requested at the beginning of the flow. It is 3 letters ISO 4217 code.
 
