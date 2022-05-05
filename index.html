@@ -2681,31 +2681,31 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <li>On this notification, the Merchant should request to initiate a new Invoice to transfer the Startpoints to them as in other Payments Methods.</li>
 </ol>
 
-<p>Steps <strong>2 and 3</strong> should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer. </p>
+<p>Steps <strong>2 and 3</strong> should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer.</p>
 <h2 id='user-request-a-crypto-address'>User request a Crypto Address</h2>
 <p>As it is mentioned in <a href="#crypto-iframe-integration">Crypto Iframe Integration</a>, this is done by calling the endpoint in the <strong>iframe</strong> <code>get_address</code>. This is forwarding the call to the public endpoint:</p>
 
 <aside class="success"><b><code>POST /blockchain/api/v1/{chain}/address/new</code></b></aside>
 
 <blockquote>
-<p>Example cURL </p>
+<p>Example cURL</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span> <span class="nt">-d</span> <span class="s1">'{"merchant_customer_id": "123","fiat_amount": 10000, "fiat_currency": "EUR", "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done" }'</span> http://localhost:7000/blockchain/api/v1/btc/address/new
 </code></pre></div>
 <blockquote>
 <p>ReqAddress</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
-    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="p">,</span><span class="w"> 
-    </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w"> 
-    </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w"> 
-    </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="w"> 
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
 <p>AddressResponse</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ADDRESS_BASE58_OR_SPECIFIC_BLOCKCHAIN_ENCODING"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"qr_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BASE_64_IMAGE_OF_ADDRESS"</span><span class="w">
@@ -2714,11 +2714,11 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <blockquote>
 <p>ErrorResponse (Status 400)</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_ADDRESS_ALREADY_IN_USE"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"in_use_addr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ADDRESS"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_NOT_CONFIGURED_YET"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_API_KEY"</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2726,7 +2726,7 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <blockquote>
 <p>ErrorResponse (Status 401)</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_WRONG_API_KEY"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"api_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_API_KEY"</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2734,11 +2734,11 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <blockquote>
 <p>ErrorResponse (Status 500)</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_CANNOT_CREATE_QR_CODE"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some message"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
+</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
     </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_UNKNOWN_ERROR"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some message"</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2825,15 +2825,15 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <aside class="success"><b><code>POST `notify_new_funds_url`</code></b></aside>
 
 <blockquote>
-<p>Example cURL </p>
+<p>Example cURL</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span> <span class="nt">-d</span> <span class="s1">'{"crypto_tx_ref": "123"}'</span> http://SOME_URL_SENT_IN_NOTIFY_NEW_FUNDS_URL
 </code></pre></div>
 <blockquote>
 <p>Request</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> 
-    </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"</span><span class="p">,</span><span class="w"> 
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"</span><span class="p">,</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='authentication-2'>Authentication</h3>
 <table><thead>
@@ -2869,12 +2869,13 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 </tr>
 </tbody></table>
 <h2 id='merchant-create-new-crypto-invoice'>Merchant Create new Crypto Invoice</h2>
-<p>Once the Merchant receives the notification on new crypto funds it should call the following endpoint to initiate the invoice and transfer of startpoints. Similar to <a href="#ingress-api">Ingress API</a>.</p>
+<p>Once the Merchant receives the notification on new crypto funds it should call the following endpoint to initiate the invoice and transfer of startpoints. Similar to <a href="#ingress-api">Ingress API</a>.
+The main difference with this endpoint is that it is provided the real amount of fiat that the user deposits at the moment that the crypto transaction was confirm. Because the end user cannot be forced to deposit a specific amount of crypto, we cannot rely on what the user input as fiat amount in the beginning of the transaction, because the user can deposit less or more in crypto and due to the variability of the price of this kind of assets.</p>
 
 <aside class="success"><b><code>POST `https://api.onramp.ltd/rpc/create_crypto_ingress_invoice`</code></b></aside>
 
 <blockquote>
-<p>Example cURL </p>
+<p>Example cURL</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           <span class="se">\</span>
   <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span>                     <span class="se">\</span>
@@ -2958,6 +2959,8 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="w">
 </span><span class="p">,</span><span class="w"> </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="w">
+</span><span class="p">,</span><span class="w"> </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
@@ -3127,6 +3130,25 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <td>String</td>
 <td>The merchant customer id.</td>
 <td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='response-json-fields'>Response JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Fiat amount in cents denomination after exchange with the current rate of crypto transaction confirmation time.</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>Fiat currency. It is the same that the user requested at the beginning of the flow. It is 3 letters ISO 4217 code.</td>
 </tr>
 </tbody></table>
 <h1 id='quotes-api'>Quotes API</h1>
