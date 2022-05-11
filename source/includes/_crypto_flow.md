@@ -241,6 +241,8 @@ curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           \
 , "invoice_url_qr": "https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"
 , "fiat_amount": 1000
 , "fiat_currency": "EUR"
+, "crypto_amount": 0.00001
+, "crypto_type": "btc"
 }
 ```
 
@@ -287,4 +289,6 @@ Field     |   Type   | Description
 ---       | -------- | -----------
 fiat_amount  | Integer | Fiat amount in cents denomination after exchange with the current rate of crypto transaction confirmation time.
 fiat_currency  | String | Fiat currency. It is the same that the user requested at the beginning of the flow. It is 3 letters ISO 4217 code.
+crypto_amount | Float | The amount of crypto that the system received from the user.
+crypto_type   | String | Either "btc" or "bch" for the moment depending on the blockchain that the user selected.
 
