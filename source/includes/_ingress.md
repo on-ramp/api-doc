@@ -220,8 +220,9 @@ pausing the user payment and prompting manual intervention, potentially delaying
 }
 ```
 
-#### Confirmation request signature
+### Confirmation request signature
 If you are willing to impose additional security on final confirmation callback (the one specified uder `payment_ack_url`) we can provide a unique secret which will be used to sign request in the following way:
+
 - take prettified request body (see [RFC759](https://datatracker.ietf.org/doc/html/rfc7159))
 - append as a new line random nonce provided under the header `x-xco-nonce`
 - append as a new line given secret
@@ -230,18 +231,23 @@ If you are willing to impose additional security on final confirmation callback 
 - base64 encode result
 - compare obtained string with the one provided under `xco-x-signature` header
 
-> Example confirmation callback (please note that `x-xco-authorization` header will be sent anyway)
-```json
-curl --location --request POST 'payment_ack_url' \
---header 'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=' \
---header 'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4' \
---header 'x-xco-authorization: Bearer 9d01c660-19e3-4070-a1f1-72a6e2b8bc94' \
---header 'content-type: application/json' \
---data-raw '{"reference":"e5b8f01c-bcb1-4721-b831-b2e11903b979","invoice_id":"ebb626aa-5d3b-4642-927f-cb76cbdd350e"}'
+> Example confirmation callback with signature header and steps to recreate it (please note that `x-xco-authorization` header will be sent anyway)
+
+```shell
+curl payment_ack_url \
+-H 'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=' \
+-H 'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4' \
+-H 'x-xco-authorization: Bearer 9d01c660-19e3-4070-a1f1-72a6e2b8bc94' \
+-H 'content-type: application/json' \
+-X POST -d '{
+                "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
+                "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
+            }'
 ```
 
-> Request JSON Body
-```json
+> Take prettified JSON Body
+
+```text
 {
     "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
     "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
@@ -249,7 +255,8 @@ curl --location --request POST 'payment_ack_url' \
 ```
 
 > Append nonce and secret (both as new lines)
-```json
+
+```text
 {
     "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
     "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
@@ -259,16 +266,19 @@ NzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI=
 ```
 
 > URI encode
-```json
+
+```text
 %7B%0A%20%20%20%20%22reference%22%3A%20%22e5b8f01c-bcb1-4721-b831-b2e11903b979%22%2C%0A%20%20%20%20%22invoice_id%22%3A%20%22ebb626aa-5d3b-4642-927f-cb76cbdd350e%22%0A%7D%0A7d4558fe-04dc-4b95-a71f-c5c1f9e903d4%0ANzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI%3D
 ```
 
 > Apply SHA-512
-```json
+
+```text
 54ea4cabf5962e869656fb449025048ba0102dc2321bfdc37ab773f0bfe1b4c26b3b6d4e00556b36e1ea4e134f4e0dd51382eb732d85ffc0726b92f554703e6b
 ```
 
 > Encode in base64
-```json
+
+```text
 NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=
 ```
