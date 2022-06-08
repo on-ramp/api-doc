@@ -1001,61 +1001,65 @@ pausing the user payment and prompting manual intervention, potentially delaying
     </span><span class="nl">"fee_rate"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.065</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h4 id='confirmation-request-signature'>Confirmation request signature</h4>
-<p>If you are willing to impose additional security on final confirmation callback (the one specified uder <code>payment_ack_url</code>) we can provide a unique secret which will be used to sign request in the following way:
-- take prettified request body (see <a href="https://datatracker.ietf.org/doc/html/rfc7159">RFC759</a>)
-- append as a new line random nonce provided under the header <code>x-xco-nonce</code>
-- append as a new line given secret
-- URI encode result
-- apply SH512 hashing
-- base64 encode result
-- compare obtained string with the one provided under <code>xco-x-signature</code> header</p>
+</span></code></pre></div><h3 id='confirmation-request-signature'>Confirmation request signature</h3>
+<p>If you are willing to impose additional security on final confirmation callback (the one specified uder <code>payment_ack_url</code>) we can provide a unique secret which will be used to sign request in the following way:</p>
+
+<ul>
+<li>take prettified request body (see <a href="https://datatracker.ietf.org/doc/html/rfc7159">RFC759</a>)</li>
+<li>append as a new line random nonce provided under the header <code>x-xco-nonce</code></li>
+<li>append as a new line given secret</li>
+<li>URI encode result</li>
+<li>apply SH512 hashing</li>
+<li>base64 encode result</li>
+<li>compare obtained string with the one provided under <code>xco-x-signature</code> header</li>
+</ul>
 
 <blockquote>
-<p>Example confirmation callback (please note that <code>x-xco-authorization</code> header will be sent anyway)
-<code>json
-curl --location --request POST &#39;payment_ack_url&#39; \
---header &#39;x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=&#39; \
---header &#39;x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4&#39; \
---header &#39;x-xco-authorization: Bearer 9d01c660-19e3-4070-a1f1-72a6e2b8bc94&#39; \
---header &#39;content-type: application/json&#39; \
---data-raw &#39;{&quot;reference&quot;:&quot;e5b8f01c-bcb1-4721-b831-b2e11903b979&quot;,&quot;invoice_id&quot;:&quot;ebb626aa-5d3b-4642-927f-cb76cbdd350e&quot;}&#39;
-</code></p>
-
-<p>Request JSON Body
-<code>json
-{
-    &quot;reference&quot;: &quot;e5b8f01c-bcb1-4721-b831-b2e11903b979&quot;,
-    &quot;invoice_id&quot;: &quot;ebb626aa-5d3b-4642-927f-cb76cbdd350e&quot;
+<p>Example confirmation callback with signature header and steps to recreate it (please note that <code>x-xco-authorization</code> header will be sent anyway)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl payment_ack_url <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI='</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 9d01c660-19e3-4070-a1f1-72a6e2b8bc94'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
+<span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{
+                "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
+                "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
+            }'</span>
+</code></pre></div>
+<blockquote>
+<p>Take prettified JSON Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>{
+    "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
+    "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
 }
-</code></p>
-
-<p>Append nonce and secret (both as new lines)
-<code>json
-{
-    &quot;reference&quot;: &quot;e5b8f01c-bcb1-4721-b831-b2e11903b979&quot;,
-    &quot;invoice_id&quot;: &quot;ebb626aa-5d3b-4642-927f-cb76cbdd350e&quot;
+</code></pre></div>
+<blockquote>
+<p>Append nonce and secret (both as new lines)</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>{
+    "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
+    "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
 }
 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4
 NzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI=
-</code></p>
-
-<p>URI encode
-<code>json
-%7B%0A%20%20%20%20%22reference%22%3A%20%22e5b8f01c-bcb1-4721-b831-b2e11903b979%22%2C%0A%20%20%20%20%22invoice_id%22%3A%20%22ebb626aa-5d3b-4642-927f-cb76cbdd350e%22%0A%7D%0A7d4558fe-04dc-4b95-a71f-c5c1f9e903d4%0ANzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI%3D
-</code></p>
-
-<p>Apply SHA-512
-<code>json
-54ea4cabf5962e869656fb449025048ba0102dc2321bfdc37ab773f0bfe1b4c26b3b6d4e00556b36e1ea4e134f4e0dd51382eb732d85ffc0726b92f554703e6b
-</code></p>
-
-<p>Encode in base64
-<code>json
-NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=
-</code></p>
+</code></pre></div>
+<blockquote>
+<p>URI encode</p>
 </blockquote>
-<h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
+<div class="highlight"><pre class="highlight plaintext"><code>%7B%0A%20%20%20%20%22reference%22%3A%20%22e5b8f01c-bcb1-4721-b831-b2e11903b979%22%2C%0A%20%20%20%20%22invoice_id%22%3A%20%22ebb626aa-5d3b-4642-927f-cb76cbdd350e%22%0A%7D%0A7d4558fe-04dc-4b95-a71f-c5c1f9e903d4%0ANzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI%3D
+</code></pre></div>
+<blockquote>
+<p>Apply SHA-512</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>54ea4cabf5962e869656fb449025048ba0102dc2321bfdc37ab773f0bfe1b4c26b3b6d4e00556b36e1ea4e134f4e0dd51382eb732d85ffc0726b92f554703e6b
+</code></pre></div>
+<blockquote>
+<p>Encode in base64</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=
+</code></pre></div><h1 id='egress-api'>Egress API</h1><h2 id='create-egress-invoice-app-redirection-flow'>Create Egress Invoice (App redirection flow)</h2>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
