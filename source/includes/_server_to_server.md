@@ -247,7 +247,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
@@ -258,7 +258,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Optional</td>
+    <td>Always</td>
   </tr>
   <tr></tr>
   <tr>
