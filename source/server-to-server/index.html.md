@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.9
+title: ON/RAMP payment API v1.4.10
 
-version: 1.4.9
+version: 1.4.10
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,10 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.9:
+
+- Made street and city fields required
 
 Changes since v1.4.8:
 
