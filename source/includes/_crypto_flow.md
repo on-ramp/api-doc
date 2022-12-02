@@ -260,7 +260,7 @@ billing_details          | Billing Details | User billing details. Please, notic
 
 Field                 |   Type      | Description                                                           | Required
 --------------------- | ----------- | ----------------------------------------------------------------------|---------
-payer_email           | Email       | Email of the user making the payment.                                 | No
+payer_email           | Email       | Email of the user making the payment.                                 | Yes
 payer_first_name      | String      | First name of the user making the payment.                            | No
 payer_last_name       | String      | Last name of the user making the payment.                             | No
 payer_phone           | String      | Including country code, without spaces or separators.                 | No
