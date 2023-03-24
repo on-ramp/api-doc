@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.10
+title: ON/RAMP payment API v1.4.11
 
-version: 1.4.10
+version: 1.4.11
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,11 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.10:
+
+- Added `card_type` to ingress flow parameters
+- Added `order_id` to ingress flow parameters
 
 Changes since v1.4.9:
 

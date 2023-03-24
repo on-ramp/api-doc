@@ -46,6 +46,8 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
               , "card_cvv"                : "356"
               , "card_holder_first_name"  : "John"
               , "card_holder_last_name"   : "Smith"
+              , "card_type"               : "VISA"
+              , "order_id"                : "order-1234"
               }'
 ```
 
@@ -90,7 +92,9 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
   "card_expiry_date": "2030-12-01",
   "card_cvv": "356",
   "card_holder_first_name": "John",
-  "card_holder_last_name": "Smith"
+  "card_holder_last_name": "Smith",
+  "card_type": "VISA",
+  "order_id": "order-1234"
 }
 ```
 
@@ -127,6 +131,8 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 | card_cvv               | String          | Credit card CVV to be used to attempt the payment.                                                                                  | No       |
 | card_holder_first_name | String          | Credit card cardholder first name to be used to attempt the payment.                                                                | No       |
 | card_holder_last_name  | String          | Credit card cardholder last name to attempt the payment.                                                                            | No       |
+| card_type              | String          | Credit card type to be used to attempt the payment. Plese consult our integration team for supported values before using this parameter.                                                                                 | No       |
+| order_id               | String          | Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.                                                                                                                 | No       |
 
 ### Ingress Skin
 
