@@ -116,23 +116,23 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
 
 ### Request JSON Fields
 
-| Field                  | Type            |  Description                                                                                                                        | Required |
-| ---------------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| fiat_amount            | Integer         | Amount to be paid denominated in cents .                                                                                            | Yes      |
-| fiat_currency          | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`. | Yes      |
-| payment_ack_url        | Url             | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                               | Yes      |
-| user_redirect_url      | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                   | Yes      |
-| timeout_in_sec         | Integer         | When to expire the link if unused.                                                                                                  | Yes      |
-| offer_skin             | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                              | Yes      |
-| billing_details        | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`. | Yes      |
-| cancel_callback        | Url             | Merchant callback endpoint to be called when an ingress payment couldn't be completed.                                              | No       |
-| card_number            | String          | Credit card number to be used to attempt the payment. If not sent, no credit card details will be prefilled.                        | No       |
-| card_expiry_date       | String          | Credit card expiry date to be used to attempt the payment.                                                                          | No       |
-| card_cvv               | String          | Credit card CVV to be used to attempt the payment.                                                                                  | No       |
-| card_holder_first_name | String          | Credit card cardholder first name to be used to attempt the payment.                                                                | No       |
-| card_holder_last_name  | String          | Credit card cardholder last name to attempt the payment.                                                                            | No       |
-| card_type              | String          | Credit card type to be used to attempt the payment. Please consult our integration team for supported values before using this parameter.                                                                                 | No       |
-| order_id               | String          | Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.                                                                                                                 | No       |
+| Field                  | Type            |  Description                                                                                                                                                               | Required |
+| ---------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| fiat_amount            | Integer         | Amount to be paid denominated in cents .                                                                                                                                   | Yes      |
+| fiat_currency          | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.                                        | Yes      |
+| payment_ack_url        | Url             | Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.                                                                      | Yes      |
+| user_redirect_url      | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                                                          | Yes      |
+| timeout_in_sec         | Integer         | When to expire the link if unused.                                                                                                                                         | Yes      |
+| offer_skin             | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                                                                     | Yes      |
+| billing_details        | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.                                        | Yes      |
+| cancel_callback        | Url             | Merchant callback endpoint to be called when an ingress payment couldn't be completed.                                                                                     | No       |
+| card_number            | String          | Credit card number to be used to attempt the payment. If not sent, no credit card details will be prefilled. **Not needed for bank payments**                              | No       |
+| card_expiry_date       | String          | Credit card expiry date to be used to attempt the payment. **Not needed for bank payments**                                                                                | No       |
+| card_cvv               | String          | Credit card CVV to be used to attempt the payment. **Not needed for bank payments**                                                                                        | No       |
+| card_holder_first_name | String          | Credit card cardholder first name to be used to attempt the payment. **Not needed for bank payments**                                                                      | No       |
+| card_holder_last_name  | String          | Credit card cardholder last name to attempt the payment. **Not needed for bank payments**                                                                                  | No       |
+| card_type              | String          | Credit card type to be used to attempt the payment. Please consult our integration team for supported values before using this parameter. **Not needed for bank payments** | No       |
+| order_id               | String          | Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.                                                                              | No       |
 
 ### Ingress Skin
 
@@ -227,6 +227,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 ```
 
 ### Confirmation request signature
+
 If you are willing to impose additional security on final confirmation callback (the one specified uder `payment_ack_url`) we can provide a unique secret which will be used to sign request in the following way:
 
 - take prettified request body (see [RFC759](https://datatracker.ietf.org/doc/html/rfc7159))
@@ -288,3 +289,14 @@ NzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI=
 ```text
 NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=
 ```
+
+### Bank payments flow
+
+As a clarification, our ingress flow currently supports both paying with credit card and with our bank payments solution.
+
+**In order to be able to use that, you need to get a specific API key from us.**
+
+For how the flow works or what parameters are needed to be used, you can see above on the technical specifications how:
+
+- Flow is exactly the same as in a 3DS transaction, but instead the user seeing an OTP screen to confirm the transaction, they will see a page where they will be able to choose from the available banks and continue the process.
+- The parameters required are exactly the same as on the credit card payment, but except for the credit card data since this is a bank payment flow. This means the same current implementation you may have for credit card payment will work (even if for some reason you would be sending credit card details, as those would be ignored).
