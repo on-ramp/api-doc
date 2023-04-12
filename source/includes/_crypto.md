@@ -21,12 +21,12 @@ As it can be seen, there are only three main attributes to deal with:
 	- "crypto-iframe"
 
 - `src`: The source of the iframe. There are two options to be used depending on the environment you are integrating with.
-	
+
 	- **production**: [https://crypto.onramp.ltd](https://crypto.onramp.ltd)
-	- **stage**: [https://crypto.stage-wallet.onramp.ltd](https://crypto.stage-wallet.onramp.ltd)
+	- **stage**: [https://stage-crypto.onramp.ltd](https://stage-crypto.onramp.ltd)
 
 - `style`: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).
-	
+
 	- `width: 100%;`: This way the iframe occupies all available width from parent
 	- `min-width: 320px;`: Below this mininum width, the iframe wouldn't display its contents correctly.
 	- `min-height: 500px`: Although this one it is just recommended, having this minimum height will make scrollbars disappear.
@@ -42,9 +42,9 @@ There are several methods the iframe works with and so the merchant will have to
 
 ### Crypto Ingress Configuration
 Requests for the merchant to customize the appearance and some parameters of the iframe.
-	
-- `crypto_ingress_config` (sent by the iframe)  
-*No parameters*    
+
+- `crypto_ingress_config` (sent by the iframe)
+*No parameters*
 
 - `crypto_ingress_config_response` (returned by the merchant)
 
@@ -60,39 +60,39 @@ customization | Customization Info | A JSON object containing look and feel sett
 
 User Info:
 
-Field                   |   Type            | Description                                               | Required 
------------------------ | ----------------- | --------------------------------------------------------- | -------- 
-merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
+Field                   |   Type            | Description                                               | Required
+----------------------- | ----------------- | --------------------------------------------------------- | --------
+merchant_customer_id    | String            | The merchant customer id.                                 | Yes
 
 Customization Info:
 
-Field            |   Type            | Description                                                | Required 
----------------- | ----------------- | ---------------------------------------------------------  | -------- 
-primary_color    | String            | The main accent color that will be applied on UI elements. | No       
-font_color       | String            | The font color that will be applied on texts.              | No       
-font_color_type  | String            | Either if UI is light or dark.                             | No      
-font_family      | String          	 | The font family name that will be applied in the whole UI. | No      
+Field            |   Type            | Description                                                | Required
+---------------- | ----------------- | ---------------------------------------------------------  | --------
+primary_color    | String            | The main accent color that will be applied on UI elements. | No
+font_color       | String            | The font color that will be applied on texts.              | No
+font_color_type  | String            | Either if UI is light or dark.                             | No
+font_family      | String          	 | The font family name that will be applied in the whole UI. | No
 background_color | String 		     | The background color for the iframe.                       | No
 
 
 ### Crypto Ingress Status
 Requests for the iframe to know about the statuses of current open operations
-	
+
 - `crypto_op_status` (sent by the iframe)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                               | Required 
------------------------ | ----------------- | --------------------------------------------------------- | -------- 
-merchant_customer_id    | String            | The merchant customer id.                                 | Yes 
+Field                   |   Type            | Description                                               | Required
+----------------------- | ----------------- | --------------------------------------------------------- | --------
+merchant_customer_id    | String            | The merchant customer id.                                 | Yes
 
 - `crypto_op_status_response` (sent by the merchant)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                                     | Required 
------------------------ | ----------------- | --------------------------------------------------------------- | -------- 
-data                    | JSON              | Just the forwarded response from `/crypto_op_status` endpoint.  | Yes 
+Field                   |   Type            | Description                                                     | Required
+----------------------- | ----------------- | --------------------------------------------------------------- | --------
+data                    | JSON              | Just the forwarded response from `/crypto_op_status` endpoint.  | Yes
 
 ### Crypto Ingress Address
 Requests for the iframe to ask for a crypto address to send the funds
@@ -101,19 +101,19 @@ Requests for the iframe to ask for a crypto address to send the funds
 
 Main Parameters:
 
-Field                   |   Type            | Description                     | Required 
------------------------ | ----------------- | ------------------------------- | -------- 
-fiat_amount             | String            | The amount of fiat to get.      | Yes 
-fiat_currency           | String            | The currency of the fiat.       | Yes 
-crypto_currency         | String            | The crypto currency to be used. | Yes 	
+Field                   |   Type            | Description                     | Required
+----------------------- | ----------------- | ------------------------------- | --------
+fiat_amount             | String            | The amount of fiat to get.      | Yes
+fiat_currency           | String            | The currency of the fiat.       | Yes
+crypto_currency         | String            | The crypto currency to be used. | Yes
 
 - `get_address_response` (sent by the merchant)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                                                         | Required 
------------------------ | ----------------- | ----------------------------------------------------------------------------------- | -------- 
-data                    | JSON              | Just the forwarded response from `/blockchain/api/v1/{chain}/address/new` endpoint. | Yes 
+Field                   |   Type            | Description                                                                         | Required
+----------------------- | ----------------- | ----------------------------------------------------------------------------------- | --------
+data                    | JSON              | Just the forwarded response from `/blockchain/api/v1/{chain}/address/new` endpoint. | Yes
 
 ### Crypto Ingress Cancelation
 Requests for the iframe to cancel an open operation
@@ -122,24 +122,24 @@ Requests for the iframe to cancel an open operation
 
 Main Parameters:
 
-Field                   |   Type            | Description                          | Required 
------------------------ | ----------------- | ------------------------------------ | -------- 
-op_id                   | String            | The UUID of the operation to cancel. | Yes 
+Field                   |   Type            | Description                          | Required
+----------------------- | ----------------- | ------------------------------------ | --------
+op_id                   | String            | The UUID of the operation to cancel. | Yes
 
 - `crypto_op_cancel_response` (sent by the merchant)
 
 Main Parameters:
 
-Field                   |   Type            | Description                                                    | Required 
------------------------ | ----------------- | -------------------------------------------------------------- | -------- 
-data                    | JSON              | Just the forwarded response from `crypto_op_cancel` endpoint.  | Yes 
+Field                   |   Type            | Description                                                    | Required
+----------------------- | ----------------- | -------------------------------------------------------------- | --------
+data                    | JSON              | Just the forwarded response from `crypto_op_cancel` endpoint.  | Yes
 
 
 ### Example of integration
 
 On the right side, there is a full example of an implementation any merchant could use in order to integrate our iframe.
 
-Please, note the following: 
+Please, note the following:
 
 - There are some functions that are not required and they have been added to show a complete integration that should just work. The only required implementation is the one about the `window.postMessage` and `window.addEventListener` APIs.
 
