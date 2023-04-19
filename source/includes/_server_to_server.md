@@ -149,7 +149,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Always <b>(Not needed for bank payments)</b></td>
   </tr>
   <tr></tr>
   <tr>
@@ -160,7 +160,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Always <b>(Not needed for bank payments)</b></td>
   </tr>
   <tr></tr>
   <tr>
@@ -171,7 +171,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Always <b>(Not needed for bank payments)</b></td>
   </tr>
   <tr></tr>
   <tr>
@@ -182,7 +182,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Always <b>(Not needed for bank payments)</b></td>
   </tr>
   <tr></tr>
   <tr>
@@ -193,7 +193,7 @@ curl https://example.com/s2s/create_operation                           \
     <td></td>
     <td>String</td>
     <td></td>
-    <td>Always</td>
+    <td>Always <b>(Not needed for bank payments)</b></td>
   </tr>
   <tr></tr>
   <tr>
@@ -725,6 +725,17 @@ On the testing environment several CVVs behave differently:
 &emsp;`004` — payment goes through mocked 3DSv2 detached from any payment system;
 
 <aside class="notice">These test cases jump certain status change callbacks, notably <code>pending</code> and <code>processing_user_payment</code>, but they will still be visible on <b><code>GET /s2s/operation_status</code></b></aside>
+
+## Bank payments flow
+
+As a clarification, our ingress flow currently supports both paying with credit card and with our bank payments solution.
+
+**In order to be able to use that, you need to get a specific API key from us.**
+
+For how the flow works or what parameters are needed to be used, you can see above on the technical specifications how:
+
+- Flow is exactly the same as in a 3DS transaction, but instead the user seeing an OTP screen to confirm the transaction, they will see a page where they will be able to choose from the available banks and continue the process.
+- The parameters required are exactly the same as on the credit card payment, but except for the credit card data since this is a bank payment flow. This means the same current implementation you may have for credit card payment will work if you just remove the credit card parameters (`card_number, card_expiry_month, card_expiry_year, card_cvv, card_holder_name`).
 
 ## API changes & backwards compatibility:
 
