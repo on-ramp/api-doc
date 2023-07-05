@@ -2,6 +2,8 @@
 
 In case you are getting crypto in return of an [ingress](/#ingress-api), you can get the reference prices for it if you would like to display that to users at the beginning of the process.
 
+An API key is required to use this API.  Please contact us to request an API key.
+
 ## Base URL
 
 Production:
