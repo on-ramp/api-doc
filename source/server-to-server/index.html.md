@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.12
+title: ON/RAMP payment API v1.4.13
 
-version: 1.4.12
+version: 1.4.13
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,10 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.12:
+
+- Added `x_api_key` parameter on the crypto ingress iframe flow
 
 Changes since v1.4.11:
 
