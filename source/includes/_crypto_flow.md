@@ -125,14 +125,21 @@ When we are ready to do the callback notifying about new Crypto funds we are goi
 > Example cURL
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer MERCHANT_API_KEY" -d '{"crypto_tx_ref": "123"}' http://SOME_URL_SENT_IN_NOTIFY_NEW_FUNDS_URL
+curl -X POST 'http://mydomain.com/callback/notify/crypto_done' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-d '{
+    "crypto_tx_ref": "123",
+    "high_risk": false
+}'
 ```
 
 > Request
 
 ```json
 {
-  "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"
+  "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE",
+  "high_risk": false
 }
 ```
 
