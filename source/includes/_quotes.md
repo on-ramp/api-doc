@@ -17,16 +17,15 @@ Test:
 > Example Call
 
 ```shell
-curl -X POST \
-	'https://web.blockfort-exchange.io/referenceTrade' \
-	-H 'x-api-key: 0000000000000000000000000000000000000000' \
-	-H 'Content-Type: application/json' \
-	-d '{
-			"currency_lhs":"gbp",
-			"currency_rhs":"usdt",
-			"amount_lhs":100,
-			"direction":"sell"
-		}'
+curl -X POST 'https://web.blockfort-exchange.io/referenceTrade' \
+-H 'Content-Type: application/json' \
+-H 'x-api-key: 0000000000000000000000000000000000000000' \
+-d '{
+    "currency_lhs":"gbp",
+    "currency_rhs":"usdt",
+    "amount_lhs":100,
+    "direction":"sell"
+}'
 ```
 
 > Request JSON Body

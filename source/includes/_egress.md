@@ -5,43 +5,44 @@
 > Example Call
 
 ```shell
-curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"   \
-  -H "Content-Type: application/json"                                     \
-  -X POST -d '{ "fiat_amount"        : 3000
-              , "fiat_currency"      : "EUR"
-              , "payment_ack_url"    : "https://www.example.com"
-              , "user_redirect_url"  : "https://www.example.com?user_redirected"
-              , "timeout_in_sec"     : 3600
-              , "offer_skin"         :
-                  { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
-                  , "description": "¥‎435.22 redemption from your account"
-                  }
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              }'
+curl -X POST 'https://api.onramp.ltd/rpc/create_egress_invoice' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "payment_ack_url": "https://www.example.com",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "timeout_in_sec": 3600,
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "¥‎435.22 redemption from your account"
+    },
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your Country",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    }
+}'
 ```
 
 > Request JSON Body
@@ -54,21 +55,21 @@ curl https://api.onramp.ltd/rpc/create_egress_invoice                     \
   "user_redirect_url": "https://www.example.com?user_redirected",
   "timeout_in_sec": 3600,
   "offer_skin": {
-    "title": "The Nice merchant",
+    "title": "The Nice Merchant",
     "image": "https://static.example.com/merchant-logo",
     "description": "¥‎435.22 redemption from your account"
   },
   "billing_details": {
-    "payer_email": "mrpayer.payerson@email.com",
-    "payer_first_name": "MrPayer",
-    "payer_last_name": "Payerson",
+    "payer_email": "example@example.com",
+    "payer_first_name": "John",
+    "payer_last_name": "Doe",
     "payer_phone": "0034666444446",
     "birth_date": "1980-11-24 00:00:00.000000+00",
     "street": "Main Street",
     "unit": "Floor 7 12B",
     "postal_code": "0000001",
     "city": "Big Town",
-    "county": "Big Town county",
+    "county": "Your County",
     "state": "CA",
     "prefecture": "Prefecture-ku",
     "country": "GBR",
@@ -171,42 +172,43 @@ pausing the user payment and prompting manual intervention, potentially delaying
 > Example Call
 
 ```shell
-curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"       \
-  -H "Content-Type: application/json"                                         \
-  -X POST -d '{ "fiat_amount"        : 3000
-              , "fiat_currency"      : "EUR"
-              , "user_redirect_url"  : "https://www.example.com?user_redirected"
-              , "offer_skin"         :
-                  { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
-                  , "description": "¥435.22 redemption from your account"
-                  }
-              , "onramp_user_email"  : "user@example.com"
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              }'
+curl -X POST 'https://api.onramp.ltd/rpc/send_funds_to_email' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "¥435.22 redemption from your account"
+    },
+    "onramp_user_email": "user@example.com",
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    }
+}'
 ```
 
 > Request JSON Body
@@ -217,22 +219,22 @@ curl https://api.onramp.ltd/rpc/send_funds_to_email                           \
   "fiat_currency": "EUR",
   "user_redirect_url": "https://www.example.com?user_redirected",
   "offer_skin": {
-    "title": "The Nice merchant",
+    "title": "The Nice Merchant",
     "image": "https://static.example.com/merchant-logo",
     "description": "¥‎435.22 redemption from your account"
   },
   "onramp_user_email": "user@example.com",
   "billing_details": {
-    "payer_email": "mrpayer.payerson@email.com",
-    "payer_first_name": "MrPayer",
-    "payer_last_name": "Payerson",
+    "payer_email": "example@example.com",
+    "payer_first_name": "John",
+    "payer_last_name": "Doe",
     "payer_phone": "0034666444446",
     "birth_date": "1980-11-24 00:00:00.000000+00",
     "street": "Main Street",
     "unit": "Floor 7 12B",
     "postal_code": "0000001",
     "city": "Big Town",
-    "county": "Big Town county",
+    "county": "Your County",
     "state": "CA",
     "prefecture": "Prefecture-ku",
     "country": "GBR",

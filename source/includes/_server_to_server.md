@@ -54,29 +54,29 @@ Operations created under a specific API key will only be visible with that API k
 > Example Call
 
 ```shell
-curl https://example.com/s2s/create_operation                           \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000" \
-  -H "Content-Type: application/json"                                   \
-  -X POST                                                               \
-  -d '{ "op_id": "00112233-4455-6677-8899-aabbccddeeff"
-      , "fiat_amount": "1000"
-      , "fiat_currency": "EUR"
-      , "callback_url": "https://api.example.com/deposit-webhook"
-      , "user_redirect_url": "https://example.com/user/deposits"
-      , "customer_id": "ffeeddcc-bbaa-9988-7766-554433221100"
-      , "session_id": "00112233-4455-6677-8899-aabbccddeeff"
-      , "card_details":
-          { "card_number": "4242424242424242"
-          , "card_expiry_month": "12"
-          , "card_expiry_year": "21"
-          , "card_cvv": "356"
-          , "card_holder_name": "John Doe"
-          , "email": "example@example.com"
-          , "first_name": "John"
-          , "last_name": "Doe"
-          , "country": "GBR"
-          }
-      }'
+curl -X POST 'https://api.onramp.ltd/s2s/create_operation' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "op_id": "00112233-4455-6677-8899-aabbccddeeff",
+    "fiat_amount": "1000",
+    "fiat_currency": "EUR",
+    "callback_url": "https://api.example.com/deposit-webhook",
+    "user_redirect_url": "https://example.com/user/deposits",
+    "customer_id": "ffeeddcc-bbaa-9988-7766-554433221100",
+    "session_id": "00112233-4455-6677-8899-aabbccddeeff",
+    "card_details": {
+        "card_number": "4242424242424242",
+        "card_expiry_month": "12",
+        "card_expiry_year": "21",
+        "card_cvv": "356",
+        "card_holder_name": "John Doe",
+        "email": "example@example.com",
+        "first_name": "John",
+        "last_name": "Doe",
+        "country": "GBR"
+    }
+}'
 ```
 
 ### Request
@@ -663,9 +663,8 @@ It returns the list of status changes related to the given event.
 > Example Call
 
 ```shell
-curl https://example.com/s2s/operation_status?op_id=7ffb7577-e4f9-4980-89d0-a1936f9088f4  \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"                   \
-  -H "Content-Type: application/json"                                                     \
+curl 'https://api.onramp.ltd/s2s/operation_status?op_id=7ffb7577-e4f9-4980-89d0-a1936f9088f4' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'
 ```
 
 ### Request
@@ -687,16 +686,15 @@ Send an action to a given operation.
 > Example Call
 
 ```shell
-curl https://example.com/s2s/update_operation                           \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000" \
-  -H "Content-Type: application/json"                                   \
-  -X POST                                                               \
-  -d '{ "op_id": "5b99dfb2-ef07-4fb7-9d20-62d63ce0f737"
-      , "action":
-          { "request_attempt_cancel":
-              {}
-          }
-      }'
+curl -X POST 'https://api.onramp.ltd/s2s/update_operation' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "op_id": "5b99dfb2-ef07-4fb7-9d20-62d63ce0f737",
+    "action": {
+        "request_attempt_cancel": {}
+    }
+}'
 ```
 
 ### Request

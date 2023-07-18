@@ -5,50 +5,51 @@
 > Example Call
 
 ```shell
-curl https://api.onramp.ltd/rpc/create_ingress_invoice                                    \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"                   \
-  -H "Content-Type: application/json"                                                     \
-  -X POST -d '{ "fiat_amount"             : 3000
-              , "fiat_currency"           : "EUR"
-              , "payment_ack_url"         : "https://www.example.com"
-              , "user_redirect_url"       : "https://www.example.com?user_redirected"
-              , "timeout_in_sec"          : 3600
-              , "offer_skin"              :
-                  { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
-                  , "description": "Awesome green Pluff with handler"
-                  }
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              , "card_number"             : "4929421234600821"
-              , "card_expiry_date"        : "2030-12-01"
-              , "card_cvv"                : "356"
-              , "card_holder_first_name"  : "John"
-              , "card_holder_last_name"   : "Smith"
-              , "card_type"               : "VISA"
-              , "order_id"                : "order-1234"
-              }'
+curl -X POST 'https://api.onramp.ltd/rpc/create_ingress_invoice' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "payment_ack_url": "https://www.example.com",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "timeout_in_sec": 3600,
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "Awesome green Pluff with handler"
+    },
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    },
+    "card_number": "4929421234600821",
+    "card_expiry_date": "2030-12-01",
+    "card_cvv": "356",
+    "card_holder_first_name": "John",
+    "card_holder_last_name": "Doe",
+    "card_type": "VISA",
+    "order_id": "order-1234"
+}'
 ```
 
 > Request JSON Body
@@ -61,21 +62,21 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
   "user_redirect_url": "https://www.example.com?user_redirected",
   "timeout_in_sec": 3600,
   "offer_skin": {
-    "title": "The Nice merchant",
+    "title": "The Nice Merchant",
     "image": "https://static.example.com/merchant-logo",
     "description": "Awesome green Pluff with handler"
   },
   "billing_details": {
-    "payer_email": "mrpayer.payerson@email.com",
-    "payer_first_name": "MrPayer",
-    "payer_last_name": "Payerson",
+    "payer_email": "example@example.com",
+    "payer_first_name": "John",
+    "payer_last_name": "Doe",
     "payer_phone": "0034666444446",
     "birth_date": "1980-11-24 00:00:00.000000+00",
     "street": "Main Street",
     "unit": "Floor 7 12B",
     "postal_code": "0000001",
     "city": "Big Town",
-    "county": "Big Town county",
+    "county": "Your County",
     "state": "CA",
     "prefecture": "Prefecture-ku",
     "country": "GBR",
@@ -92,7 +93,7 @@ curl https://api.onramp.ltd/rpc/create_ingress_invoice                          
   "card_expiry_date": "2030-12-01",
   "card_cvv": "356",
   "card_holder_first_name": "John",
-  "card_holder_last_name": "Smith",
+  "card_holder_last_name": "Doe",
   "card_type": "VISA",
   "order_id": "order-1234"
 }
@@ -241,15 +242,15 @@ If you are willing to impose additional security on final confirmation callback 
 > Example confirmation callback with signature header and steps to recreate it (please note that `x-xco-authorization` header will be sent anyway)
 
 ```shell
-curl payment_ack_url \
--H 'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=' \
--H 'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4' \
+curl -X POST payment_ack_url \
+-H 'Content-Type: application/json' \
 -H 'x-xco-authorization: Bearer 9d01c660-19e3-4070-a1f1-72a6e2b8bc94' \
--H 'content-type: application/json' \
--X POST -d '{
-                "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
-                "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
-            }'
+-H 'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4' \
+-H 'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI=' \
+-d '{
+    "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
+    "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
+}'
 ```
 
 > Take prettified JSON Body
