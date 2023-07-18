@@ -228,7 +228,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 
 ### Confirmation request signature
 
-If you are willing to impose additional security on final confirmation callback (the one specified uder `payment_ack_url`) we can provide a unique secret which will be used to sign request in the following way:
+If you are willing to impose additional security on final confirmation callback (the one specified under `payment_ack_url`) we can provide a unique secret which will be used to sign request in the following way:
 
 - take prettified request body (see [RFC759](https://datatracker.ietf.org/doc/html/rfc7159))
 - append as a new line random nonce provided under the header `x-xco-nonce`
