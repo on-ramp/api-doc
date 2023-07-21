@@ -24,7 +24,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 -H 'Content-Type: application/json' \
 -H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
-    "merchant_customer_id": "123",
+    "merchant_customer_id": "u2340112",
     "fiat_amount": 10000,
     "fiat_currency": "EUR",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
@@ -35,7 +35,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 
 ```json
 {
-  "merchant_customer_id": "merchant_customer_id",
+  "merchant_customer_id": "u2340112",
   "fiat_amount": 10000,
   "fiat_currency": "EUR",
   "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
