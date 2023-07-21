@@ -7,18 +7,22 @@ This call is for active (dis-)approval of payments by Merchant. See [API flows](
 > Example Call
 
 ```shell
-curl https://api.onramp.ltd/rpc/mark_operation                           \
-  -H "x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"  \
-  -H "Content-Type: application/json"                                    \
-  -X POST -d '{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
-              , "accept" : true
-              }'
+curl -X POST 'https://api.onramp.ltd/rpc/mark_operation' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "op_id": "cde6f458-8754-4ffe-81a9-77c6d05a5540",
+    "accept" : true
+}'
 ```
 
 > Request JSON Body
 
 ```json
-{ "op_id": "cde6f458-8754-4ffe-81a9-77c6d05a5540", "accept": true }
+{
+    "op_id": "cde6f458-8754-4ffe-81a9-77c6d05a5540",
+    "accept": true
+}
 ```
 
 > Response JSON
@@ -46,15 +50,18 @@ completion or query rejection reason.
 > Example Call
 
 ```shell
-curl https://api.onramp.ltd/rpc/op_status \
-  --header 'Content-Type: application/json' \
-  --header 'X-XCO-Authorization: Bearer 00000000-0000-0000-0000-000000000000' \
-  -X POST -d '{"invoices_id": [
-                 "eaed5195-b85c-41aa-9661-10693b65976e",
-                 "0928b88d-372a-475e-8095-2f20a66cfa9f",
-                 "5059dadc-4463-440b-9025-694355c0a941",
-                 "73f4a88c-8591-4550-9b4d-dfa687d61a89",
-                 "e59eeff7-5780-4707-b1f6-fa0a7e020ce0"]}'
+curl -X POST 'https://api.onramp.ltd/rpc/op_status' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "invoices_id": [
+        "eaed5195-b85c-41aa-9661-10693b65976e",
+        "0928b88d-372a-475e-8095-2f20a66cfa9f",
+        "5059dadc-4463-440b-9025-694355c0a941",
+        "73f4a88c-8591-4550-9b4d-dfa687d61a89",
+        "e59eeff7-5780-4707-b1f6-fa0a7e020ce0"
+    ]
+}'
 ```
 
 > Request JSON Body
@@ -106,11 +113,12 @@ curl https://api.onramp.ltd/rpc/op_status \
 > Example Call
 
 ```shell
-curl https://api.onramp.ltd/rpc/op_status \
-  --header 'Content-Type: application/json' \
-  --header 'X-XCO-Authorization: Bearer 00000000-0000-0000-0000-000000000000' \
-  -X POST -d '{"invoices_id": [
-                 "d3baca97-6edc-47cd-bc9f-67ae52863a01"]}'
+curl -X POST 'https://api.onramp.ltd/rpc/op_status' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "invoices_id": ["d3baca97-6edc-47cd-bc9f-67ae52863a01"]
+}'
 ```
 
 > Request JSON Body

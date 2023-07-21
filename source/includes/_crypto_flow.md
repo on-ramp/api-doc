@@ -20,7 +20,15 @@ As it is mentioned in [Crypto Iframe Integration](#crypto-iframe-integration), t
 > Example cURL
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer MERCHANT_API_KEY" -d '{"merchant_customer_id": "123","fiat_amount": 10000, "fiat_currency": "EUR", "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done" }' http://localhost:7000/blockchain/api/v1/btc/address/new
+curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-d '{
+    "merchant_customer_id": "123",
+    "fiat_amount": 10000,
+    "fiat_currency": "EUR",
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
+}'
 ```
 
 > ReqAddress
@@ -125,14 +133,22 @@ When we are ready to do the callback notifying about new Crypto funds we are goi
 > Example cURL
 
 ```shell
-curl -X POST -H "Content-Type: application/json" -H "x-xco-authorization: Bearer MERCHANT_API_KEY" -d '{"crypto_tx_ref": "123"}' http://SOME_URL_SENT_IN_NOTIFY_NEW_FUNDS_URL
+
+curl -X POST notify_new_funds_url \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-d '{
+    "crypto_tx_ref": "123",
+    "high_risk": false
+}'
 ```
 
 > Request
 
 ```json
 {
-  "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"
+  "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE",
+  "high_risk": false
 }
 ```
 
@@ -159,36 +175,37 @@ The main difference with this endpoint is that it is provided the real amount of
 > Example cURL
 
 ```shell
-curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           \
-  -H "x-xco-authorization: Bearer MERCHANT_API_KEY"                   	\
-  -H "Content-Type: application/json"                                   \
--X POST -d '{ "crypto_tx_ref"             : "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS"
-              , "payment_ack_url"         : "wwww.example.com"
-              , "timeout_in_sec"          : 3600
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              }'
+curl -X POST 'https://api.onramp.ltd/rpc/create_crypto_ingress_invoice' \
+-H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-H 'Content-Type: application/json' \
+-d '{
+    "crypto_tx_ref": "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS",
+    "payment_ack_url": "wwww.example.com",
+    "timeout_in_sec": 3600,
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference" : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    }
+}'
 ```
 
 > Request
@@ -199,16 +216,16 @@ curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           \
   "payment_ack_url": "wwww.example.com",
   "timeout_in_sec": 3600,
   "billing_details": {
-    "payer_email": "mrpayer.payerson@email.com",
-    "payer_first_name": "MrPayer",
-    "payer_last_name": "Payerson",
+    "payer_email": "example@example.com",
+    "payer_first_name": "John",
+    "payer_last_name": "Doe",
     "payer_phone": "0034666444446",
     "birth_date": "1980-11-24 00:00:00.000000+00",
     "street": "Main Street",
     "unit": "Floor 7 12B",
     "postal_code": "0000001",
     "city": "Big Town",
-    "county": "Big Town county",
+    "county": "Your County",
     "state": "CA",
     "prefecture": "Prefecture-ku",
     "country": "GBR",
