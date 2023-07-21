@@ -602,50 +602,51 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_ingress_invoice                                    <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>                   <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                                     <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"             : 3000
-              , "fiat_currency"           : "EUR"
-              , "payment_ack_url"         : "https://www.example.com"
-              , "user_redirect_url"       : "https://www.example.com?user_redirected"
-              , "timeout_in_sec"          : 3600
-              , "offer_skin"              :
-                  { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
-                  , "description": "Awesome green Pluff with handler"
-                  }
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              , "card_number"             : "4929421234600821"
-              , "card_expiry_date"        : "2030-12-01"
-              , "card_cvv"                : "356"
-              , "card_holder_first_name"  : "John"
-              , "card_holder_last_name"   : "Smith"
-              , "card_type"               : "VISA"
-              , "order_id"                : "order-1234"
-              }'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/create_ingress_invoice'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "payment_ack_url": "https://www.example.com",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "timeout_in_sec": 3600,
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "Awesome green Pluff with handler"
+    },
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    },
+    "card_number": "4929421234600821",
+    "card_expiry_date": "2030-12-01",
+    "card_cvv": "356",
+    "card_holder_first_name": "John",
+    "card_holder_last_name": "Doe",
+    "card_type": "VISA",
+    "order_id": "order-1234"
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
@@ -657,21 +658,21 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
   </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
   </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice Merchant"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your County"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
@@ -688,7 +689,7 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
   </span><span class="nl">"card_expiry_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2030-12-01"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"card_cvv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"356"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"card_holder_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"card_holder_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Smith"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_holder_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"card_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VISA"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order-1234"</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1043,7 +1044,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='confirmation-request-signature'>Confirmation request signature</h3>
-<p>If you are willing to impose additional security on final confirmation callback (the one specified uder <code>payment_ack_url</code>) we can provide a unique secret which will be used to sign request in the following way:</p>
+<p>If you are willing to impose additional security on final confirmation callback (the one specified under <code>payment_ack_url</code>) we can provide a unique secret which will be used to sign request in the following way:</p>
 
 <ul>
 <li>take prettified request body (see <a href="https://datatracker.ietf.org/doc/html/rfc7159">RFC759</a>)</li>
@@ -1058,15 +1059,15 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Example confirmation callback with signature header and steps to recreate it (please note that <code>x-xco-authorization</code> header will be sent anyway)</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl payment_ack_url <span class="se">\</span>
-<span class="nt">-H</span> <span class="s1">'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI='</span> <span class="se">\</span>
-<span class="nt">-H</span> <span class="s1">'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4'</span> <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST payment_ack_url <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 9d01c660-19e3-4070-a1f1-72a6e2b8bc94'</span> <span class="se">\</span>
-<span class="nt">-H</span> <span class="s1">'content-type: application/json'</span> <span class="se">\</span>
-<span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{
-                "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
-                "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
-            }'</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-nonce: 7d4558fe-04dc-4b95-a71f-c5c1f9e903d4'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-signature: NTRlYTRjYWJmNTk2MmU4Njk2NTZmYjQ0OTAyNTA0OGJhMDEwMmRjMjMyMWJmZGMzN2FiNzczZjBiZmUxYjRjMjZiM2I2ZDRlMDA1NTZiMzZlMWVhNGUxMzRmNGUwZGQ1MTM4MmViNzMyZDg1ZmZjMDcyNmI5MmY1NTQ3MDNlNmI='</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "reference": "e5b8f01c-bcb1-4721-b831-b2e11903b979",
+    "invoice_id": "ebb626aa-5d3b-4642-927f-cb76cbdd350e"
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Take prettified JSON Body</p>
@@ -1115,43 +1116,44 @@ NzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI=
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_egress_invoice                     <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>   <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                     <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
-              , "fiat_currency"      : "EUR"
-              , "payment_ack_url"    : "https://www.example.com"
-              , "user_redirect_url"  : "https://www.example.com?user_redirected"
-              , "timeout_in_sec"     : 3600
-              , "offer_skin"         :
-                  { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
-                  , "description": "¥‎435.22 redemption from your account"
-                  }
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              }'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/create_egress_invoice'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "payment_ack_url": "https://www.example.com",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "timeout_in_sec": 3600,
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "¥‎435.22 redemption from your account"
+    },
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    }
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
@@ -1163,21 +1165,21 @@ NzAwZmIwMGQ0YTJiNDhkMzZjYzc3YjQ5OGQyYWMzOTI=
   </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
   </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice Merchant"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your County"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
@@ -1465,42 +1467,43 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/send_funds_to_email                           <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>       <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                         <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "fiat_amount"        : 3000
-              , "fiat_currency"      : "EUR"
-              , "user_redirect_url"  : "https://www.example.com?user_redirected"
-              , "offer_skin"         :
-                  { "title" : "The Nice merchant"
-                  , "image" : "https://static.example.com/merchant-logo"
-                  , "description": "¥435.22 redemption from your account"
-                  }
-              , "onramp_user_email"  : "user@example.com"
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              }'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/send_funds_to_email'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "¥435.22 redemption from your account"
+    },
+    "onramp_user_email": "user@example.com",
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    }
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
@@ -1510,22 +1513,22 @@ pausing the user payment and prompting manual intervention, potentially delaying
   </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice Merchant"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"¥‎435.22 redemption from your account"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="nl">"onramp_user_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user@example.com"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your County"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
@@ -1824,17 +1827,21 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/mark_operation                           <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000"</span>  <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                    <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "op_id"  : "cde6f458-8754-4ffe-81a9-77c6d05a5540"
-              , "accept" : true
-              }'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/mark_operation'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "op_id": "cde6f458-8754-4ffe-81a9-77c6d05a5540",
+    "accept" : true
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="p">,</span><span class="w"> </span><span class="nl">"accept"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"op_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cde6f458-8754-4ffe-81a9-77c6d05a5540"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"accept"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
@@ -1868,15 +1875,18 @@ completion or query rejection reason.</p>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/op_status <span class="se">\</span>
-  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-  <span class="nt">--header</span> <span class="s1">'X-XCO-Authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{"invoices_id": [
-                 "eaed5195-b85c-41aa-9661-10693b65976e",
-                 "0928b88d-372a-475e-8095-2f20a66cfa9f",
-                 "5059dadc-4463-440b-9025-694355c0a941",
-                 "73f4a88c-8591-4550-9b4d-dfa687d61a89",
-                 "e59eeff7-5780-4707-b1f6-fa0a7e020ce0"]}'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/op_status'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "invoices_id": [
+        "eaed5195-b85c-41aa-9661-10693b65976e",
+        "0928b88d-372a-475e-8095-2f20a66cfa9f",
+        "5059dadc-4463-440b-9025-694355c0a941",
+        "73f4a88c-8591-4550-9b4d-dfa687d61a89",
+        "e59eeff7-5780-4707-b1f6-fa0a7e020ce0"
+    ]
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
@@ -1924,11 +1934,12 @@ completion or query rejection reason.</p>
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/op_status <span class="se">\</span>
-  <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-  <span class="nt">--header</span> <span class="s1">'X-XCO-Authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
-  <span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{"invoices_id": [
-                 "d3baca97-6edc-47cd-bc9f-67ae52863a01"]}'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/op_status'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "invoices_id": ["d3baca97-6edc-47cd-bc9f-67ae52863a01"]
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
@@ -2822,13 +2833,21 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <blockquote>
 <p>Example cURL</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span> <span class="nt">-d</span> <span class="s1">'{"merchant_customer_id": "123","fiat_amount": 10000, "fiat_currency": "EUR", "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done" }'</span> http://localhost:7000/blockchain/api/v1/btc/address/new
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/blockchain/api/v1/btc/address/new'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "merchant_customer_id": "u2340112",
+    "fiat_amount": 10000,
+    "fiat_currency": "EUR",
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>ReqAddress</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"merchant_customer_id"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="w">
@@ -2852,7 +2871,7 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_NOT_CONFIGURED_YET"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_API_KEY"</span><span class="w">
+  </span><span class="nl">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -2860,7 +2879,7 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_WRONG_API_KEY"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"api_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_API_KEY"</span><span class="w">
+  </span><span class="nl">"api_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -2959,13 +2978,21 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
 <blockquote>
 <p>Example cURL</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span> <span class="nt">-d</span> <span class="s1">'{"crypto_tx_ref": "123"}'</span> http://SOME_URL_SENT_IN_NOTIFY_NEW_FUNDS_URL
+<div class="highlight"><pre class="highlight shell tab-shell"><code>
+curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "crypto_tx_ref": "123",
+    "high_risk": false
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"</span><span class="w">
+  </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"high_risk"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='authentication-2'>Authentication</h3>
 <table><thead>
@@ -3009,36 +3036,37 @@ The main difference with this endpoint is that it is provided the real amount of
 <blockquote>
 <p>Example cURL</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl https://api.onramp.ltd/rpc/create_crypto_ingress_invoice           <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"x-xco-authorization: Bearer MERCHANT_API_KEY"</span>                     <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>                                   <span class="se">\</span>
-<span class="nt">-X</span> POST <span class="nt">-d</span> <span class="s1">'{ "crypto_tx_ref"             : "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS"
-              , "payment_ack_url"         : "wwww.example.com"
-              , "timeout_in_sec"          : 3600
-              , "billing_details"    :
-                  { "payer_email"            : "mrpayer.payerson@email.com"
-                  , "payer_first_name"       : "MrPayer"
-                  , "payer_last_name"        : "Payerson"
-                  , "payer_phone"            : "0034666444446"
-                  , "birth_date"             : "1980-11-24 00:00:00.000000+00"
-                  , "street"                 : "Main Street"
-                  , "unit"                   : "Floor 7 12B"
-                  , "postal_code"            : "0000001"
-                  , "city"                   : "Big Town"
-                  , "county"                 : "Big Town county"
-                  , "state"                  : "CA"
-                  , "prefecture"             : "Prefecture-ku"
-                  , "country"                : "GBR"
-                  , "kyc_verified"           : "2020-01-01 12:45:00.000000+00"
-                  , "kyc_document"           : "Passport"
-                  , "kyc_reference"          : "25177aa2-d848-846d-226c-97ec3096f5fe"
-                  , "address_verified"       : "2020-01-01 12:55:00.000000+00"
-                  , "address_doc_reference"  : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"
-                  , "player_level"           : "New"
-                  , "member_since"           : "2020-01-01 12:35:00.000000+00"
-                  , "merchant_customer_id"   : "u2340112"
-                  }
-              }'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/create_crypto_ingress_invoice'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "crypto_tx_ref": "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS",
+    "payment_ack_url": "wwww.example.com",
+    "timeout_in_sec": 3600,
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference" : "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    }
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request</p>
@@ -3048,16 +3076,16 @@ The main difference with this endpoint is that it is provided the real amount of
   </span><span class="nl">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
   </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mrpayer.payerson@email.com"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MrPayer"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payerson"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town county"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your County"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
@@ -3311,16 +3339,15 @@ The main difference with this endpoint is that it is provided the real amount of
 <blockquote>
 <p>Example Call</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="se">\</span>
-    <span class="s1">'https://web.blockfort-exchange.io/referenceTrade'</span> <span class="se">\</span>
-    <span class="nt">-H</span> <span class="s1">'x-api-key: 0000000000000000000000000000000000000000'</span> <span class="se">\</span>
-    <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-    <span class="nt">-d</span> <span class="s1">'{
-            "currency_lhs":"gbp",
-            "currency_rhs":"usdt",
-            "amount_lhs":100,
-            "direction":"sell"
-        }'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://web.blockfort-exchange.io/referenceTrade'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-api-key: 0000000000000000000000000000000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "currency_lhs":"gbp",
+    "currency_rhs":"usdt",
+    "amount_lhs":100,
+    "direction":"sell"
+}'</span>
 </code></pre></div>
 <blockquote>
 <p>Request JSON Body</p>
