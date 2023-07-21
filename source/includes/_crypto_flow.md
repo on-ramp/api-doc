@@ -22,7 +22,7 @@ As it is mentioned in [Crypto Iframe Integration](#crypto-iframe-integration), t
 ```shell
 curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 -H 'Content-Type: application/json' \
--H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
     "merchant_customer_id": "123",
     "fiat_amount": 10000,
@@ -64,7 +64,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 ```json
 {
   "error_code": "ERROR_MERCHANT_NOT_CONFIGURED_YET",
-  "merchant_id": "MERCHANT_API_KEY"
+  "merchant_id": "00000000-0000-0000-0000-000000000000"
 }
 ```
 
@@ -73,7 +73,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 ```json
 {
   "error_code": "ERROR_MERCHANT_WRONG_API_KEY",
-  "api_key": "MERCHANT_API_KEY"
+  "api_key": "00000000-0000-0000-0000-000000000000"
 }
 ```
 
@@ -136,7 +136,7 @@ When we are ready to do the callback notifying about new Crypto funds we are goi
 
 curl -X POST notify_new_funds_url \
 -H 'Content-Type: application/json' \
--H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
     "crypto_tx_ref": "123",
     "high_risk": false
@@ -176,7 +176,7 @@ The main difference with this endpoint is that it is provided the real amount of
 
 ```shell
 curl -X POST 'https://api.onramp.ltd/rpc/create_crypto_ingress_invoice' \
--H 'x-xco-authorization: Bearer MERCHANT_API_KEY' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -H 'Content-Type: application/json' \
 -d '{
     "crypto_tx_ref": "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS",
