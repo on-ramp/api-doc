@@ -29,7 +29,7 @@ curl -X POST 'https://api.onramp.ltd/rpc/create_egress_invoice' \
         "unit": "Floor 7 12B",
         "postal_code": "0000001",
         "city": "Big Town",
-        "county": "Your Country",
+        "county": "Your County",
         "state": "CA",
         "prefecture": "Prefecture-ku",
         "country": "GBR",
