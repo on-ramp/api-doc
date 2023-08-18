@@ -645,7 +645,8 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
     "card_holder_first_name": "John",
     "card_holder_last_name": "Doe",
     "card_type": "VISA",
-    "order_id": "order-1234"
+    "order_id": "order-1234",
+    "first_time": true
 }'</span>
 </code></pre></div>
 <blockquote>
@@ -691,7 +692,8 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
   </span><span class="nl">"card_holder_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"card_holder_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"card_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VISA"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order-1234"</span><span class="w">
+  </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order-1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"first_time"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -803,6 +805,12 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <td>order_id</td>
 <td>String</td>
 <td>Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>first_time</td>
+<td>Boolean</td>
+<td>Whether the invoice is for a first time deposit.</td>
 <td>No</td>
 </tr>
 </tbody></table>
