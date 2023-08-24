@@ -101,17 +101,19 @@ Main Parameters:
 
 ### Crypto Ingress Address
 
-Requests for the iframe to ask for a crypto address to send the funds
+Requests for the iframe to ask for a crypto address to send the funds. Depending on the kind of blockchain, a different endpoint should be used:
+
+#### FOR UTXO BASED BLOCKCHAINS (`BTC` AND `BCH`)
 
 - `get_address` (sent by the iframe)
 
 Main Parameters:
 
-| Field           | Type   | Description                     | Required |
-| --------------- | ------ | ------------------------------- | -------- |
-| fiat_amount     | String | The amount of fiat to get.      | Yes      |
-| fiat_currency   | String | The currency of the fiat.       | Yes      |
-| crypto_currency | String | The crypto currency to be used. | Yes      |
+| Field           | Type    | Description                     | Required |
+| --------------- | ------- | ------------------------------- | -------- |
+| fiat_amount     | Integer | The amount of fiat to get.      | Yes      |
+| fiat_currency   | String  | The currency of the fiat.       | Yes      |
+| crypto_currency | String  | The crypto currency to be used. | Yes      |
 
 - `get_address_response` (sent by the merchant)
 
@@ -120,6 +122,51 @@ Main Parameters:
 | Field | Type | Description                                                                         | Required |
 | ----- | ---- | ----------------------------------------------------------------------------------- | -------- |
 | data  | JSON | Just the forwarded response from `/blockchain/api/v1/{chain}/address/new` endpoint. | Yes      |
+
+#### FOR ACCOUNT BASED BLOCKCHAINS AND TOKENS (`ETH`, `USDT`, ...)
+
+- `get_address_v2` (sent by the iframe)
+
+Main Parameters:
+
+| Field           | Type    | Description                                         | Required |
+| --------------- | ------- | --------------------------------------------------- | -------- |
+| fiat_amount     | Integer | The amount of fiat to get.                          | Yes      |
+| fiat_currency   | String  | The currency of the fiat.                           | Yes      |
+| crypto_currency | String  | The crypto currency to be used.                     | Yes      |
+| token           | String  | The token of the transaction if exists (e.g. usdt). | No       |
+| sender_address  | String  | The address of the sender of the transaction.       | Yes      |
+
+- `get_address_v2_response` (sent by the merchant)
+
+Main Parameters:
+
+| Field | Type | Description                                                                           | Required |
+| ----- | ---- | ------------------------------------------------------------------------------------- | -------- |
+| data  | JSON | Just the forwarded response from a POST to `/blockchain/api/v2/transaction` endpoint. | Yes      |
+
+- `update_address_v2` (sent by the iframe)
+
+Main Parameters:
+
+| Field           | Type    | Description                                                  | Required |
+| --------------- | ------- | ------------------------------------------------------------ | -------- |
+| fiat_amount     | Integer | The amount of fiat to get.                                   | Yes      |
+| fiat_currency   | String  | The currency of the fiat.                                    | Yes      |
+| crypto_currency | String  | The crypto currency to be used.                              | Yes      |
+| token           | String  | The token of the transaction if exists (e.g. usdt).          | No       |
+| sender_address  | String  | The address of the sender of the transaction.                | Yes      |
+| xref            | String  | The xref received on the `get_address_v2_response` response. | Yes      |
+| tx_hash         | String  | The hash of the transaction the user did.                    | Yes      |
+| tx_amount       | Integer | The amount of the transaction the user did.                  | Yes      |
+
+- `update_address_v2_response` (sent by the merchant)
+
+Main Parameters:
+
+| Field | Type | Description                                                                            | Required |
+| ----- | ---- | -------------------------------------------------------------------------------------- | -------- |
+| data  | JSON | Just the forwarded response from a PATCH to `/blockchain/api/v2/transaction` endpoint. | Yes      |
 
 ### Crypto Ingress Cancelation
 
@@ -253,6 +300,36 @@ const getAddress = async (data) => {
   postMessage(message);
 };
 
+const getAddressV2 = async (data) => {
+  // Here you should send the provided data to your API
+  // API should call the POST to `blockchain/api/v2/transaction` endpoint on ON/RAMP API
+  // Then the response should be sent back to the iframe
+  // For easiness on the docs we are going to provide a standard implementation
+
+  const serverURL = "<YOUR_API_URL>";
+  // data contains a new address to be funded
+  let response = await postData(serverURL, data);
+
+  let eventName = "get_address_v2_response";
+  const message = createMessage(eventName, response);
+  postMessage(message);
+};
+
+const updateAddressV2 = async (data) => {
+  // Here you should send the provided data to your API
+  // API should call the PATCH to `blockchain/api/v2/transaction` endpoint on ON/RAMP API
+  // Then the response should be sent back to the iframe
+  // For easiness on the docs we are going to provide a standard implementation
+
+  const serverURL = "<YOUR_API_URL>";
+  // data contains a new address to be funded
+  let response = await postData(serverURL, data);
+
+  let eventName = "update_address_v2_response";
+  const message = createMessage(eventName, response);
+  postMessage(message);
+};
+
 const getCryptoOpCancel = async (data) => {
   // Here you should send the provided data to your API
   // API should call the `crypto_op_cancel` endpoint on ON/RAMP API
@@ -287,6 +364,10 @@ window.addEventListener("message", async (event) => {
         await getCryptoOpStatus(parsedMessage.data);
       } else if (eventName === "get_address") {
         await getAddress(parsedMessage.data);
+      } else if (eventName === "get_address_v2") {
+        await getAddressV2(parsedMessage.data);
+      } else if (eventName === "update_address_v2") {
+        await updateAddressV2(parsedMessage.data);
       } else if (eventName === "crypto_op_cancel") {
         await getCryptoOpCancel(parsedMessage.data);
       } else {
