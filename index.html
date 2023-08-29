@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4.13</title>
+    <title>ON/RAMP payment API v1.4.14</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.4.13</span>
+        <span class="toc-link">API v1.4.14</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -404,16 +404,22 @@
               </ul>
           </li>
           <li>
-            <a href="#crypto-ingress-flow" class="toc-h1 toc-link" data-title="Crypto Ingress Flow">Crypto Ingress Flow</a>
+            <a href="#crypto-ingress-flow" class="toc-h1 toc-link" data-title="Crypto ingress flow">Crypto ingress flow</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#user-request-a-crypto-address" class="toc-h2 toc-link" data-title="User request a Crypto Address">User request a Crypto Address</a>
+                    <a href="#request-address-for-utxo-based-blockchains" class="toc-h2 toc-link" data-title="Request address for UTXO-based blockchains">Request address for UTXO-based blockchains</a>
                   </li>
                   <li>
-                    <a href="#on-ramp-notify-merchant-on-new-crypto-funds" class="toc-h2 toc-link" data-title="ON/RAMP notify Merchant on new Crypto Funds">ON/RAMP notify Merchant on new Crypto Funds</a>
+                    <a href="#request-address-for-account-based-blockchains-and-tokens" class="toc-h2 toc-link" data-title="Request address for account-based blockchains and tokens">Request address for account-based blockchains and tokens</a>
                   </li>
                   <li>
-                    <a href="#merchant-create-new-crypto-invoice" class="toc-h2 toc-link" data-title="Merchant Create new Crypto Invoice">Merchant Create new Crypto Invoice</a>
+                    <a href="#register-transaction-for-account-based-blockchains-and-tokens" class="toc-h2 toc-link" data-title="Register transaction for account-based blockchains and tokens">Register transaction for account-based blockchains and tokens</a>
+                  </li>
+                  <li>
+                    <a href="#notification-of-successful-crypto-transaction" class="toc-h2 toc-link" data-title="Notification of successful crypto transaction">Notification of successful crypto transaction</a>
+                  </li>
+                  <li>
+                    <a href="#create-crypto-ingress-invoice" class="toc-h2 toc-link" data-title="Create crypto ingress invoice">Create crypto ingress invoice</a>
                   </li>
               </ul>
           </li>
@@ -446,6 +452,18 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4.14:</p>
+
+<ul>
+<li>Added new Crypto Ingress Flow and Iframe to work with account based blockchains</li>
+</ul>
+
+<p>Changes since v1.4.13:</p>
+
+<ul>
+<li>Added <code>first_time</code> parameter on ingress flow</li>
+</ul>
+
 <p>Changes since v1.4.12:</p>
 
 <ul>
@@ -2556,8 +2574,8 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 </tr>
 </tbody></table>
 <h3 id='crypto-ingress-address'>Crypto Ingress Address</h3>
-<p>Requests for the iframe to ask for a crypto address to send the funds</p>
-
+<p>Requests for the iframe to ask for a crypto address to send the funds. Depending on the kind of blockchain, a different endpoint should be used:</p>
+<h4 id='for-utxo-based-blockchains-btc-and-bch'>FOR UTXO BASED BLOCKCHAINS (<code>BTC</code> AND <code>BCH</code>)</h4>
 <ul>
 <li><code>get_address</code> (sent by the iframe)</li>
 </ul>
@@ -2574,7 +2592,7 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 </thead><tbody>
 <tr>
 <td>fiat_amount</td>
-<td>String</td>
+<td>Integer</td>
 <td>The amount of fiat to get.</td>
 <td>Yes</td>
 </tr>
@@ -2610,6 +2628,160 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td>data</td>
 <td>JSON</td>
 <td>Just the forwarded response from <code>/blockchain/api/v1/{chain}/address/new</code> endpoint.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h4 id='for-account-based-blockchains-and-tokens-eth-usdt'>FOR ACCOUNT BASED BLOCKCHAINS AND TOKENS (<code>ETH</code>, <code>USDT</code>, ...)</h4>
+<ul>
+<li><code>get_address_v2</code> (sent by the iframe)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>The amount of fiat to get.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>The currency of the fiat.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>crypto_currency</td>
+<td>String</td>
+<td>The crypto currency to be used.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>token</td>
+<td>String</td>
+<td>The token of the transaction if exists (e.g. usdt).</td>
+<td>No</td>
+</tr>
+<tr>
+<td>sender_address</td>
+<td>String</td>
+<td>The address of the sender of the transaction.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>get_address_v2_response</code> (sent by the merchant)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>JSON</td>
+<td>Just the forwarded response from a POST to <code>/blockchain/api/v2/transaction</code> endpoint.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>update_address_v2</code> (sent by the iframe)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>The amount of fiat to get.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>The currency of the fiat.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>crypto_currency</td>
+<td>String</td>
+<td>The crypto currency to be used.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>token</td>
+<td>String</td>
+<td>The token of the transaction if exists (e.g. usdt).</td>
+<td>No</td>
+</tr>
+<tr>
+<td>sender_address</td>
+<td>String</td>
+<td>The address of the sender of the transaction.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>xref</td>
+<td>String</td>
+<td>The xref received on the <code>get_address_v2_response</code> response.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>tx_hash</td>
+<td>String</td>
+<td>The hash of the transaction the user did.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>tx_amount</td>
+<td>Integer</td>
+<td>The amount of the transaction the user did.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+
+<ul>
+<li><code>update_address_v2_response</code> (sent by the merchant)</li>
+</ul>
+
+<p>Main Parameters:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td>JSON</td>
+<td>Just the forwarded response from a PATCH to <code>/blockchain/api/v2/transaction</code> endpoint.</td>
 <td>Yes</td>
 </tr>
 </tbody></table>
@@ -2771,6 +2943,36 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
   <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
 <span class="p">};</span>
 
+<span class="kd">const</span> <span class="nx">getAddressV2</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// Here you should send the provided data to your API</span>
+  <span class="c1">// API should call the POST to `blockchain/api/v2/transaction` endpoint on ON/RAMP API</span>
+  <span class="c1">// Then the response should be sent back to the iframe</span>
+  <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
+
+  <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">;</span>
+  <span class="c1">// data contains a new address to be funded</span>
+  <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+
+  <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">get_address_v2_response</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+  <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">updateAddressV2</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="c1">// Here you should send the provided data to your API</span>
+  <span class="c1">// API should call the PATCH to `blockchain/api/v2/transaction` endpoint on ON/RAMP API</span>
+  <span class="c1">// Then the response should be sent back to the iframe</span>
+  <span class="c1">// For easiness on the docs we are going to provide a standard implementation</span>
+
+  <span class="kd">const</span> <span class="nx">serverURL</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">&lt;YOUR_API_URL&gt;</span><span class="dl">"</span><span class="p">;</span>
+  <span class="c1">// data contains a new address to be funded</span>
+  <span class="kd">let</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">postData</span><span class="p">(</span><span class="nx">serverURL</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+
+  <span class="kd">let</span> <span class="nx">eventName</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">update_address_v2_response</span><span class="dl">"</span><span class="p">;</span>
+  <span class="kd">const</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">createMessage</span><span class="p">(</span><span class="nx">eventName</span><span class="p">,</span> <span class="nx">response</span><span class="p">);</span>
+  <span class="nx">postMessage</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
+
 <span class="kd">const</span> <span class="nx">getCryptoOpCancel</span> <span class="o">=</span> <span class="k">async</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="c1">// Here you should send the provided data to your API</span>
   <span class="c1">// API should call the `crypto_op_cancel` endpoint on ON/RAMP API</span>
@@ -2805,6 +3007,10 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
         <span class="k">await</span> <span class="nx">getCryptoOpStatus</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">get_address</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">await</span> <span class="nx">getAddress</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">get_address_v2</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">await</span> <span class="nx">getAddressV2</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">update_address_v2</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">await</span> <span class="nx">updateAddressV2</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">eventName</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">crypto_op_cancel</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">await</span> <span class="nx">getCryptoOpCancel</span><span class="p">(</span><span class="nx">parsedMessage</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
@@ -2820,21 +3026,22 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">});</span>
-</code></pre></div><h1 id='crypto-ingress-flow'>Crypto Ingress Flow</h1>
-<p>This documentation contains the main endpoints that participate in the Crypto Ingress Flow. Most of them are called directly from the <strong>iframe</strong>
-integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
+</code></pre></div><h1 id='crypto-ingress-flow'>Crypto ingress flow</h1>
+<p>This section describes the endpoints used in the crypto ingress flow. They are also used in the <a href="#crypto-iframe-integration"><strong>iframe</strong>
+integration</a>.</p>
 
-<p>From the User point of view, there are mainly 3 steps in the flow:</p>
+<p>Follow these steps when using this flow:</p>
 
 <ol>
-<li>User requests a new Crypto Address (<em>BTC or BCH</em>) to transfer coins into.</li>
-<li>Once we verify that the user has transferred coins to that address, we notify back to the Merchant that there are new funds available from this user.</li>
-<li>On this notification, the Merchant should request to initiate a new Invoice as in other Payments Methods.</li>
+<li>Request a crypto address to which coins or tokens will be transferred.</li>
+<li>For account-based blockchains, e.g. <code>ETH</code>, register the transaction details once it has been initiated.</li>
+<li>Once the transaction has been confirmed, a notification request will be sent to a URL provided by the merchant.</li>
+<li>Upon receiving the notification, the merchant should send a request to initiate an invoice.</li>
 </ol>
+<h2 id='request-address-for-utxo-based-blockchains'>Request address for UTXO-based blockchains</h2>
+<p>This endpoint should only be used for UTXO-based blockchains, e.g., <code>BTC</code> and <code>BCH</code>.  For account-based blockchains, please refer to <a href="#request-address-for-account-based-blockchains-and-tokens">Request address for account-based blockchains and tokens</a></p>
 
-<p>Steps <strong>2 and 3</strong> should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer.</p>
-<h2 id='user-request-a-crypto-address'>User request a Crypto Address</h2>
-<p>As it is mentioned in <a href="#crypto-iframe-integration">Crypto Iframe Integration</a>, this is done by calling the endpoint in the <strong>iframe</strong> <code>get_address</code>. This is forwarding the call to the public endpoint:</p>
+<p>A receiving address will be returned once a successful request is made to this endpoint.</p>
 
 <aside class="success"><b><code>POST /blockchain/api/v1/{chain}/address/new</code></b></aside>
 
@@ -2848,140 +3055,359 @@ integration that you can see <a href="#crypto-iframe-integration">here</a>.</p>
     "merchant_customer_id": "u2340112",
     "fiat_amount": 10000,
     "fiat_currency": "EUR",
-    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+    "email": "example@example.com"
 }'</span>
 </code></pre></div>
 <blockquote>
-<p>ReqAddress</p>
+<p>Request JSON Body</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="w">
+  </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
-<p>AddressResponse</p>
+<p>Response JSON</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ADDRESS_BASE58_OR_SPECIFIC_BLOCKCHAIN_ENCODING"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BITCOIN_ADDRESS_1"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"qr_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BASE_64_IMAGE_OF_ADDRESS"</span><span class="w">
+  </span><span class="nl">"qr_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data:image/png;base64,AAAA..."</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-<blockquote>
-<p>ErrorResponse (Status 400)</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_ADDRESS_ALREADY_IN_USE"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"in_use_addr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ADDRESS"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_NOT_CONFIGURED_YET"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"merchant_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-<blockquote>
-<p>ErrorResponse (Status 401)</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_MERCHANT_WRONG_API_KEY"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"api_key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"00000000-0000-0000-0000-000000000000"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-<blockquote>
-<p>ErrorResponse (Status 500)</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_CANNOT_CREATE_QR_CODE"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some message"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"error_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERROR_UNKNOWN_ERROR"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Some message"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='authentication'>Authentication</h3>
+</span></code></pre></div><h3 id='request-url-parameters'>Request URL Parameters</h3>
 <table><thead>
 <tr>
-<th>type</th>
-<th>Header Key</th>
-<th>Header Value</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Header</td>
-<td><code>x-xco-authorization</code></td>
-<td><code>Bearer merchant_api_key</code></td>
-</tr>
-</tbody></table>
-<h3 id='parameters'>Parameters</h3>
-<table><thead>
-<tr>
-<th>name</th>
-<th>type</th>
-<th>values</th>
-<th>description</th>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
 <td>chain</td>
-<td>enum</td>
-<td><code>btc, bch</code></td>
-<td>Blockchain the user requested ingress to</td>
+<td>String</td>
+<td>Blockchain, e.g.,<code>btc</code>, <code>bch</code></td>
+<td>Yes</td>
 </tr>
 </tbody></table>
-<h3 id='body'>Body</h3>
+<h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
 <tr>
-<th>Content Type</th>
-<th>Data Type</th>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
 </tr>
 </thead><tbody>
 <tr>
-<td><code>application/json</code></td>
-<td><code>ReqAddress</code></td>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Amount expected to be paid denominated in cents.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>Currency identifier following the ISO 4217 standard.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>notify_new_funds_url</td>
+<td>Url</td>
+<td>Callback URL to which a request will be sent after the transaction has been confirmed.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Email</td>
+<td>Email of the user.</td>
+<td>No</td>
 </tr>
 </tbody></table>
-<h3 id='responses'>Responses</h3>
+<h3 id='response-json-fields'>Response JSON Fields</h3>
 <table><thead>
 <tr>
-<th>http code</th>
-<th>content-type</th>
-<th>response</th>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td><code>200</code></td>
-<td><code>application/json</code></td>
-<td><code>AddressResponse</code></td>
+<td>address</td>
+<td>String</td>
+<td>Blockchain address to which funds will be sent.</td>
 </tr>
 <tr>
-<td><code>400</code></td>
-<td><code>application/json</code></td>
-<td><code>ErrorResponse</code></td>
+<td>chain</td>
+<td>String</td>
+<td>Blockchain, e.g.,<code>btc</code>, <code>bch</code>.</td>
 </tr>
 <tr>
-<td><code>401</code></td>
-<td><code>application/json</code></td>
-<td><code>ErrorResponse</code></td>
-</tr>
-<tr>
-<td><code>500</code></td>
-<td><code>application/json</code></td>
-<td><code>ErrorResponse</code></td>
+<td>qr_base64</td>
+<td>String</td>
+<td>QR code data URL.</td>
 </tr>
 </tbody></table>
-<h2 id='on-ramp-notify-merchant-on-new-crypto-funds'>ON/RAMP notify Merchant on new Crypto Funds</h2>
-<p>As we have seen in the previous endpoint the Merchant is going to provide some URL to notify back when there is some new funds from some user.</p>
+<h2 id='request-address-for-account-based-blockchains-and-tokens'>Request address for account-based blockchains and tokens</h2>
+<p>This endpoint should only be used for account-based blockchains, e.g., <code>ETH</code> and <code>USDT</code>.  For UTXO-based blockchains, please refer to <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
+
+<p>A receiving address will be returned along with a reference ID once a successful request is made to this endpoint.</p>
+
+<p>After a transaction has been made, register the transaction with <a href="#register-transaction-for-account-based-blockchains-and-tokens">Register transaction for account-based blockchains and tokens</a></p>
+
+<aside class="success"><b><code>POST /blockchain/api/v2/transaction</code></b></aside>
 
 <blockquote>
-<p><strong><em>IMPORTANT</em></strong>: This is not the same as <code>payment_ack_url</code> because up to this point we don&#39;t know how much money the user is going to transfer and if in fact the user is going to transfer or not. This SHOULD NOT be consider as an INVOICE.</p>
+<p>Example cURL</p>
 </blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/blockchain/api/v2/transaction'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "merchant_customer_id": "u2340112",
+    "fiat_amount": 10000,
+    "fiat_currency": "EUR",
+    "sender_address": "ETHEREUM_ADDRESS_1",
+    "chain": "eth",
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+    "email": "example@example.com"
+}'</span>
+</code></pre></div>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sender_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETHEREUM_ADDRESS_1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETHEREUM_ADDRESS_2"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"qr_base64"</span><span class="p">:</span><span class="w"> </span><span class="s2">"data:image/png;base64,AAAA..."</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"xref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-json-fields-2'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Amount expected to be paid denominated in cents.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>Currency identifier following the ISO 4217 standard.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>sender_address</td>
+<td>String</td>
+<td>Blockchain public address of the sender.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>String</td>
+<td>Blockchain, e.g.,<code>eth</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>notify_new_funds_url</td>
+<td>Url</td>
+<td>Callback URL to which a request will be sent after the transaction has been confirmed.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>email</td>
+<td>Email</td>
+<td>Email of the user.</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h3 id='response-json-fields-2'>Response JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>address</td>
+<td>String</td>
+<td>Blockchain address to which funds will be sent.</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>String</td>
+<td>Blockchain, e.g.,<code>eth</code>.</td>
+</tr>
+<tr>
+<td>qr_base64</td>
+<td>String</td>
+<td>QR code data URL.</td>
+</tr>
+<tr>
+<td>xref</td>
+<td>String</td>
+<td>Reference ID.</td>
+</tr>
+</tbody></table>
+<h2 id='register-transaction-for-account-based-blockchains-and-tokens'>Register transaction for account-based blockchains and tokens</h2>
+<p>This endpoint should only be used for account-based blockchains, e.g., <code>ETH</code> and <code>USDT</code>.  For UTXO-based blockchains, please refer to <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
 
-<p>When we are ready to do the callback notifying about new Crypto funds we are going to do the following call:</p>
+<p>After a transaction has been made, send a request to this endpoint in order to register the transaction.  A reference ID, required for this request, is provided in the response from <a href="#request-address-for-account-based-blockchains-and-tokens">Request address for account-based blockchains and tokens</a>.</p>
 
-<aside class="success"><b><code>POST `notify_new_funds_url`</code></b></aside>
+<aside class="success"><b><code>PATCH /blockchain/api/v2/transaction</code></b></aside>
+
+<blockquote>
+<p>Example cURL</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> PATCH <span class="s1">'https://api.onramp.ltd/blockchain/api/v2/transaction'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "xref": "11111111-1111-1111-1111-111111111111",
+    "merchant_customer_id": "u2340112",
+    "fiat_currency": "EUR",
+    "sender_address": "ETHEREUM_ADDRESS_1",
+    "chain": "eth",
+    "tx_hash": "TRANSACTION_HASH_1",
+    "tx_amount": 110,
+    "token": "usdt"
+}'</span>
+</code></pre></div>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"xref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sender_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETHEREUM_ADDRESS_1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tx_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TRANSACTION_HASH_1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tx_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">110</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usdt"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"xref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-json-fields-3'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>xref</td>
+<td>String</td>
+<td>Reference ID received when request for a receiving address.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>Currency identifier following the ISO 4217 standard.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>sender_address</td>
+<td>String</td>
+<td>Blockchain public address of the sender.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>chain</td>
+<td>String</td>
+<td>Blockchain, e.g.,<code>eth</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>tx_hash</td>
+<td>String</td>
+<td>Blockchain transaction hash.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>tx_amount</td>
+<td>String</td>
+<td>Amount in token unit sent in the transaction.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>token</td>
+<td>String</td>
+<td>Token sent in the transaction, e.g. <code>usdt</code>.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='response-json-fields-3'>Response JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>xref</td>
+<td>String</td>
+<td>Reference ID</td>
+</tr>
+</tbody></table>
+<h2 id='notification-of-successful-crypto-transaction'>Notification of successful crypto transaction</h2>
+<p>A URL provided by the merchant in a previous request will be used to send a notification request once the transaction has been confirmed.</p>
+
+<p><strong><em>IMPORTANT</em></strong>: This is not the same as <code>payment_ack_url</code>. It should NOT be considered as an INVOICE.</p>
+
+<aside class="success"><b><code>POST notify_new_funds_url</code></b></aside>
 
 <blockquote>
 <p>Example cURL</p>
@@ -2991,7 +3417,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
 <span class="nt">-d</span> <span class="s1">'{
-    "crypto_tx_ref": "123",
+    "crypto_tx_ref": "11111111-1111-1111-1111-111111111111",
     "high_risk": false
 }'</span>
 </code></pre></div>
@@ -2999,45 +3425,44 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <p>Request</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"high_risk"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='authentication-2'>Authentication</h3>
+</span></code></pre></div><h3 id='request-json-fields-4'>Request JSON Fields</h3>
 <table><thead>
 <tr>
-<th>type</th>
-<th>Header Key</th>
-<th>Header Value</th>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>Header</td>
-<td><code>x-xco-authorization</code></td>
-<td><code>Bearer merchant_api_key</code></td>
+<td>crypto_tx_ref</td>
+<td>String</td>
+<td>Reference ID to be used when creating an invoice.</td>
+</tr>
+<tr>
+<td>high_risk</td>
+<td>Boolean</td>
+<td><code>true</code> if the transaction of high risk.  Otherwise, <code>false</code></td>
 </tr>
 </tbody></table>
-<h3 id='responses-2'>Responses</h3>
+<h3 id='expected-response'>Expected Response</h3>
 <table><thead>
 <tr>
-<th>http code</th>
-<th>content-type</th>
-<th>response</th>
+<th>Status</th>
 </tr>
 </thead><tbody>
 <tr>
-<td><code>200</code></td>
-<td><code>application/json</code></td>
-<td>If Ok</td>
-</tr>
-<tr>
-<td><code>500</code></td>
-<td><code>application/json</code></td>
-<td>If Error</td>
+<td>200</td>
 </tr>
 </tbody></table>
-<h2 id='merchant-create-new-crypto-invoice'>Merchant Create new Crypto Invoice</h2>
-<p>Once the Merchant receives the notification on new crypto funds it should call the following endpoint to initiate the invoice. Similar to <a href="#ingress-api">Ingress API</a>.
-The main difference with this endpoint is that it is provided the real amount of fiat that the user deposits at the moment that the crypto transaction was confirm. Because the end user cannot be forced to deposit a specific amount of crypto, we cannot rely on what the user input as fiat amount in the beginning of the transaction, because the user can deposit less or more in crypto and due to the variability of the price of this kind of assets.</p>
+<h2 id='create-crypto-ingress-invoice'>Create crypto ingress invoice</h2>
+<p>Once the merchant receives a notification that a successful transaction has been made, a request should be sent to this endpoint to create an invoice.</p>
+
+<p>A reference ID, required for this request, is provided in the <a href="#notification-of-successful-crypto-transaction">Notification of successful crypto transaction</a></p>
+
+<p>The main difference between this endpoint and the <a href="#ingress-api">Ingress API</a> is that, the payment amount is absent from the request to this endpoint.  This is because the payment amount depends on what is transferred by the user, instead of the amount provided in the request at the beginning of the crypto ingress flow.</p>
 
 <aside class="success"><b><code>POST `https://api.onramp.ltd/rpc/create_crypto_ingress_invoice`</code></b></aside>
 
@@ -3077,7 +3502,7 @@ The main difference with this endpoint is that it is provided the real amount of
 }'</span>
 </code></pre></div>
 <blockquote>
-<p>Request</p>
+<p>Request JSON Body</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS"</span><span class="p">,</span><span class="w">
@@ -3107,21 +3532,7 @@ The main difference with this endpoint is that it is provided the real amount of
     </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='authentication-3'>Authentication</h3>
-<table><thead>
-<tr>
-<th>type</th>
-<th>Header Key</th>
-<th>Header Value</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Header</td>
-<td><code>x-xco-authorization</code></td>
-<td><code>Bearer merchant_api_key</code></td>
-</tr>
-</tbody></table>
-
+</span></code></pre></div>
 <blockquote>
 <p>Response JSON</p>
 </blockquote>
@@ -3134,7 +3545,7 @@ The main difference with this endpoint is that it is provided the real amount of
   </span><span class="nl">"crypto_amount"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00001</span><span class="p">,</span><span class="w">
   </span><span class="nl">"crypto_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc"</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='request-json-fields'>Request JSON Fields</h3>
+</span></code></pre></div><h3 id='request-json-fields-5'>Request JSON Fields</h3>
 <table><thead>
 <tr>
 <th>Field</th>
@@ -3304,7 +3715,7 @@ The main difference with this endpoint is that it is provided the real amount of
 <td>Yes</td>
 </tr>
 </tbody></table>
-<h3 id='response-json-fields'>Response JSON Fields</h3>
+<h3 id='response-json-fields-4'>Response JSON Fields</h3>
 <table><thead>
 <tr>
 <th>Field</th>
