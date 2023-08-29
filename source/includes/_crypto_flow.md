@@ -1,19 +1,20 @@
-# Crypto Ingress Flow
+# Crypto ingress flow
 
-This documentation contains the main endpoints that participate in the Crypto Ingress Flow. Most of them are called directly from the **iframe**
-integration that you can see [here](#crypto-iframe-integration).
+This section describes the endpoints used in the crypto ingress flow. They are also used in the [**iframe**
+integration](#crypto-iframe-integration).
 
-From the User point of view, there are mainly 3 steps in the flow:
+Follow these steps when using this flow:
 
-1. User requests a new Crypto Address (_BTC or BCH_) to transfer coins into.
-2. Once we verify that the user has transferred coins to that address, we notify back to the Merchant that there are new funds available from this user.
-3. On this notification, the Merchant should request to initiate a new Invoice as in other Payments Methods.
+1. Request a crypto address to which coins or tokens will be transferred.
+2. For account-based blockchains, e.g. `ETH`, register the transaction details once it has been initiated.
+3. Once the transaction has been confirmed, a notification request will be sent to a URL provided by the merchant.
+4. Upon receiving the notification, the merchant should send a request to initiate an invoice.
 
-Steps **2 and 3** should be interactively between Merchant and ON/RAMP because of the nature of Blockchain transactions, since we need to wait to the user to transfer some coins but since the process is completely asynchronous and distributed, we dont know when the user is going to do the transfer and how much is going to transfer.
+## Request address for UTXO-based blockchains
 
-## User request a Crypto Address
+This endpoint should only be used for UTXO-based blockchains, e.g., `BTC` and `BCH`.  For account-based blockchains, please refer to [Request address for account-based blockchains and tokens](#request-address-for-account-based-blockchains-and-tokens)
 
-As it is mentioned in [Crypto Iframe Integration](#crypto-iframe-integration), this is done by calling the endpoint in the **iframe** `get_address`. This is forwarding the call to the public endpoint:
+A receiving address will be returned once a successful request is made to this endpoint.
 
 <aside class="success"><b><code>POST /blockchain/api/v1/{chain}/address/new</code></b></aside>
 
@@ -27,108 +28,205 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
     "merchant_customer_id": "u2340112",
     "fiat_amount": 10000,
     "fiat_currency": "EUR",
-    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+    "email": "example@example.com"
 }'
 ```
 
-> ReqAddress
+> Request JSON Body
 
 ```json
 {
   "merchant_customer_id": "u2340112",
   "fiat_amount": 10000,
   "fiat_currency": "EUR",
-  "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done"
+  "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+  "email": "example@example.com"
 }
 ```
 
-> AddressResponse
+> Response JSON
 
 ```json
 {
-  "address": "ADDRESS_BASE58_OR_SPECIFIC_BLOCKCHAIN_ENCODING",
+  "address": "BITCOIN_ADDRESS_1",
   "chain": "btc",
-  "qr_base64": "BASE_64_IMAGE_OF_ADDRESS"
+  "qr_base64": "data:image/png;base64,AAAA..."
 }
 ```
 
-> ErrorResponse (Status 400)
+### Request URL Parameters
+
+| Field | Type   | Description                   | Required |
+| ----- | ------ | ----------------------------- | -------- |
+| chain | String | Blockchain, e.g.,`btc`, `bch` | Yes      |
+
+### Request JSON Fields
+
+| Field                | Type    | Description                                                                            | Required |
+| -------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
+| merchant_customer_id | String  | The merchant customer id.                                                              | Yes      |
+| fiat_amount          | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
+| fiat_currency        | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
+| notify_new_funds_url | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
+| email                | Email   | Email of the user.                                                                     | No       |
+
+### Response JSON Fields
+
+| Field     | Type   | Description                                     |
+| --------- | ------ | ----------------------------------------------- |
+| address   | String | Blockchain address to which funds will be sent. |
+| chain     | String | Blockchain, e.g.,`btc`, `bch`.                  |
+| qr_base64 | String | QR code data URL.                               |
+
+## Request address for account-based blockchains and tokens
+
+This endpoint should only be used for account-based blockchains, e.g., `ETH` and `USDT`.  For UTXO-based blockchains, please refer to [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
+
+A receiving address will be returned along with a reference ID once a successful request is made to this endpoint.
+
+After a transaction has been made, register the transaction with [Register transaction for account-based blockchains and tokens](#register-transaction-for-account-based-blockchains-and-tokens)
+
+<aside class="success"><b><code>POST /blockchain/api/v2/transaction</code></b></aside>
+
+> Example cURL
+
+```shell
+curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "merchant_customer_id": "u2340112",
+    "fiat_amount": 10000,
+    "fiat_currency": "EUR",
+    "sender_address": "ETHEREUM_ADDRESS_1",
+    "chain": "eth",
+    "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+    "email": "example@example.com"
+}'
+```
+
+> Request JSON Body
 
 ```json
 {
-  "error_code": "ERROR_ADDRESS_ALREADY_IN_USE",
-  "in_use_addr": "ADDRESS"
+  "merchant_customer_id": "u2340112",
+  "fiat_amount": 10000,
+  "fiat_currency": "EUR",
+  "sender_address": "ETHEREUM_ADDRESS_1",
+  "chain": "eth",
+  "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+  "email": "example@example.com"
 }
 ```
+> Response JSON
 
 ```json
 {
-  "error_code": "ERROR_MERCHANT_NOT_CONFIGURED_YET",
-  "merchant_id": "00000000-0000-0000-0000-000000000000"
+  "address": "ETHEREUM_ADDRESS_2",
+  "chain": "eth",
+  "qr_base64": "data:image/png;base64,AAAA...",
+  "xref": "11111111-1111-1111-1111-111111111111"
 }
 ```
 
-> ErrorResponse (Status 401)
+### Request JSON Fields
+
+| Field                | Type    | Description                                                                            | Required |
+| -------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
+| merchant_customer_id | String  | The merchant customer id.                                                              | Yes      |
+| fiat_amount          | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
+| fiat_currency        | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
+| sender_address       | String  | Blockchain public address of the sender.                                               | Yes      |
+| chain                | String  | Blockchain, e.g.,`eth`.                                                                | Yes      |
+| notify_new_funds_url | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
+| email                | Email   | Email of the user.                                                                     | No       |
+
+### Response JSON Fields
+
+| Field     | Type   | Description                                     |
+| --------- | ------ | ----------------------------------------------- |
+| address   | String | Blockchain address to which funds will be sent. |
+| chain     | String | Blockchain, e.g.,`eth`.                         |
+| qr_base64 | String | QR code data URL.                               |
+| xref      | String | Reference ID.                                   |
+
+
+## Register transaction for account-based blockchains and tokens
+
+This endpoint should only be used for account-based blockchains, e.g., `ETH` and `USDT`.  For UTXO-based blockchains, please refer to [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
+
+After a transaction has been made, send a request to this endpoint in order to register the transaction.  A reference ID, required for this request, is provided in the response from [Request address for account-based blockchains and tokens](#request-address-for-account-based-blockchains-and-tokens).
+
+<aside class="success"><b><code>PATCH /blockchain/api/v2/transaction</code></b></aside>
+
+> Example cURL
+
+```shell
+curl -X PATCH 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
+-H 'Content-Type: application/json' \
+-H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
+-d '{
+    "xref": "11111111-1111-1111-1111-111111111111",
+    "merchant_customer_id": "u2340112",
+    "fiat_currency": "EUR",
+    "sender_address": "ETHEREUM_ADDRESS_1",
+    "chain": "eth",
+    "tx_hash": "TRANSACTION_HASH_1",
+    "tx_amount": 110,
+    "token": "usdt"
+}'
+```
+
+> Request JSON Body
 
 ```json
 {
-  "error_code": "ERROR_MERCHANT_WRONG_API_KEY",
-  "api_key": "00000000-0000-0000-0000-000000000000"
+  "xref": "11111111-1111-1111-1111-111111111111",
+  "merchant_customer_id": "u2340112",
+  "fiat_currency": "EUR",
+  "sender_address": "ETHEREUM_ADDRESS_1",
+  "chain": "eth",
+  "tx_hash": "TRANSACTION_HASH_1",
+  "tx_amount": 110,
+  "token": "usdt"
 }
 ```
-
-> ErrorResponse (Status 500)
+> Response JSON
 
 ```json
 {
-  "error_code": "ERROR_CANNOT_CREATE_QR_CODE",
-  "message": "Some message"
+  "xref": "11111111-1111-1111-1111-111111111111"
 }
 ```
 
-```json
-{
-  "error_code": "ERROR_UNKNOWN_ERROR",
-  "message": "Some message"
-}
-```
+### Request JSON Fields
 
-### Authentication
+| Field                | Type    | Description                                                 | Required |
+| -------------------- | --------| ----------------------------------------------------------- | -------- |
+| xref                 | String  | Reference ID received when request for a receiving address. | Yes      |
+| merchant_customer_id | String  | The merchant customer id.                                   | Yes      |
+| fiat_currency        | String  | Currency identifier following the ISO 4217 standard.        | Yes      |
+| sender_address       | String  | Blockchain public address of the sender.                    | Yes      |
+| chain                | String  | Blockchain, e.g.,`eth`.                                     | Yes      |
+| tx_hash              | String  | Blockchain transaction hash.                                | Yes      |
+| tx_amount            | String  | Amount in token unit sent in the transaction.               | Yes      |
+| token                | String  | Token sent in the transaction, e.g. `usdt`.                 | Yes      |
 
-| type   | Header Key            | Header Value              |
-| ------ | --------------------- | ------------------------- |
-| Header | `x-xco-authorization` | `Bearer merchant_api_key` |
+### Response JSON Fields
 
-### Parameters
+| Field | Type   | Description  |
+| ----- | ------ | -------------|
+| xref  | String | Reference ID |
 
-| name  | type | values     | description                              |
-| ----- | ---- | ---------- | ---------------------------------------- |
-| chain | enum | `btc, bch` | Blockchain the user requested ingress to |
 
-### Body
+## Notification of successful crypto transaction
 
-| Content Type       | Data Type    |
-| ------------------ | ------------ |
-| `application/json` | `ReqAddress` |
+A URL provided by the merchant in a previous request will be used to send a notification request once the transaction has been confirmed.
 
-### Responses
+**_IMPORTANT_**: This is not the same as `payment_ack_url`. It should NOT be considered as an INVOICE.
 
-| http code | content-type       | response          |
-| --------- | ------------------ | ----------------- |
-| `200`     | `application/json` | `AddressResponse` |
-| `400`     | `application/json` | `ErrorResponse`   |
-| `401`     | `application/json` | `ErrorResponse`   |
-| `500`     | `application/json` | `ErrorResponse`   |
-
-## ON/RAMP notify Merchant on new Crypto Funds
-
-As we have seen in the previous endpoint the Merchant is going to provide some URL to notify back when there is some new funds from some user.
-
-> **_IMPORTANT_**: This is not the same as `payment_ack_url` because up to this point we don't know how much money the user is going to transfer and if in fact the user is going to transfer or not. This SHOULD NOT be consider as an INVOICE.
-
-When we are ready to do the callback notifying about new Crypto funds we are going to do the following call:
-
-<aside class="success"><b><code>POST `notify_new_funds_url`</code></b></aside>
+<aside class="success"><b><code>POST notify_new_funds_url</code></b></aside>
 
 > Example cURL
 
@@ -138,7 +236,7 @@ curl -X POST notify_new_funds_url \
 -H 'Content-Type: application/json' \
 -H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
-    "crypto_tx_ref": "123",
+    "crypto_tx_ref": "11111111-1111-1111-1111-111111111111",
     "high_risk": false
 }'
 ```
@@ -147,28 +245,32 @@ curl -X POST notify_new_funds_url \
 
 ```json
 {
-  "crypto_tx_ref": "REFERENCE_ID_TO_BE_USED_IN_CALLING_CREATE_CRYPTO_INGRESS_INVOICE",
+  "crypto_tx_ref": "11111111-1111-1111-1111-111111111111",
   "high_risk": false
 }
 ```
 
-### Authentication
+### Request JSON Fields
 
-| type   | Header Key            | Header Value              |
-| ------ | --------------------- | ------------------------- |
-| Header | `x-xco-authorization` | `Bearer merchant_api_key` |
+| Field                | Type    | Description                                                 |
+| -------------------- | --------| ----------------------------------------------------------- |
+| crypto_tx_ref        | String  | Reference ID to be used when creating an invoice.           |
+| high_risk            | Boolean | `true` if the transaction of high risk.  Otherwise, `false` |
 
-### Responses
 
-| http code | content-type       | response |
-| --------- | ------------------ | -------- |
-| `200`     | `application/json` | If Ok    |
-| `500`     | `application/json` | If Error |
+### Expected Response
 
-## Merchant Create new Crypto Invoice
+| Status |
+| ------ |
+| 200    |
 
-Once the Merchant receives the notification on new crypto funds it should call the following endpoint to initiate the invoice. Similar to [Ingress API](#ingress-api).
-The main difference with this endpoint is that it is provided the real amount of fiat that the user deposits at the moment that the crypto transaction was confirm. Because the end user cannot be forced to deposit a specific amount of crypto, we cannot rely on what the user input as fiat amount in the beginning of the transaction, because the user can deposit less or more in crypto and due to the variability of the price of this kind of assets.
+## Create crypto ingress invoice
+
+Once the merchant receives a notification that a successful transaction has been made, a request should be sent to this endpoint to create an invoice.
+
+A reference ID, required for this request, is provided in the [Notification of successful crypto transaction](#notification-of-successful-crypto-transaction)
+
+The main difference between this endpoint and the [Ingress API](#ingress-api) is that, the payment amount is absent from the request to this endpoint.  This is because the payment amount depends on what is transferred by the user, instead of the amount provided in the request at the beginning of the crypto ingress flow.
 
 <aside class="success"><b><code>POST `https://api.onramp.ltd/rpc/create_crypto_ingress_invoice`</code></b></aside>
 
@@ -208,7 +310,7 @@ curl -X POST 'https://api.onramp.ltd/rpc/create_crypto_ingress_invoice' \
 }'
 ```
 
-> Request
+> Request JSON Body
 
 ```json
 {
@@ -240,12 +342,6 @@ curl -X POST 'https://api.onramp.ltd/rpc/create_crypto_ingress_invoice' \
   }
 }
 ```
-
-### Authentication
-
-| type   | Header Key            | Header Value              |
-| ------ | --------------------- | ------------------------- |
-| Header | `x-xco-authorization` | `Bearer merchant_api_key` |
 
 > Response JSON
 
