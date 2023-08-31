@@ -3056,7 +3056,8 @@ integration</a>.</p>
     "fiat_amount": 10000,
     "fiat_currency": "EUR",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
-    "email": "example@example.com"
+    "email": "example@example.com",
+    "merchant_reference_id": "MERCHANT_REF_ID_1"
 }'</span>
 </code></pre></div>
 <blockquote>
@@ -3067,7 +3068,8 @@ integration</a>.</p>
   </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10000</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"merchant_reference_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_REF_ID_1"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -3130,7 +3132,13 @@ integration</a>.</p>
 <tr>
 <td>email</td>
 <td>Email</td>
-<td>Email of the user.</td>
+<td>Email of the customer.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>merchant_reference_id</td>
+<td>String</td>
+<td>A reference id for the merchant, e.g., internal transaction id.</td>
 <td>No</td>
 </tr>
 </tbody></table>
@@ -3180,7 +3188,8 @@ integration</a>.</p>
     "sender_address": "ETHEREUM_ADDRESS_1",
     "chain": "eth",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
-    "email": "example@example.com"
+    "email": "example@example.com",
+    "merchant_reference_id": "MERCHANT_REF_ID_1"
 }'</span>
 </code></pre></div>
 <blockquote>
@@ -3193,7 +3202,8 @@ integration</a>.</p>
   </span><span class="nl">"sender_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETHEREUM_ADDRESS_1"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"merchant_reference_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_REF_ID_1"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -3253,7 +3263,13 @@ integration</a>.</p>
 <tr>
 <td>email</td>
 <td>Email</td>
-<td>Email of the user.</td>
+<td>Email of the customer.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>merchant_reference_id</td>
+<td>String</td>
+<td>A reference id for the merchant, e.g., internal transaction id.</td>
 <td>No</td>
 </tr>
 </tbody></table>
