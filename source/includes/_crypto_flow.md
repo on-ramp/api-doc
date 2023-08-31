@@ -29,7 +29,8 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
     "fiat_amount": 10000,
     "fiat_currency": "EUR",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
-    "email": "example@example.com"
+    "email": "example@example.com",
+    "merchant_reference_id": "MERCHANT_REF_ID_1"
 }'
 ```
 
@@ -41,7 +42,8 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
   "fiat_amount": 10000,
   "fiat_currency": "EUR",
   "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
-  "email": "example@example.com"
+  "email": "example@example.com",
+  "merchant_reference_id": "MERCHANT_REF_ID_1"
 }
 ```
 
@@ -63,13 +65,14 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 
 ### Request JSON Fields
 
-| Field                | Type    | Description                                                                            | Required |
-| -------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
-| merchant_customer_id | String  | The merchant customer id.                                                              | Yes      |
-| fiat_amount          | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
-| fiat_currency        | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
-| notify_new_funds_url | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
-| email                | Email   | Email of the user.                                                                     | No       |
+| Field                 | Type    | Description                                                                            | Required |
+| --------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
+| merchant_customer_id  | String  | The merchant customer id.                                                              | Yes      |
+| fiat_amount           | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
+| fiat_currency         | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
+| notify_new_funds_url  | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
+| email                 | Email   | Email of the user.                                                                     | No       |
+| merchant_reference_id | String  | A reference id for the merchant, e.g., internal transaction id.                        | No       |
 
 ### Response JSON Fields
 
@@ -102,7 +105,8 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
     "sender_address": "ETHEREUM_ADDRESS_1",
     "chain": "eth",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
-    "email": "example@example.com"
+    "email": "example@example.com",
+    "merchant_reference_id": "MERCHANT_REF_ID_1"
 }'
 ```
 
@@ -116,7 +120,8 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
   "sender_address": "ETHEREUM_ADDRESS_1",
   "chain": "eth",
   "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
-  "email": "example@example.com"
+  "email": "example@example.com",
+  "merchant_reference_id": "MERCHANT_REF_ID_1"
 }
 ```
 > Response JSON
@@ -132,15 +137,16 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
 
 ### Request JSON Fields
 
-| Field                | Type    | Description                                                                            | Required |
-| -------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
-| merchant_customer_id | String  | The merchant customer id.                                                              | Yes      |
-| fiat_amount          | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
-| fiat_currency        | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
-| sender_address       | String  | Blockchain public address of the sender.                                               | Yes      |
-| chain                | String  | Blockchain, e.g.,`eth`.                                                                | Yes      |
-| notify_new_funds_url | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
-| email                | Email   | Email of the user.                                                                     | No       |
+| Field                 | Type    | Description                                                                            | Required |
+| --------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
+| merchant_customer_id  | String  | The merchant customer id.                                                              | Yes      |
+| fiat_amount           | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
+| fiat_currency         | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
+| sender_address        | String  | Blockchain public address of the sender.                                               | Yes      |
+| chain                 | String  | Blockchain, e.g.,`eth`.                                                                | Yes      |
+| notify_new_funds_url  | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
+| email                 | Email   | Email of the user.                                                                     | No       |
+| merchant_reference_id | String  | A reference id for the merchant, e.g., internal transaction id.                        | No       |
 
 ### Response JSON Fields
 
