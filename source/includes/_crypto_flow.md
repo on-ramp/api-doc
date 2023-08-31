@@ -71,7 +71,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 | fiat_amount           | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
 | fiat_currency         | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
 | notify_new_funds_url  | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
-| email                 | Email   | Email of the user.                                                                     | No       |
+| email                 | Email   | Email of the customer.                                                                 | No       |
 | merchant_reference_id | String  | A reference id for the merchant, e.g., internal transaction id.                        | No       |
 
 ### Response JSON Fields
@@ -145,7 +145,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
 | sender_address        | String  | Blockchain public address of the sender.                                               | Yes      |
 | chain                 | String  | Blockchain, e.g.,`eth`.                                                                | Yes      |
 | notify_new_funds_url  | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
-| email                 | Email   | Email of the user.                                                                     | No       |
+| email                 | Email   | Email of the customer.                                                                 | No       |
 | merchant_reference_id | String  | A reference id for the merchant, e.g., internal transaction id.                        | No       |
 
 ### Response JSON Fields
