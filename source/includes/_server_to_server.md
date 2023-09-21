@@ -608,6 +608,35 @@ out of order, therefore we recommend checking the `date` field to detect these a
     <td></td>
     <td>String</td>
   </tr>
+  <tr>
+    <td colspan=2>received</td>
+    <td colspan=2>Funds have been transferred successfully</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">received.</span>data</td>
+    <td></td>
+    <td>Bank-specific data. May be null.</td>
+    <td></td>
+    <td>Object</td>
+  </tr>
+  <tr>
+    <td colspan=2>not_received</td>
+    <td colspan=2>Funds could not be transferred</td>
+    <td colspan=2>Object</td>
+  </tr>
+  <tr></tr>
+  <tr>
+    <td></td>
+    <td><span style="color:gray">not_received.</span>data</td>
+    <td></td>
+    <td>Bank-specific data. May be null.</td>
+    <td></td>
+    <td>Object</td>
+  </tr>
+
 
 </table>
 
