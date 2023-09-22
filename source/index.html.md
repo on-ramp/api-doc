@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.14
+title: ON/RAMP payment API v1.4.15
 
-version: 1.4.14
+version: 1.4.15
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -17,6 +17,7 @@ includes:
   - crypto
   - crypto_flow
   - quotes
+  - egress_crypto_flow
 
 search: true
 
@@ -40,6 +41,10 @@ Test:
 **[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.15:
+
+- Added new Egress Crypto Flow
 
 Changes since v1.4.14:
 
