@@ -6,6 +6,8 @@ graph TD
   Processing[processing_user_payment];
   Accepted[accepted];
   Rejected[rejected];
+  Received[received];
+  NotReceived[not_received];
 
   Waiting --> Cancel;
   Waiting --> Redirected;
@@ -21,3 +23,6 @@ graph TD
   Pending --> Processing;
   Pending --> Accepted;
   Pending --> Rejected;
+
+  Accepted -.-> Received;
+  Accepted -.-> NotReceived;
