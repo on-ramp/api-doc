@@ -4,7 +4,7 @@ This section describes the endpoints used in the egress crypto flow.
 
 ## Get available offers quotes
 
-<aside class="success"><b><code>POST /s2s/egress/quotes/{offer_id}</code></b></aside>
+<aside class="success"><b><code>POST /s2s/egress/quotes?offer_id=a47c2282-7212-5412-ab9a-ee856477648d</code></b></aside>
 
 > Example cURL request
 
@@ -41,6 +41,11 @@ curl -X GET 'https://api.onramp.ltd/s2s/egress/quotes' \
 | currency_rhs    | String          | Crypto currency code in upper case. Valid values are `"BTC"`, `"ETH"`, etc. | Yes |
 | amount_lhs      | Integer         | Amount to sell. | Yes |
 
+### Request query parameters
+
+| Field           | Type            |  Description                             | Required |
+| --------------- | --------------  | ---------------------------------------- | -------- |
+| offer_id        | String          | ID of a an offer to return quotes for.   |    No    |
 
 ### Response JSON
 
@@ -106,7 +111,9 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
 > Example response
 
 ```json
-  "10e35c16-3ff8-4238-b5b5-34b4da9b4115"
+{
+  "invoice_id": "10e35c16-3ff8-4238-b5b5-34b4da9b4115"
+}
 ```
 
 ### Request JSON Fields
@@ -114,13 +121,13 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
 | Field           | Type            |  Description                 | Required |
 | -----------     | --------------  | ---------------------------- | -------- |
 | offer_id        | String          | ID of a an offer to use. | Yes      |
-| billing_details | Billing Details | User billing details. Please, notice how **not** all parameters inside this JSON object are required except `payer_email` and `merchant_customer_id`. | Yes |
+| billing_details | Billing Details | User billing details. Please, notice how **not** all parameters inside this JSON object are required except `payer_email`, `payer_phone` and `merchant_customer_id`. | Yes |
 | ack_callback    | Url             | Merchant callback endpoint to confirm egress transaction if `require_confirmation`. | No |
 | cancel_callback | Url             | Merchant callback endpoint to be called when an egress payment couldn't be completed. | No |
 | fiat_amount     | Integer         | Amount to sell denominated in cents. | Yes |
 | fiat_currency   | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`. | Yes |
 | offer_data      | Offer Data      | Object containing offer data. | Yes |
-| require_confirmation | Boolean    | Whether the merchant wants to confirm an operation or not. | No |
+| require_confirmation | Boolean    | Whether the merchant wants to confirm an operation or not. Deafult is `true`. | No |
 | callback_url    | Url             | Merchant callback endpoint to be called when status of operation is changed. Currently will be called only when operation is successfully completed. | No |
 | quote_id        | String          | Unique ID of a quote, for information purposes only. | No |
 
@@ -131,7 +138,7 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
 | payer_email           | Email  | Email of the user making the payment.                                 | Yes      |
 | payer_first_name      | String | First name of the user making the payment.                            | No       |
 | payer_last_name       | String | Last name of the user making the payment.                             | No       |
-| payer_phone           | String | Including country code, without spaces or separators.                 | No       |
+| payer_phone           | String | Including country code, without spaces or separators.                 | Yes      |
 | birth_date            | Date   | Date of birth of the user making the payment.                         | No       |
 | street                | String | Street from the billing address.                                      | No       |
 | unit                  | String | Unit from the billing address.                                        | No       |
@@ -166,4 +173,49 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
 
 ### Response JSON
 
-  String containing egress `invoice_id` reference.
+| Field       | Type   |  Description             | Required |
+| ----------- | ------ | -------------------------| -------- |
+| invoice_id  | String | Unique ID of an invoice. | Yes      |
+
+
+### Confirmation callback
+
+If merchant is willing to additionally confirm the operation, then:
+  - a callback url should be provided in the `ack_callback` field
+  - `require_confirmation` field can also be explicitly set to `true` or simply omitted from the request which will result in application of default value whish is `true`
+Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point
+when the user transaction should be consider done and be debited at merchant's side**. If the merchant was able to
+debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). **Any other status code** but 200 or 204 **will be treated as an internal error from the merchant side**,
+pausing the user payment and prompting manual intervention, potentially delaying the process several hours.
+
+Confirmation callback will be done with the following JSON payload:
+
+```json
+{
+  "invoice_id": "52e81f50-4bf1-4970-8c53-abe2228e2d5e",
+  "reference": "a49c1dee-42b2-427a-a493-8b6e30fab42b"
+}
+```
+
+
+> IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET, either for `payment_ack_url` or `cancel_url`.
+
+
+### Status callback
+
+In order to receive status callbacks for an operation, a `callback_url` should be provided in the request. **ON/RAMP** will call back the merchant with the following JSON payload:
+
+```json
+{
+    "invoice_id": "10e35c16-3ff8-4238-b5b5-34b4da9b4115",
+    "timestamp_utc": "2020-01-01 12:45:00.000000+00",
+    "status": { 
+        "completed": {}
+    }
+}
+```
+
+The `status` field can have the following values:
+    - `completed`: The payment has been succesfully completed.
