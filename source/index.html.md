@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.16
+title: ON/RAMP payment API v1.4.17
 
-version: 1.4.16
+version: 1.4.17
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -18,6 +18,7 @@ includes:
   - crypto_flow
   - quotes
   - egress_crypto_flow
+  - fiat_to_crypto_flow
 
 search: true
 
@@ -41,6 +42,10 @@ Test:
 **[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.17:
+
+- Added new Fiat to Crypto Flow
 
 Changes since v1.4.16:
 
