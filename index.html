@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4.15</title>
+    <title>ON/RAMP payment API v1.4.16</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.4.15</span>
+        <span class="toc-link">API v1.4.16</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -463,6 +463,12 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4.16:</p>
+
+<ul>
+<li>Updated Egress Crypto Flow</li>
+</ul>
+
 <p>Changes since v1.4.15:</p>
 
 <ul>
@@ -3867,7 +3873,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <h1 id='egress-crypto-flow'>Egress crypto flow</h1>
 <p>This section describes the endpoints used in the egress crypto flow. </p>
 <h2 id='get-available-offers-quotes'>Get available offers quotes</h2>
-<aside class="success"><b><code>POST /s2s/egress/quotes/{offer_id}</code></b></aside>
+<aside class="success"><b><code>POST /s2s/egress/quotes?offer_id=a47c2282-7212-5412-ab9a-ee856477648d</code></b></aside>
 
 <blockquote>
 <p>Example cURL request</p>
@@ -3918,6 +3924,22 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <td>Integer</td>
 <td>Amount to sell.</td>
 <td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='request-query-parameters'>Request query parameters</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>offer_id</td>
+<td>String</td>
+<td>ID of a an offer to return quotes for.</td>
+<td>No</td>
 </tr>
 </tbody></table>
 <h3 id='response-json'>Response JSON</h3>
@@ -4006,7 +4028,9 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <blockquote>
 <p>Example response</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="w">  </span><span class="s2">"10e35c16-3ff8-4238-b5b5-34b4da9b4115"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10e35c16-3ff8-4238-b5b5-34b4da9b4115"</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='request-json-fields-2'>Request JSON Fields</h3>
 <table><thead>
 <tr>
@@ -4025,7 +4049,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
-<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this JSON object are required except <code>payer_email</code> and <code>merchant_customer_id</code>.</td>
+<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this JSON object are required except <code>payer_email</code>, <code>payer_phone</code> and <code>merchant_customer_id</code>.</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -4061,7 +4085,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>require_confirmation</td>
 <td>Boolean</td>
-<td>Whether the merchant wants to confirm an operation or not.</td>
+<td>Whether the merchant wants to confirm an operation or not. Deafult is <code>true</code>.</td>
 <td>No</td>
 </tr>
 <tr>
@@ -4108,7 +4132,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <td>payer_phone</td>
 <td>String</td>
 <td>Including country code, without spaces or separators.</td>
-<td>No</td>
+<td>Yes</td>
 </tr>
 <tr>
 <td>birth_date</td>
@@ -4252,7 +4276,53 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 </tr>
 </tbody></table>
 <h3 id='response-json-2'>Response JSON</h3>
-<p>String containing egress <code>invoice_id</code> reference.</p>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Unique ID of an invoice.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='confirmation-callback'>Confirmation callback</h3>
+<p>If merchant is willing to additionally confirm the operation, then:
+  - a callback url should be provided in the <code>ack_callback</code> field
+  - <code>require_confirmation</code> field can also be explicitly set to <code>true</code> or simply omitted from the request which will result in application of default value whish is <code>true</code>
+Once <strong>ON/RAMP</strong> is ready to commit the payment, it will call back merchant to confirm. <strong>It is only at this point
+when the user transaction should be consider done and be debited at merchant&#39;s side</strong>. If the merchant was able to
+debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
+debit the user, it should answer with an http 204 status code (this will cancel the user payment, expiring his
+invoice link). <strong>Any other status code</strong> but 200 or 204 <strong>will be treated as an internal error from the merchant side</strong>,
+pausing the user payment and prompting manual intervention, potentially delaying the process several hours.</p>
+
+<p>Confirmation callback will be done with the following JSON payload:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"52e81f50-4bf1-4970-8c53-abe2228e2d5e"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a49c1dee-42b2-427a-a493-8b6e30fab42b"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET, either for <code>payment_ack_url</code> or <code>cancel_url</code>.</p>
+</blockquote>
+<h3 id='status-callback'>Status callback</h3>
+<p>In order to receive status callbacks for an operation, a <code>callback_url</code> should be provided in the request. <strong>ON/RAMP</strong> will call back the merchant with the following JSON payload:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10e35c16-3ff8-4238-b5b5-34b4da9b4115"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"timestamp_utc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+        </span><span class="nl">"completed"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>The <code>status</code> field can have the following values:
+    - <code>completed</code>: The payment has been succesfully completed.</p>
 
       </div>
       <div class="dark-box">
