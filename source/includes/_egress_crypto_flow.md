@@ -180,9 +180,9 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
 
 ### Confirmation callback
 
-If merchant is willing to addtionaly confirm the operation, then:
+If merchant is willing to additionally confirm the operation, then:
   - a callback url should be provided in the `ack_callback` field
-  - `require_confirmation` field can also be excplisitly set to `true` or simply omitted from the request which will result in application of default value whish is `true`
+  - `require_confirmation` field can also be explicitly set to `true` or simply omitted from the request which will result in application of default value whish is `true`
 Once **ON/RAMP** is ready to commit the payment, it will call back merchant to confirm. **It is only at this point
 when the user transaction should be consider done and be debited at merchant's side**. If the merchant was able to
 debit the user, then it should answer the callback with an http 200 status code; if the merchant was unable to
@@ -205,7 +205,7 @@ Confirmation callback will be done with the following JSON payload:
 
 ### Status callback
 
-In ordre to receive status callbacks for an operation, a `callback_url` should be provided in the request. **ON/RAMP** will call back the merchant with the following JSON payload:
+In order to receive status callbacks for an operation, a `callback_url` should be provided in the request. **ON/RAMP** will call back the merchant with the following JSON payload:
 
 ```json
 {
