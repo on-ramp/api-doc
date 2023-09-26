@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4.16</title>
+    <title>ON/RAMP payment API v1.4.17</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.4.16</span>
+        <span class="toc-link">API v1.4.17</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -445,6 +445,14 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#fiat-to-crypto-flow" class="toc-h1 toc-link" data-title="Fiat to Crypto flow">Fiat to Crypto flow</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#create-fiat-to-crypto-invoice" class="toc-h2 toc-link" data-title="Create Fiat to Crypto Invoice">Create Fiat to Crypto Invoice</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
     </div>
     <div class="page-wrapper">
@@ -463,6 +471,12 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4.17:</p>
+
+<ul>
+<li>Added new Fiat to Crypto Flow</li>
+</ul>
+
 <p>Changes since v1.4.16:</p>
 
 <ul>
@@ -4321,6 +4335,483 @@ pausing the user payment and prompting manual intervention, potentially delaying
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
+<p>The <code>status</code> field can have the following values:
+    - <code>completed</code>: The payment has been succesfully completed.</p>
+<h1 id='fiat-to-crypto-flow'>Fiat to Crypto flow</h1>
+<p>This section describes the endpoints used in the fiat to crypto flow. </p>
+<h2 id='create-fiat-to-crypto-invoice'>Create Fiat to Crypto Invoice</h2>
+<blockquote>
+<p>Example Call</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/rpc/create_fiat_to_crypto_invoice'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "fiat_amount": 3000,
+    "fiat_currency": "EUR",
+    "callback_url": "https://www.example.com",
+    "timeout_in_sec": 3600,
+    "offer_skin": {
+        "title": "The Nice Merchant",
+        "image": "https://static.example.com/merchant-logo",
+        "description": "Awesome green Pluff with handler"
+    },
+    "billing_details": {
+        "payer_email": "example@example.com",
+        "payer_first_name": "John",
+        "payer_last_name": "Doe",
+        "payer_phone": "0034666444446",
+        "birth_date": "1980-11-24 00:00:00.000000+00",
+        "street": "Main Street",
+        "unit": "Floor 7 12B",
+        "postal_code": "0000001",
+        "city": "Big Town",
+        "county": "Your County",
+        "state": "CA",
+        "prefecture": "Prefecture-ku",
+        "country": "GBR",
+        "kyc_verified": "2020-01-01 12:45:00.000000+00",
+        "kyc_document": "Passport",
+        "kyc_reference": "25177aa2-d848-846d-226c-97ec3096f5fe",
+        "address_verified": "2020-01-01 12:55:00.000000+00",
+        "address_doc_reference": "3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf",
+        "player_level": "New",
+        "member_since": "2020-01-01 12:35:00.000000+00",
+        "merchant_customer_id": "u2340112"
+    },
+    "card_number": "4929421234600821",
+    "card_expiry_date": "2030-12-01",
+    "card_cvv": "356",
+    "card_holder_first_name": "John",
+    "card_holder_last_name": "Doe",
+    "card_type": "VISA",
+    "order_id": "order-1234",
+    "first_time": true,
+    "is_banking": false,
+    "crypto_data": {
+        "currency": "BTC",
+        "address": "1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"
+    }
+}'</span>
+</code></pre></div>
+<blockquote>
+<p>Request JSON Body</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"callback_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice Merchant"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"image"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://static.example.com/merchant-logo"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Awesome green Pluff with handler"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"payer_phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0034666444446"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"birth_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1980-11-24 00:00:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"street"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Main Street"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"unit"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Floor 7 12B"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"postal_code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0000001"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"city"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Big Town"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"county"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Your County"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CA"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"prefecture"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Prefecture-ku"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBR"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_document"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Passport"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"kyc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"25177aa2-d848-846d-226c-97ec3096f5fe"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_verified"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:55:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address_doc_reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3sdffdss-4mgo-44gfd-34dx-r34rfdfs4gf"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"player_level"</span><span class="p">:</span><span class="w"> </span><span class="s2">"New"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"member_since"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:35:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"merchant_customer_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"u2340112"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"card_number"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4929421234600821"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_expiry_date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2030-12-01"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_cvv"</span><span class="p">:</span><span class="w"> </span><span class="s2">"356"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_holder_first_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"John"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_holder_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"card_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VISA"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order-1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"first_time"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"is_banking"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"crypto_data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>Response JSON</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"invoice_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://wallet.onramp.ltd/ingressing?reference=a3076265-138d-4be6-89fb-d50427adaf4e"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"invoice_url_qr"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://api.onramp.ltd/qr_encode/68747470733a2f2f73746167652d77616c6c65742e6f6e72616d702e6c74642f656772657373696e673f7265666572656e63653d38303061343437382d393832322d343561382d616239302d323637306665393262343933"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
+<aside class="success"><b><code> POST /rpc/create_fiat_to_crypto_invoice </code></b></aside>
+<h3 id='request-json-fields'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Amount to be paid denominated in cents .</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>String</td>
+<td>Currency identifier following the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217 standard</a>. Valid values are <code>&quot;EUR&quot;</code> or <code>&quot;USD&quot;</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>callback_url</td>
+<td>Url</td>
+<td>Callback to receive status updates. It should be a complete, well formed, url.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>timeout_in_sec</td>
+<td>Integer</td>
+<td>When to expire the link if unused.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>offer_skin</td>
+<td>Ingress Skin</td>
+<td>Specify how the offer should be displayed to the user.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>billing_details</td>
+<td>Billing Details</td>
+<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>cancel_callback</td>
+<td>Url</td>
+<td>Merchant callback endpoint to be called when an ingress payment couldn&#39;t be completed.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>card_number</td>
+<td>String</td>
+<td>Credit card number to be used to attempt the payment. If not sent, no credit card details will be prefilled. <strong>Not needed for bank payments</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>card_expiry_date</td>
+<td>String</td>
+<td>Credit card expiry date to be used to attempt the payment. <strong>Not needed for bank payments</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>card_cvv</td>
+<td>String</td>
+<td>Credit card CVV to be used to attempt the payment. <strong>Not needed for bank payments</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>card_holder_first_name</td>
+<td>String</td>
+<td>Credit card cardholder first name to be used to attempt the payment. <strong>Not needed for bank payments</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>card_holder_last_name</td>
+<td>String</td>
+<td>Credit card cardholder last name to attempt the payment. <strong>Not needed for bank payments</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>card_type</td>
+<td>String</td>
+<td>Credit card type to be used to attempt the payment. Please consult our integration team for supported values before using this parameter. <strong>Not needed for bank payments</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>order_id</td>
+<td>String</td>
+<td>Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>first_time</td>
+<td>Boolean</td>
+<td>Whether the invoice is for a first time deposit.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>is_banking</td>
+<td>Boolean</td>
+<td>Whether the invoice should go via bank payments solution. Deafult is <code>false</code>.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>crypto_data</td>
+<td>Crypto Data</td>
+<td>Object containing crypto data.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='ingress-skin'>Ingress Skin</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>title</td>
+<td>String</td>
+<td>Short string containing merchant&#39;s or product&#39;s name.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>image</td>
+<td>Url</td>
+<td>image to stylize the offer.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>description</td>
+<td>String</td>
+<td>A text explaining what the user is purchasing.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='billing-details'>Billing Details</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>payer_email</td>
+<td>Email</td>
+<td>Email of the user making the payment.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>payer_first_name</td>
+<td>String</td>
+<td>First name of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>payer_last_name</td>
+<td>String</td>
+<td>Last name of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>payer_phone</td>
+<td>String</td>
+<td>Including country code, without spaces or separators.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>birth_date</td>
+<td>Date</td>
+<td>Date of birth of the user making the payment.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>street</td>
+<td>String</td>
+<td>Street from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>unit</td>
+<td>String</td>
+<td>Unit from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>postal_code</td>
+<td>String</td>
+<td>Postal code from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>city</td>
+<td>String</td>
+<td>City from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>county</td>
+<td>String</td>
+<td>County from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>state</td>
+<td>String</td>
+<td>State from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>prefecture</td>
+<td>String</td>
+<td>Prefecture from the billing address.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>country</td>
+<td>String</td>
+<td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>kyc_verified</td>
+<td>Date</td>
+<td>Date when the user was KYC verified. <strong>Important: Please check section below.</strong></td>
+<td>No</td>
+</tr>
+<tr>
+<td>kyc_document</td>
+<td>String</td>
+<td>Type of the document. Some examples would be Passport or National_ID.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>kyc_reference</td>
+<td>String</td>
+<td>A unique id of the KYC verification. Something like a UUID.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>address_verified</td>
+<td>Date</td>
+<td>Date when the address was verified.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>address_doc_reference</td>
+<td>String</td>
+<td>A unique id of the address document reference.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>player_level</td>
+<td>String</td>
+<td>Your internal player level. Something like New, Normal, VIP, ...</td>
+<td>No</td>
+</tr>
+<tr>
+<td>member_since</td>
+<td>Date</td>
+<td>The date since that user is a member of yours.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>merchant_customer_id</td>
+<td>String</td>
+<td>The merchant customer id.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='crypto-data'>Crypto Data</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>String</td>
+<td>Currency identifier following the <a href="https://en.wikipedia.org/wiki/ISO_4217">ISO 4217 standard</a>. Valid values are <code>&quot;BTC&quot;</code> or <code>&quot;ETH&quot;</code>.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>address</td>
+<td>String</td>
+<td>Blockchain address to transfer funds to.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='response-json-fields'>Response JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s Invoice Identifier.</td>
+</tr>
+<tr>
+<td>invoice_url</td>
+<td>Url</td>
+<td>Url where to redirect user.</td>
+</tr>
+<tr>
+<td>invoice_url_qr</td>
+<td>Url</td>
+<td>Source Url for an image with QR-encoded <code>invoice_url</code></td>
+</tr>
+</tbody></table>
+<h3 id='verified-vs-unverified-traffic'>Verified vs Unverified traffic</h3>
+<p><strong>One of the most important things to be defined when communicating with the ON/RAMP API is if the traffic you are sending is verified or unverified.</strong></p>
+
+<p>In order to let us know if that specific user you are sending us for a transaction has been KYC verified is to send a valid date on the <code>kyc_verified</code> parameter inside the <code>billing_details</code> object.</p>
+
+<p>So the 2 potential cases are:</p>
+
+<ul>
+<li><p>Verified traffic</p>
+
+<ul>
+<li>You need to send us the <code>kyc_verified</code> parameter with a valid date.</li>
+</ul></li>
+<li><p>Unverified traffic</p>
+
+<ul>
+<li>You can either not send the <code>kyc_verified</code> parameter or send it with a <code>null</code> value.</li>
+</ul></li>
+</ul>
+<h3 id='status-callback'>Status callback</h3>
+<p>In order to receive status callbacks for an operation, a <code>callback_url</code> should be provided in the request. <strong>ON/RAMP</strong> will call back the merchant with the following JSON payload:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10e35c16-3ff8-4238-b5b5-34b4da9b4115"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"timestamp_utc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> 
+        </span><span class="nl">"completed"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<blockquote>
+<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET.</p>
+</blockquote>
+
 <p>The <code>status</code> field can have the following values:
     - <code>completed</code>: The payment has been succesfully completed.</p>
 
