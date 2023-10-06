@@ -7,12 +7,14 @@ This section describes the endpoints used in the fiat to crypto flow.
 > Example Call
 
 ```shell
-curl -X POST 'https://api.onramp.ltd/rpc/create_fiat_to_crypto_invoice' \
+curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 -H 'Content-Type: application/json' \
 -H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
     "fiat_amount": 3000,
     "fiat_currency": "EUR",
+    "payment_ack_url": "https://www.example.com",
+    "user_redirect_url": "https://www.example.com?user_redirected",
     "callback_url": "https://www.example.com",
     "timeout_in_sec": 3600,
     "offer_skin": {
