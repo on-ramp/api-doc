@@ -65,6 +65,7 @@ curl -X POST 'https://api.onramp.ltd/s2s/create_operation' \
     "user_redirect_url": "https://example.com/user/deposits",
     "customer_id": "ffeeddcc-bbaa-9988-7766-554433221100",
     "session_id": "00112233-4455-6677-8899-aabbccddeeff",
+    "first_time": false,
     "card_details": {
         "card_number": "4242424242424242",
         "card_expiry_month": "12",
@@ -133,6 +134,12 @@ curl -X POST 'https://api.onramp.ltd/s2s/create_operation' \
     <td colspan=2>Unique ID of users browsing session</td>
     <td colspan=2>String</td>
     <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>first_time</td>
+    <td colspan=2>Whether the invoice is for a first time deposit.</td>
+    <td colspan=2>Boolean</td>
+    <td colspan=2>No</td>
   </tr>
   <tr>
     <td colspan=2>card_details</td>
@@ -636,7 +643,6 @@ out of order, therefore we recommend checking the `date` field to detect these a
     <td></td>
     <td>Object</td>
   </tr>
-
 
 </table>
 

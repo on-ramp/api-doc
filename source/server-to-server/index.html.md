@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.18
+title: ON/RAMP payment API v1.4.19
 
-version: 1.4.18
+version: 1.4.19
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,11 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.19:
+
+- Add `first_time` parameter to S2S
+
 Changes since v1.4.18:
 
 - Update Fiat to Crypto Flow
