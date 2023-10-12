@@ -127,7 +127,7 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 
 ### HTTP Request
 
-<aside class="success"><b><code> POST /rpc/create_fiat_to_crypto_invoice </code></b></aside>
+<aside class="success"><b><code> POST /exchange/fiat/crypto/invoice/new </code></b></aside>
 
 ### Request JSON Fields
 
