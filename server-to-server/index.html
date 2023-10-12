@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4.17</title>
+    <title>ON/RAMP payment API v1.4.19</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="../images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.4.17</span>
+        <span class="toc-link">API v1.4.19</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -384,6 +384,18 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/s2s</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4.19:</p>
+
+<ul>
+<li>Add <code>first_time</code> parameter to S2S</li>
+</ul>
+
+<p>Changes since v1.4.18:</p>
+
+<ul>
+<li>Update Fiat to Crypto Flow</li>
+</ul>
+
 <p>Changes since v1.4.17:</p>
 
 <ul>
@@ -577,6 +589,7 @@ Operation has been cancelled.</li>
     "user_redirect_url": "https://example.com/user/deposits",
     "customer_id": "ffeeddcc-bbaa-9988-7766-554433221100",
     "session_id": "00112233-4455-6677-8899-aabbccddeeff",
+    "first_time": false,
     "card_details": {
         "card_number": "4242424242424242",
         "card_expiry_month": "12",
@@ -642,6 +655,12 @@ Operation has been cancelled.</li>
     <td colspan=2>Unique ID of users browsing session</td>
     <td colspan=2>String</td>
     <td colspan=2>Always</td>
+  </tr>
+  <tr>
+    <td colspan=2>first_time</td>
+    <td colspan=2>Whether the invoice is for a first time deposit.</td>
+    <td colspan=2>Boolean</td>
+    <td colspan=2>No</td>
   </tr>
   <tr>
     <td colspan=2>card_details</td>
@@ -1145,7 +1164,6 @@ out of order, therefore we recommend checking the <code>date</code> field to det
     <td></td>
     <td>Object</td>
   </tr>
-
 
 </table>
 <h3 id='response-2'>Response</h3>
