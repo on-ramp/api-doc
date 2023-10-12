@@ -52,7 +52,7 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
     "card_holder_last_name": "Doe",
     "card_type": "VISA",
     "order_id": "order-1234",
-    "first_time": true,
+    "first_time": false,
     "is_banking": false,
     "crypto_data": {
         "currency": "BTC",
