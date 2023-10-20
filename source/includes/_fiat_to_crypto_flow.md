@@ -229,6 +229,9 @@ Once transfer is completed, we will do a completion callback to the merchant. Me
 ```json
 {
   "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
-  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2"
+  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
+  "crypto_transfer": {
+      "tx_hash": "d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"
+    }
 }
 ```
