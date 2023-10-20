@@ -13,8 +13,6 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 -d '{
     "fiat_amount": 3000,
     "fiat_currency": "EUR",
-    "payment_ack_url": "https://www.example.com",
-    "user_redirect_url": "https://www.example.com?user_redirected",
     "callback_url": "https://www.example.com",
     "timeout_in_sec": 3600,
     "offer_skin": {
