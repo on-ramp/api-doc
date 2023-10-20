@@ -451,6 +451,9 @@
                   <li>
                     <a href="#create-fiat-to-crypto-invoice" class="toc-h2 toc-link" data-title="Create Fiat to Crypto Invoice">Create Fiat to Crypto Invoice</a>
                   </li>
+                  <li>
+                    <a href="#notification-of-successful-transaction" class="toc-h2 toc-link" data-title="Notification of successful transaction">Notification of successful transaction</a>
+                  </li>
               </ul>
           </li>
       </ul>
@@ -3499,7 +3502,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 }'</span>
 </code></pre></div>
 <blockquote>
-<p>Request</p>
+<p>Request JSON Body</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11111111-1111-1111-1111-111111111111"</span><span class="p">,</span><span class="w">
@@ -4356,7 +4359,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <p>The <code>status</code> field can have the following values:
     - <code>completed</code>: The payment has been succesfully completed.</p>
 <h1 id='fiat-to-crypto-flow'>Fiat to Crypto flow</h1>
-<p>This section describes the endpoints used in the fiat to crypto flow. </p>
+<p>This section describes the endpoints used in the fiat to crypto flow.</p>
 <h2 id='create-fiat-to-crypto-invoice'>Create Fiat to Crypto Invoice</h2>
 <blockquote>
 <p>Example Call</p>
@@ -4367,8 +4370,6 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <span class="nt">-d</span> <span class="s1">'{
     "fiat_amount": 3000,
     "fiat_currency": "EUR",
-    "payment_ack_url": "https://www.example.com",
-    "user_redirect_url": "https://www.example.com?user_redirected",
     "callback_url": "https://www.example.com",
     "timeout_in_sec": 3600,
     "offer_skin": {
@@ -4818,22 +4819,72 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <li>You can either not send the <code>kyc_verified</code> parameter or send it with a <code>null</code> value.</li>
 </ul></li>
 </ul>
-<h3 id='completion-callback'>Completion Callback</h3>
-<p>Once transfer is completed, we will do a completion callback to the merchant. Merchant should answer the callback with an http 200 status code.</p>
+<h2 id='notification-of-successful-transaction'>Notification of successful transaction</h2>
+<p>A URL provided by the merchant in a previous request (see <code>callback_url</code> and <code>cancel_callback</code> in <a href="#create-fiat-to-crypto-invoice">Create fiat to crypto invoice</a>) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, <code>callback_url</code> will be used, while <code>cancel_callback</code> will be used when the transaction cannot be completed.</p>
+
+<p>The merchant is expected to respond with 200 status code.</p>
+
+<aside class="success"><b><code>POST callback_url</code></b></aside>
 
 <blockquote>
-<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET, either for <code>payment_ack_url</code> or <code>cancel_url</code>.</p>
-
+<p>Example cURL</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>
+curl <span class="nt">-X</span> POST callback_url <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
+    "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
+    "crypto_transfer": {
+        "tx_hash": "d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"
+    }
+}'</span>
+</code></pre></div>
+<blockquote>
 <p>Request JSON Body</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ac400127-93a9-4b9c-9612-c23a3c078933"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"crypto_transfer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"tx_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"</span><span class="w">
-    </span><span class="p">}</span><span class="w">
+    </span><span class="nl">"tx_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div>
+</span></code></pre></div><h3 id='request-json-fields-2'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>reference</td>
+<td>String</td>
+<td>Reference identifier for the notification.</td>
+</tr>
+<tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Internal <strong>ON/RAMP</strong>&#39;s invoice identifier.</td>
+</tr>
+<tr>
+<td>crypto_transfer</td>
+<td>Status</td>
+<td>Contains <code>tx_hash</code> field whose value is the network transaction hash.  Not available in <code>cancel_callback</code></td>
+</tr>
+</tbody></table>
+<h3 id='expected-response'>Expected Response</h3>
+<table><thead>
+<tr>
+<th>Status</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>200</td>
+</tr>
+</tbody></table>
+
       </div>
       <div class="dark-box">
           <div class="lang-selector">
