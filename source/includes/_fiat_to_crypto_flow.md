@@ -217,7 +217,9 @@ So the 2 potential cases are:
 
 ## Notification of successful transaction
 
-A URL provided by the merchant in a previous request (see `callback_url` and `cancel_callback` in [Create fiat to crypto invoice](#create-fiat-to-crypto-invoice)) will be used to send a notification request once the transaction has been confirmed.  The merchant is expected to respond with 200 status code.
+A URL provided by the merchant in a previous request (see `callback_url` and `cancel_callback` in [Create fiat to crypto invoice](#create-fiat-to-crypto-invoice)) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, `callback_url` will be used, while `cancel_callback` will be used when the transaction cannot be completed.
+
+The merchant is expected to respond with 200 status code.
 
 <aside class="success"><b><code>POST callback_url</code></b></aside>
 
@@ -250,11 +252,11 @@ curl -X POST callback_url \
 
 ### Request JSON Fields
 
-| Field           | Type   | Description                                                           |
-| ----------------| -------| ----------------------------------------------------------------------|
-| reference       | String | Reference identifier for the notification.                            |
-| invoice_id      | String | Internal **ON/RAMP**'s invoice identifier.                            |
-| crypto_transfer | Status | Contains "tx_hash" field whose value is the network transaction hash. |
+| Field           | Type   | Description                                                                                               |
+| ----------------| -------| ----------------------------------------------------------------------------------------------------------|
+| reference       | String | Reference identifier for the notification.                                                                |
+| invoice_id      | String | Internal **ON/RAMP**'s invoice identifier.                                                                |
+| crypto_transfer | Status | Contains `tx_hash` field whose value is the network transaction hash.  Not available in `cancel_callback` |
 
 
 ### Expected Response
