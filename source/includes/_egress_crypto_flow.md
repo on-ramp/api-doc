@@ -10,7 +10,7 @@ This section describes the endpoints used in the egress crypto flow.
 
 
 ```shell
-curl -X GET 'https://api.onramp.ltd/s2s/egress/quotes' \
+curl -X POST 'https://api.onramp.ltd/s2s/egress/quotes' \
 -H 'Content-Type: application/json' \
 -H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
