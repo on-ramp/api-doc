@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4.19</title>
+    <title>ON/RAMP payment API v1.4.20</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -300,7 +300,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-86952380.png" class="logo" alt="" />
-        <span class="toc-link">API v1.4.19</span>
+        <span class="toc-link">API v1.4.20</span>
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
         </div>
@@ -471,6 +471,12 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4.20:</p>
+
+<ul>
+<li>Update callback payload for fiat to crypto flow</li>
+</ul>
+
 <p>Changes since v1.4.19:</p>
 
 <ul>
@@ -4812,23 +4818,22 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <li>You can either not send the <code>kyc_verified</code> parameter or send it with a <code>null</code> value.</li>
 </ul></li>
 </ul>
-<h3 id='status-callback'>Status callback</h3>
-<p>In order to receive status callbacks for an operation, a <code>callback_url</code> should be provided in the request. <strong>ON/RAMP</strong> will call back the merchant with the following JSON payload:</p>
+<h3 id='completion-callback'>Completion Callback</h3>
+<p>Once transfer is completed, we will do a completion callback to the merchant. Merchant should answer the callback with an http 200 status code.</p>
+
+<blockquote>
+<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET, either for <code>payment_ack_url</code> or <code>cancel_url</code>.</p>
+
+<p>Request JSON Body</p>
+</blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-    </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10e35c16-3ff8-4238-b5b5-34b4da9b4115"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"timestamp_utc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-01-01 12:45:00.000000+00"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> 
-        </span><span class="nl">"completed"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span><span class="w">
+  </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ac400127-93a9-4b9c-9612-c23a3c078933"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"62b570e8-9723-4287-a5a8-e825c2ffced2"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"crypto_transfer"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"tx_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<blockquote>
-<p>IMPORTANT: This callback is going to be done with <strong>HTTP POST</strong> method and not with GET.</p>
-</blockquote>
-
-<p>The <code>status</code> field can have the following values:
-    - <code>completed</code>: The payment has been succesfully completed.</p>
-
       </div>
       <div class="dark-box">
           <div class="lang-selector">
