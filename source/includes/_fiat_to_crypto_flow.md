@@ -1,6 +1,6 @@
 # Fiat to Crypto flow
 
-This section describes the endpoints used in the fiat to crypto flow. 
+This section describes the endpoints used in the fiat to crypto flow.
 
 ## Create Fiat to Crypto Invoice
 
@@ -13,8 +13,6 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 -d '{
     "fiat_amount": 3000,
     "fiat_currency": "EUR",
-    "payment_ack_url": "https://www.example.com",
-    "user_redirect_url": "https://www.example.com?user_redirected",
     "callback_url": "https://www.example.com",
     "timeout_in_sec": 3600,
     "offer_skin": {
@@ -216,13 +214,29 @@ So the 2 potential cases are:
 - Unverified traffic
 
   - You can either not send the `kyc_verified` parameter or send it with a `null` value.
-  
 
-### Completion Callback
+## Notification of successful transaction
 
-Once transfer is completed, we will do a completion callback to the merchant. Merchant should answer the callback with an http 200 status code.
+A URL provided by the merchant in a previous request (see `callback_url` and `cancel_callback` in [Create fiat to crypto invoice](#create-fiat-to-crypto-invoice)) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, `callback_url` will be used, while `cancel_callback` will be used when the transaction cannot be completed.
 
-> IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET, either for `payment_ack_url` or `cancel_url`.
+The merchant is expected to respond with 200 status code.
+
+<aside class="success"><b><code>POST callback_url</code></b></aside>
+
+> Example cURL
+
+```shell
+
+curl -X POST callback_url \
+-H 'Content-Type: application/json' \
+-d '{
+    "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
+    "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
+    "crypto_transfer": {
+        "tx_hash": "d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"
+    }
+}'
+```
 
 > Request JSON Body
 
@@ -231,7 +245,22 @@ Once transfer is completed, we will do a completion callback to the merchant. Me
   "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
   "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
   "crypto_transfer": {
-      "tx_hash": "d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"
-    }
+    "tx_hash": "d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"
+  }
 }
 ```
+
+### Request JSON Fields
+
+| Field           | Type   | Description                                                                                               |
+| ----------------| -------| ----------------------------------------------------------------------------------------------------------|
+| reference       | String | Reference identifier for the notification.                                                                |
+| invoice_id      | String | Internal **ON/RAMP**'s invoice identifier.                                                                |
+| crypto_transfer | Status | Contains `tx_hash` field whose value is the network transaction hash.  Not available in `cancel_callback` |
+
+
+### Expected Response
+
+| Status |
+| ------ |
+| 200    |

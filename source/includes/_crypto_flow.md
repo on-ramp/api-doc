@@ -247,7 +247,7 @@ curl -X POST notify_new_funds_url \
 }'
 ```
 
-> Request
+> Request JSON Body
 
 ```json
 {
