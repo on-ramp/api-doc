@@ -216,23 +216,22 @@ So the 2 potential cases are:
 - Unverified traffic
 
   - You can either not send the `kyc_verified` parameter or send it with a `null` value.
+  
 
+### Completion Callback
 
-### Status callback
+Once transfer is completed, we will do a completion callback to the merchant. Merchant should answer the callback with an http 200 status code.
 
-In order to receive status callbacks for an operation, a `callback_url` should be provided in the request. **ON/RAMP** will call back the merchant with the following JSON payload:
+> IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET, either for `payment_ack_url` or `cancel_url`.
+
+> Request JSON Body
 
 ```json
 {
-    "invoice_id": "10e35c16-3ff8-4238-b5b5-34b4da9b4115",
-    "timestamp_utc": "2020-01-01 12:45:00.000000+00",
-    "status": { 
-        "completed": {}
+  "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
+  "invoice_id": "62b570e8-9723-4287-a5a8-e825c2ffced2",
+  "crypto_transfer": {
+      "tx_hash": "d9d1449edaaba0f1a831c3e63406fbaa2a0146e024dd582ba6beb18c96fa5cb1"
     }
 }
 ```
-
-> IMPORTANT: This callback is going to be done with **HTTP POST** method and not with GET.
-
-The `status` field can have the following values:
-    - `completed`: The payment has been succesfully completed.
