@@ -3913,7 +3913,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <blockquote>
 <p>Example cURL request</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s1">'https://api.onramp.ltd/s2s/egress/quotes'</span> <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/s2s/egress/quotes'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
 <span class="nt">-d</span> <span class="s1">'{
@@ -4370,7 +4370,10 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <span class="nt">-d</span> <span class="s1">'{
     "fiat_amount": 3000,
     "fiat_currency": "EUR",
-    "callback_url": "https://www.example.com",
+    "payment_ack_url": "https://www.example.com/ack",
+    "user_redirect_url": "https://www.example.com?user_redirected",
+    "cancel_callback": "https://www.example.com/cancel",
+    "callback_url": "https://www.example.com/status",
     "timeout_in_sec": 3600,
     "offer_skin": {
         "title": "The Nice Merchant",
@@ -4421,7 +4424,10 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"fiat_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w">
   </span><span class="nl">"fiat_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"callback_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com/ack"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"user_redirect_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com?user_redirected"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"cancel_callback"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com/cancel"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"callback_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://www.example.com/status"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
   </span><span class="nl">"offer_skin"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"title"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The Nice Merchant"</span><span class="p">,</span><span class="w">
@@ -4500,9 +4506,27 @@ pausing the user payment and prompting manual intervention, potentially delaying
 <td>Yes</td>
 </tr>
 <tr>
+<td>payment_ack_url</td>
+<td>Url</td>
+<td>Merchant callback endpoint to receive successful transaction completion notification. It should be a complete, well formed, url.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>user_redirect_url</td>
+<td>Url</td>
+<td>Where to redirect the user after a successful payment. It should be a complete, well formed, url.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>cancel_callback</td>
+<td>Url</td>
+<td>Merchant callback endpoint to be called when transaction couldn&#39;t be completed. It should be a complete, well formed, url.</td>
+<td>No</td>
+</tr>
+<tr>
 <td>callback_url</td>
 <td>Url</td>
-<td>Callback to receive status updates. It should be a complete, well formed, url.</td>
+<td>Callback endpoint to receive status updates. It should be a complete, well formed, url.</td>
 <td>No</td>
 </tr>
 <tr>
@@ -4820,17 +4844,17 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </ul></li>
 </ul>
 <h2 id='notification-of-successful-transaction'>Notification of successful transaction</h2>
-<p>A URL provided by the merchant in a previous request (see <code>callback_url</code> and <code>cancel_callback</code> in <a href="#create-fiat-to-crypto-invoice">Create fiat to crypto invoice</a>) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, <code>callback_url</code> will be used, while <code>cancel_callback</code> will be used when the transaction cannot be completed.</p>
+<p>A URL provided by the merchant in a previous request (see <code>payment_ack_url</code> and <code>cancel_callback</code> in <a href="#create-fiat-to-crypto-invoice">Create fiat to crypto invoice</a>) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, <code>payment_ack_url</code> will be used, while <code>cancel_callback</code> will be used when the transaction cannot be completed.</p>
 
 <p>The merchant is expected to respond with 200 status code.</p>
 
-<aside class="success"><b><code>POST callback_url</code></b></aside>
+<aside class="success"><b><code>POST payment_ack_url</code></b></aside>
 
 <blockquote>
 <p>Example cURL</p>
 </blockquote>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>
-curl <span class="nt">-X</span> POST callback_url <span class="se">\</span>
+curl <span class="nt">-X</span> POST payment_ack_url <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">-d</span> <span class="s1">'{
     "reference": "ac400127-93a9-4b9c-9612-c23a3c078933",
