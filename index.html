@@ -4052,7 +4052,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
     "offer_data" : { 
       "crypto_data": {
         "currency": "BTC",
-        "address": "1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"
+        "address": "bc1qu3jehtyxksk6mxqw2r3tug6dda2w9hxm7ehwns"
         }
     },
     "require_confirmation": true,
@@ -4414,7 +4414,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
     "is_banking": false,
     "crypto_data": {
         "currency": "BTC",
-        "address": "1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"
+        "address": "bc1qu3jehtyxksk6mxqw2r3tug6dda2w9hxm7ehwns"
     }
 }'</span>
 </code></pre></div>
@@ -4468,7 +4468,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
   </span><span class="nl">"is_banking"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
   </span><span class="nl">"crypto_data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"</span><span class="w">
+    </span><span class="nl">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bc1qu3jehtyxksk6mxqw2r3tug6dda2w9hxm7ehwns"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
@@ -4844,7 +4844,7 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </ul></li>
 </ul>
 <h2 id='notification-of-successful-transaction'>Notification of successful transaction</h2>
-<p>A URL provided by the merchant in a previous request (see <code>payment_ack_url</code> and <code>cancel_callback</code> in <a href="#create-fiat-to-crypto-invoice">Create fiat to crypto invoice</a>) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, <code>payment_ack_url</code> will be used, while <code>cancel_callback</code> will be used when the transaction cannot be completed.</p>
+<p>A URL provided by the merchant in a previous request (see <code>payment_ack_url</code> and <code>cancel_callback</code> in <a href="#create-fiat-to-crypto-invoice">Create fiat to crypto invoice</a>) will be used to send a notification request once the transaction result has been confirmed. If the transaction is successful, <code>payment_ack_url</code> will be used, while <code>cancel_callback</code> will be used when the transaction cannot be completed.</p>
 
 <p>The merchant is expected to respond with 200 status code.</p>
 
@@ -4895,7 +4895,7 @@ curl <span class="nt">-X</span> POST payment_ack_url <span class="se">\</span>
 <tr>
 <td>crypto_transfer</td>
 <td>Status</td>
-<td>Contains <code>tx_hash</code> field whose value is the network transaction hash.  Not available in <code>cancel_callback</code></td>
+<td>Contains <code>tx_hash</code> field whose value is the network transaction hash. Not available in <code>cancel_callback</code></td>
 </tr>
 </tbody></table>
 <h3 id='expected-response'>Expected Response</h3>
