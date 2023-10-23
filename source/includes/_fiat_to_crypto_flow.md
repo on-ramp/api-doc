@@ -57,7 +57,7 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
     "is_banking": false,
     "crypto_data": {
         "currency": "BTC",
-        "address": "1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"
+        "address": "bc1qu3jehtyxksk6mxqw2r3tug6dda2w9hxm7ehwns"
     }
 }'
 ```
@@ -112,7 +112,7 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
   "is_banking": false,
   "crypto_data": {
     "currency": "BTC",
-    "address": "1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"
+    "address": "bc1qu3jehtyxksk6mxqw2r3tug6dda2w9hxm7ehwns"
   }
 }
 ```
@@ -139,10 +139,10 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 | ---------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | fiat_amount            | Integer         | Amount to be paid denominated in cents .                                                                                                                                   | Yes      |
 | fiat_currency          | String          | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"EUR"` or `"USD"`.                                        | Yes      |
-| payment_ack_url        | Url             | Merchant callback endpoint to receive successful transaction completion notification. It should be a complete, well formed, url.                                                                      | Yes      |
-| user_redirect_url      | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                                                      | Yes      |
-| cancel_callback        | Url             | Merchant callback endpoint to be called when transaction couldn't be completed. It should be a complete, well formed, url.                                                                      | No      |
-| callback_url           | Url             | Callback endpoint to receive status updates. It should be a complete, well formed, url.                                                                      | No      |
+| payment_ack_url        | Url             | Merchant callback endpoint to receive successful transaction completion notification. It should be a complete, well formed, url.                                           | Yes      |
+| user_redirect_url      | Url             | Where to redirect the user after a successful payment. It should be a complete, well formed, url.                                                                          | Yes      |
+| cancel_callback        | Url             | Merchant callback endpoint to be called when transaction couldn't be completed. It should be a complete, well formed, url.                                                 | No       |
+| callback_url           | Url             | Callback endpoint to receive status updates. It should be a complete, well formed, url.                                                                                    | No       |
 | timeout_in_sec         | Integer         | When to expire the link if unused.                                                                                                                                         | Yes      |
 | offer_skin             | Ingress Skin    | Specify how the offer should be displayed to the user.                                                                                                                     | Yes      |
 | billing_details        | Billing Details | User billing details. Please, notice how **not** all parameters inside this json object are required except `merchant_customer_id`.                                        | Yes      |
@@ -154,8 +154,8 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 | card_holder_last_name  | String          | Credit card cardholder last name to attempt the payment. **Not needed for bank payments**                                                                                  | No       |
 | card_type              | String          | Credit card type to be used to attempt the payment. Please consult our integration team for supported values before using this parameter. **Not needed for bank payments** | No       |
 | order_id               | String          | Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.                                                                              | No       |
-| first_time             | Boolean         | Whether the invoice is for a first time deposit.                                | No       |
-| is_banking             | Boolean         | Whether the invoice should go via bank payments solution. Deafult is `false`.                               | No       |
+| first_time             | Boolean         | Whether the invoice is for a first time deposit.                                                                                                                           | No       |
+| is_banking             | Boolean         | Whether the invoice should go via bank payments solution. Deafult is `false`.                                                                                              | No       |
 | crypto_data            | Crypto Data     | Object containing crypto data.                                                                                                                                             | Yes      |
 
 ### Ingress Skin
@@ -194,11 +194,10 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 
 ### Crypto Data
 
-| Field    | Type   | Description                                                                 | Required |
-| -------- | ------ | --------------------------------------------------------------------------- | -------- |
+| Field    | Type   | Description                                                                                                                         | Required |
+| -------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | currency | String | Currency identifier following the [ISO 4217 standard](https://en.wikipedia.org/wiki/ISO_4217). Valid values are `"BTC"` or `"ETH"`. | Yes      |
-| address  | String | Blockchain address to transfer funds to.                                     | Yes      |
-
+| address  | String | Blockchain address to transfer funds to.                                                                                            | Yes      |
 
 ### Response JSON Fields
 
@@ -226,7 +225,7 @@ So the 2 potential cases are:
 
 ## Notification of successful transaction
 
-A URL provided by the merchant in a previous request (see `payment_ack_url` and `cancel_callback` in [Create fiat to crypto invoice](#create-fiat-to-crypto-invoice)) will be used to send a notification request once the transaction result has been confirmed.  If the transaction is successful, `payment_ack_url` will be used, while `cancel_callback` will be used when the transaction cannot be completed.
+A URL provided by the merchant in a previous request (see `payment_ack_url` and `cancel_callback` in [Create fiat to crypto invoice](#create-fiat-to-crypto-invoice)) will be used to send a notification request once the transaction result has been confirmed. If the transaction is successful, `payment_ack_url` will be used, while `cancel_callback` will be used when the transaction cannot be completed.
 
 The merchant is expected to respond with 200 status code.
 
@@ -261,12 +260,11 @@ curl -X POST payment_ack_url \
 
 ### Request JSON Fields
 
-| Field           | Type   | Description                                                                                               |
-| ----------------| -------| ----------------------------------------------------------------------------------------------------------|
-| reference       | String | Reference identifier for the notification.                                                                |
-| invoice_id      | String | Internal **ON/RAMP**'s invoice identifier.                                                                |
-| crypto_transfer | Status | Contains `tx_hash` field whose value is the network transaction hash.  Not available in `cancel_callback` |
-
+| Field           | Type   | Description                                                                                              |
+| --------------- | ------ | -------------------------------------------------------------------------------------------------------- |
+| reference       | String | Reference identifier for the notification.                                                               |
+| invoice_id      | String | Internal **ON/RAMP**'s invoice identifier.                                                               |
+| crypto_transfer | Status | Contains `tx_hash` field whose value is the network transaction hash. Not available in `cancel_callback` |
 
 ### Expected Response
 

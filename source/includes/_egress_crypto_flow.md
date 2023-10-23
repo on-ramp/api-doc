@@ -99,7 +99,7 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
     "offer_data" : { 
       "crypto_data": {
         "currency": "BTC",
-        "address": "1Lbcfr7sAHTD9CgdQo3HTMTkV8LK4ZnX71"
+        "address": "bc1qu3jehtyxksk6mxqw2r3tug6dda2w9hxm7ehwns"
         }
     },
     "require_confirmation": true,
