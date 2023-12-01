@@ -133,6 +133,16 @@ curl -X POST 'https://api.onramp.ltd/exchange/fiat/crypto/invoice/new' \
 
 <aside class="success"><b><code> POST /exchange/fiat/crypto/invoice/new </code></b></aside>
 
+### Checks and errors
+Before registering an operation, several prerequisite checks will be performed and therefore following errors might be returned:
+| Error | HTTP code | Reason | Resolution |
+| ----- | --------- | ----------- | ---------- |
+| KYT failed for [chain] address: [address] | 500 | Risk assesment for given address yields High risk score | Not possible to proceed, user migh not be able to withdraw to a given address |
+| Amount is too small | 500 | Resulting crypto amount is too small | Retry with a bigger amount |
+| Amount is too big | 500 | Resulting crypto amount is too big | Retry with a smaller amount |
+| Internal error (CA:0001) | 500 | Internal service failure due to temporary outage or wrong input | Retry, check that crypto address and currency are valid, otherwise contact support |
+| Internal error (EE:0001) | 500 | Internal service failure due to temporary outage or wrong input | Retry, check that crypto and fiat currencies are valid, otherwise contact support |
+
 ### Request JSON Fields
 
 | Field                  | Type            |  Description                                                                                                                                                               | Required |

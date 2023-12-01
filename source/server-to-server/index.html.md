@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.20
+title: ON/RAMP payment API v1.4.21
 
-version: 1.4.20
+version: 1.4.21
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,10 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.21:
+
+- Update crypto related flows with checks and errors
 
 Changes since v1.4.20:
 
