@@ -4073,14 +4073,47 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
   </span><span class="nl">"invoice_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10e35c16-3ff8-4238-b5b5-34b4da9b4115"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h3 id='checks-and-errors'>Checks and errors</h3>
-<p>Before registering an operation, several prerequisite checks will be performed and therefore following errors might be returned:
-| Error | HTTP code | Reason | Resolution |
-| ----- | --------- | ----------- | ---------- |
-| KYT failed for [chain] address: [address] | 500 | Risk assesment for given address yields High risk score | Not possible to proceed, user migh not be able to withdraw to a given address |
-| Amount is too small | 500 | Resulting crypto amount is too small | Retry with a bigger amount |
-| Amount is too big | 500 | Resulting crypto amount is too big | Retry with a smaller amount |
-| Internal error (CA:0001) | 500 | Internal service failure due to temporary outage or wrong input | Retry, check that crypto address and currency are valid, otherwise contact support |
-| Internal error (EE:0001) | 500 | Internal service failure due to temporary outage or wrong input | Retry, check that crypto and fiat currencies are valid, otherwise contact support |</p>
+<p>Before registering an operation, several prerequisite checks will be performed and therefore following errors might be returned:</p>
+
+<table><thead>
+<tr>
+<th>Error</th>
+<th>HTTP code</th>
+<th>Reason</th>
+<th>Resolution</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>KYT failed for [chain] address: [address]</td>
+<td>500</td>
+<td>Risk assesment for given address yields High risk score</td>
+<td>Not possible to proceed, user migh not be able to withdraw to a given address</td>
+</tr>
+<tr>
+<td>Amount is too small</td>
+<td>500</td>
+<td>Resulting crypto amount is too small</td>
+<td>Retry with a bigger amount</td>
+</tr>
+<tr>
+<td>Amount is too big</td>
+<td>500</td>
+<td>Resulting crypto amount is too big</td>
+<td>Retry with a smaller amount</td>
+</tr>
+<tr>
+<td>Internal error (CA:0001)</td>
+<td>500</td>
+<td>Internal service failure due to temporary outage or wrong input</td>
+<td>Retry, check that crypto address and currency are valid, otherwise contact support</td>
+</tr>
+<tr>
+<td>Internal error (EE:0001)</td>
+<td>500</td>
+<td>Internal service failure due to temporary outage or wrong input</td>
+<td>Retry, check that crypto and fiat currencies are valid, otherwise contact support</td>
+</tr>
+</tbody></table>
 <h3 id='request-json-fields-2'>Request JSON Fields</h3>
 <table><thead>
 <tr>
@@ -4500,14 +4533,47 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <aside class="success"><b><code> POST /exchange/fiat/crypto/invoice/new </code></b></aside>
 <h3 id='checks-and-errors'>Checks and errors</h3>
-<p>Before registering an operation, several prerequisite checks will be performed and therefore following errors might be returned:
-| Error | HTTP code | Reason | Resolution |
-| ----- | --------- | ----------- | ---------- |
-| KYT failed for [chain] address: [address] | 500 | Risk assesment for given address yields High risk score | Not possible to proceed, user migh not be able to withdraw to a given address |
-| Amount is too small | 500 | Resulting crypto amount is too small | Retry with a bigger amount |
-| Amount is too big | 500 | Resulting crypto amount is too big | Retry with a smaller amount |
-| Internal error (CA:0001) | 500 | Internal service failure due to temporary outage or wrong input | Retry, check that crypto address and currency are valid, otherwise contact support |
-| Internal error (EE:0001) | 500 | Internal service failure due to temporary outage or wrong input | Retry, check that crypto and fiat currencies are valid, otherwise contact support |</p>
+<p>Before registering an operation, several prerequisite checks will be performed and therefore following errors might be returned:</p>
+
+<table><thead>
+<tr>
+<th>Error</th>
+<th>HTTP code</th>
+<th>Reason</th>
+<th>Resolution</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>KYT failed for [chain] address: [address]</td>
+<td>500</td>
+<td>Risk assesment for given address yields High risk score</td>
+<td>Not possible to proceed, user migh not be able to withdraw to a given address</td>
+</tr>
+<tr>
+<td>Amount is too small</td>
+<td>500</td>
+<td>Resulting crypto amount is too small</td>
+<td>Retry with a bigger amount</td>
+</tr>
+<tr>
+<td>Amount is too big</td>
+<td>500</td>
+<td>Resulting crypto amount is too big</td>
+<td>Retry with a smaller amount</td>
+</tr>
+<tr>
+<td>Internal error (CA:0001)</td>
+<td>500</td>
+<td>Internal service failure due to temporary outage or wrong input</td>
+<td>Retry, check that crypto address and currency are valid, otherwise contact support</td>
+</tr>
+<tr>
+<td>Internal error (EE:0001)</td>
+<td>500</td>
+<td>Internal service failure due to temporary outage or wrong input</td>
+<td>Retry, check that crypto and fiat currencies are valid, otherwise contact support</td>
+</tr>
+</tbody></table>
 <h3 id='request-json-fields'>Request JSON Fields</h3>
 <table><thead>
 <tr>
