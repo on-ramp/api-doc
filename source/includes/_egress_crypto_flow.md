@@ -117,8 +117,10 @@ curl -X POST 'https://api.onramp.ltd/s2s/egress/create' \
 ```
 
 ### Checks and errors
+
 Before registering an operation, several prerequisite checks will be performed and therefore following errors might be returned:
-| Error | HTTP code | Reason | Resolution |
+
+| Error | HTTP code | Reason      | Resolution |
 | ----- | --------- | ----------- | ---------- |
 | KYT failed for [chain] address: [address] | 500 | Risk assesment for given address yields High risk score | Not possible to proceed, user migh not be able to withdraw to a given address |
 | Amount is too small | 500 | Resulting crypto amount is too small | Retry with a bigger amount |
