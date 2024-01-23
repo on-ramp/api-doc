@@ -407,6 +407,12 @@
             <a href="#crypto-ingress-flow" class="toc-h1 toc-link" data-title="Crypto ingress flow">Crypto ingress flow</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#supported-blockchains" class="toc-h2 toc-link" data-title="Supported blockchains">Supported blockchains</a>
+                  </li>
+                  <li>
+                    <a href="#supported-coins-tokens" class="toc-h2 toc-link" data-title="Supported coins / tokens">Supported coins / tokens</a>
+                  </li>
+                  <li>
                     <a href="#request-address-for-utxo-based-blockchains" class="toc-h2 toc-link" data-title="Request address for UTXO-based blockchains">Request address for UTXO-based blockchains</a>
                   </li>
                   <li>
@@ -3097,19 +3103,74 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
   <span class="p">}</span>
 <span class="p">});</span>
 </code></pre></div><h1 id='crypto-ingress-flow'>Crypto ingress flow</h1>
-<p>This section describes the endpoints used in the crypto ingress flow. They are also used in the <a href="#crypto-iframe-integration"><strong>iframe</strong>
-integration</a>.</p>
+<p>This section describes the endpoints used in the crypto ingress flow. They are also used in the <a href="#crypto-iframe-integration"><strong>iframe</strong> integration</a>.</p>
 
 <p>Follow these steps when using this flow:</p>
 
 <ol>
-<li>Request a crypto address to which coins or tokens will be transferred.</li>
-<li>For account-based blockchains, e.g. <code>ETH</code>, register the transaction details once it has been initiated.</li>
+<li>Initiate a crypto ingress operation.  There are 2 options depending on the type of blockchains used for the transaction:
+
+<ol>
+<li>UTXO based blockchains, e.g., Bitcoin: request an address to which coins will be transferred.</li>
+<li>Account-based blockchains, e.g. Ethereum or Tron: register the address from which coins/tokens will be transferred. After a transaction has been made, register the transaction details.</li>
+</ol></li>
 <li>Once the transaction has been confirmed, a notification request will be sent to a URL provided by the merchant.</li>
-<li>Upon receiving the notification, the merchant should send a request to initiate an invoice.</li>
+<li>Upon receiving the notification, the merchant is expected to send a request to initiate an invoice.</li>
 </ol>
+<h2 id='supported-blockchains'>Supported blockchains</h2>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Symbol</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Bitcoin</td>
+<td><code>btc</code></td>
+</tr>
+<tr>
+<td>Bitcoin Cash</td>
+<td><code>bch</code></td>
+</tr>
+<tr>
+<td>Ethereum</td>
+<td><code>eth</code></td>
+</tr>
+<tr>
+<td>Tron</td>
+<td><code>trx</code></td>
+</tr>
+</tbody></table>
+<h2 id='supported-coins-tokens'>Supported coins / tokens</h2>
+<table><thead>
+<tr>
+<th>Coin / Token</th>
+<th>Blockchains</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>btc</code></td>
+<td><code>btc</code></td>
+</tr>
+<tr>
+<td><code>bch</code></td>
+<td><code>bch</code></td>
+</tr>
+<tr>
+<td><code>eth</code></td>
+<td><code>eth</code></td>
+</tr>
+<tr>
+<td><code>usdt</code></td>
+<td><code>eth</code>, <code>trx</code></td>
+</tr>
+<tr>
+<td><code>usdc</code></td>
+<td><code>eth</code>, <code>trx</code></td>
+</tr>
+</tbody></table>
 <h2 id='request-address-for-utxo-based-blockchains'>Request address for UTXO-based blockchains</h2>
-<p>This endpoint should only be used for UTXO-based blockchains, e.g., <code>BTC</code> and <code>BCH</code>.  For account-based blockchains, please refer to <a href="#request-address-for-account-based-blockchains-and-tokens">Request address for account-based blockchains and tokens</a></p>
+<p>This endpoint should only be used for UTXO-based blockchains, e.g., Bitcoin or Bitcoin Cash.  For account-based blockchains, please refer to <a href="#request-address-for-account-based-blockchains-and-tokens">Request address for account-based blockchains and tokens</a></p>
 
 <p>A receiving address will be returned once a successful request is made to this endpoint.</p>
 
@@ -3162,7 +3223,7 @@ integration</a>.</p>
 <tr>
 <td>chain</td>
 <td>String</td>
-<td>Blockchain, e.g.,<code>btc</code>, <code>bch</code></td>
+<td>Blockchain symbol.  Possible values: <code>btc</code>, <code>bch</code>.</td>
 <td>Yes</td>
 </tr>
 </tbody></table>
@@ -3228,7 +3289,7 @@ integration</a>.</p>
 <tr>
 <td>chain</td>
 <td>String</td>
-<td>Blockchain, e.g.,<code>btc</code>, <code>bch</code>.</td>
+<td>Blockchain symbol, e.g., <code>btc</code>, <code>bch</code>.</td>
 </tr>
 <tr>
 <td>qr_base64</td>
@@ -3237,7 +3298,7 @@ integration</a>.</p>
 </tr>
 </tbody></table>
 <h2 id='request-address-for-account-based-blockchains-and-tokens'>Request address for account-based blockchains and tokens</h2>
-<p>This endpoint should only be used for account-based blockchains, e.g., <code>ETH</code> and <code>USDT</code>.  For UTXO-based blockchains, please refer to <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
+<p>This endpoint should only be used for account-based blockchains, e.g., Ethereum or Tron.  For UTXO-based blockchains, please refer to <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
 
 <p>A receiving address will be returned along with a reference ID once a successful request is made to this endpoint.</p>
 
@@ -3321,7 +3382,7 @@ integration</a>.</p>
 <tr>
 <td>chain</td>
 <td>String</td>
-<td>Blockchain, e.g.,<code>eth</code>.</td>
+<td>Blockchain symbol.  Possible values: <code>eth</code>, <code>trx</code>.</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -3359,7 +3420,7 @@ integration</a>.</p>
 <tr>
 <td>chain</td>
 <td>String</td>
-<td>Blockchain, e.g.,<code>eth</code>.</td>
+<td>Blockchain, e.g., <code>eth</code>, <code>trx</code>.</td>
 </tr>
 <tr>
 <td>qr_base64</td>
@@ -3373,7 +3434,7 @@ integration</a>.</p>
 </tr>
 </tbody></table>
 <h2 id='register-transaction-for-account-based-blockchains-and-tokens'>Register transaction for account-based blockchains and tokens</h2>
-<p>This endpoint should only be used for account-based blockchains, e.g., <code>ETH</code> and <code>USDT</code>.  For UTXO-based blockchains, please refer to <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
+<p>This endpoint should only be used for account-based blockchains, e.g., Ethereum or Tron.  For UTXO-based blockchains, please refer to <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
 
 <p>After a transaction has been made, send a request to this endpoint in order to register the transaction.  A reference ID, required for this request, is provided in the response from <a href="#request-address-for-account-based-blockchains-and-tokens">Request address for account-based blockchains and tokens</a>.</p>
 
@@ -3452,7 +3513,7 @@ integration</a>.</p>
 <tr>
 <td>chain</td>
 <td>String</td>
-<td>Blockchain, e.g.,<code>eth</code>.</td>
+<td>Blockchain symbol. Possible values: <code>eth</code>, <code>trx</code>.</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -3470,8 +3531,8 @@ integration</a>.</p>
 <tr>
 <td>token</td>
 <td>String</td>
-<td>Token sent in the transaction, e.g. <code>usdt</code>.</td>
-<td>Yes</td>
+<td>Token sent in the transaction, e.g., <code>usdt</code>, <code>usdc</code>. Not required for native coin/token.</td>
+<td>No</td>
 </tr>
 </tbody></table>
 <h3 id='response-json-fields-3'>Response JSON Fields</h3>
@@ -3530,7 +3591,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>high_risk</td>
 <td>Boolean</td>
-<td><code>true</code> if the transaction of high risk.  Otherwise, <code>false</code></td>
+<td><code>true</code> if the transaction of high risk.  Otherwise, <code>false</code>.</td>
 </tr>
 </tbody></table>
 <h3 id='expected-response'>Expected Response</h3>
@@ -3548,7 +3609,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 
 <p>A reference ID, required for this request, is provided in the <a href="#notification-of-successful-crypto-transaction">Notification of successful crypto transaction</a></p>
 
-<p>The main difference between this endpoint and the <a href="#ingress-api">Ingress API</a> is that, the payment amount is absent from the request to this endpoint.  This is because the payment amount depends on what is transferred by the user, instead of the amount provided in the request at the beginning of the crypto ingress flow.</p>
+<p>Please note that the payment amount is absent from the request to this endpoint.  This is because the payment amount depends on what is transferred by the user, and not necessarily the amount provided during initiation of the crypto ingress operation.</p>
 
 <aside class="success"><b><code>POST `https://api.onramp.ltd/rpc/create_crypto_ingress_invoice`</code></b></aside>
 
@@ -3560,7 +3621,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">-d</span> <span class="s1">'{
     "crypto_tx_ref": "RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS",
-    "payment_ack_url": "wwww.example.com",
+    "payment_ack_url": "https://www.example.com",
     "timeout_in_sec": 3600,
     "billing_details": {
         "payer_email": "example@example.com",
@@ -3592,7 +3653,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"crypto_tx_ref"</span><span class="p">:</span><span class="w"> </span><span class="s2">"RETURNED_BY_NOTIFICATION_ON_NEW_FUNDS"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"wwww.example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"payment_ack_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"htts://www.example.com"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"timeout_in_sec"</span><span class="p">:</span><span class="w"> </span><span class="mi">3600</span><span class="p">,</span><span class="w">
   </span><span class="nl">"billing_details"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"payer_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
@@ -3649,19 +3710,19 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>payment_ack_url</td>
 <td>Url</td>
-<td>Merchant callback endpoint to confirm ingress transaction. It should be a complete, well formed, url.</td>
+<td>Callback URL to which a request will be sent when ingress is finalized.</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>timeout_in_sec</td>
 <td>Integer</td>
-<td>When to expire the link if unused.</td>
+<td>Time in seconds before <code>payment_ack_url</code> expires.</td>
 <td>Yes</td>
 </tr>
 <tr>
 <td>billing_details</td>
 <td>Billing Details</td>
-<td>User billing details. Please, notice how <strong>not</strong> all parameters inside this json object are required except <code>merchant_customer_id</code>.</td>
+<td>User billing details. Please refer to &quot;Billing Details&quot; for available parameters.</td>
 <td>Yes</td>
 </tr>
 </tbody></table>
@@ -3695,7 +3756,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>payer_phone</td>
 <td>String</td>
-<td>Including country code, without spaces or separators.</td>
+<td>Phone number including country code, without spaces or separators.</td>
 <td>No</td>
 </tr>
 <tr>
@@ -3749,7 +3810,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>country</td>
 <td>String</td>
-<td>Country from the billing address. Should be a 3 letter ISO Code.</td>
+<td>A 3-letter ISO 3166 country code from the billing address.</td>
 <td>No</td>
 </tr>
 <tr>
@@ -3761,13 +3822,13 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>kyc_document</td>
 <td>String</td>
-<td>Type of the document. Some examples would be Passport or National_ID.</td>
+<td>Type of the document, e.g., <code>Passport</code> or <code>National_ID</code>.</td>
 <td>No</td>
 </tr>
 <tr>
 <td>kyc_reference</td>
 <td>String</td>
-<td>A unique id of the KYC verification. Something like a UUID.</td>
+<td>A unique id of the KYC verification.</td>
 <td>No</td>
 </tr>
 <tr>
@@ -3785,13 +3846,13 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>player_level</td>
 <td>String</td>
-<td>Your internal player level. Something like New, Normal, VIP, ...</td>
+<td>Merchant&#39;s internal player level, e.g., <code>New</code>, <code>Normal</code>, <code>VIP</code>.</td>
 <td>No</td>
 </tr>
 <tr>
 <td>member_since</td>
 <td>Date</td>
-<td>The date since that user is a member of yours.</td>
+<td>The date since the user has become a member.</td>
 <td>No</td>
 </tr>
 <tr>
@@ -3810,14 +3871,29 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 </tr>
 </thead><tbody>
 <tr>
+<td>invoice_id</td>
+<td>String</td>
+<td>Invoice identifier.</td>
+</tr>
+<tr>
+<td>invoice_url</td>
+<td>Url</td>
+<td>Invoice URL to which user can be redirected.</td>
+</tr>
+<tr>
+<td>invoice_url_qr</td>
+<td>Url</td>
+<td>Source URL for an image with QR-encoded <code>invoice_url</code>.</td>
+</tr>
+<tr>
 <td>fiat_amount</td>
 <td>Integer</td>
-<td>Fiat amount in cents denomination after exchange with the current rate of crypto transaction confirmation time.</td>
+<td>Fiat amount in cents denomination converted from <code>crypto_amount</code> with the rate at transaction confirmation time.</td>
 </tr>
 <tr>
 <td>fiat_currency</td>
 <td>String</td>
-<td>Fiat currency. It is the same that the user requested at the beginning of the flow. It is 3 letters ISO 4217 code.</td>
+<td>A 3-letter ISO 4217 code fiat currency provided when crypto ingress operation was initiated.</td>
 </tr>
 <tr>
 <td>crypto_amount</td>
@@ -3827,7 +3903,7 @@ curl <span class="nt">-X</span> POST notify_new_funds_url <span class="se">\</sp
 <tr>
 <td>crypto_type</td>
 <td>String</td>
-<td>Either &quot;btc&quot; or &quot;bch&quot; for the moment depending on the blockchain that the user selected.</td>
+<td>Coin/token, e.g., <code>btc</code>, <code>eth</code>, <code>usdt</code>.</td>
 </tr>
 </tbody></table>
 <h1 id='quotes-api'>Quotes API</h1>
