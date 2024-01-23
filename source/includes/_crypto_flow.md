@@ -5,14 +5,15 @@ integration](#crypto-iframe-integration).
 
 Follow these steps when using this flow:
 
-1. Request a crypto address to which coins or tokens will be transferred.
-2. For account-based blockchains, e.g. `ETH`, register the transaction details once it has been initiated.
-3. Once the transaction has been confirmed, a notification request will be sent to a URL provided by the merchant.
-4. Upon receiving the notification, the merchant should send a request to initiate an invoice.
+1. Initiate a crypto ingress operation.  There are 2 options depending on the type of blockchains used for the transaction:
+    1. UTXO based blockchains, e.g., Bitcoin: request an address to which coins will be transferred.
+    2. Account-based blockchains, e.g. Ethereum: register the address from which coins/tokens will be transferred. After a transaction has been made, register the transaction details.
+2. Once the transaction has been confirmed, a notification request will be sent to a URL provided by the merchant.
+3. Upon receiving the notification, the merchant is expected to send a request to initiate an invoice.
 
 ## Request address for UTXO-based blockchains
 
-This endpoint should only be used for UTXO-based blockchains, e.g., `BTC` and `BCH`.  For account-based blockchains, please refer to [Request address for account-based blockchains and tokens](#request-address-for-account-based-blockchains-and-tokens)
+This endpoint should only be used for UTXO-based blockchains, e.g., Bitcoin or Bitcoin Cash.  For account-based blockchains, please refer to [Request address for account-based blockchains and tokens](#request-address-for-account-based-blockchains-and-tokens)
 
 A receiving address will be returned once a successful request is made to this endpoint.
 
@@ -63,6 +64,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 | ----- | ------ | ----------------------------- | -------- |
 | chain | String | Blockchain, e.g.,`btc`, `bch` | Yes      |
 
+
 ### Request JSON Fields
 
 | Field                 | Type    | Description                                                                            | Required |
@@ -84,7 +86,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
 
 ## Request address for account-based blockchains and tokens
 
-This endpoint should only be used for account-based blockchains, e.g., `ETH` and `USDT`.  For UTXO-based blockchains, please refer to [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
+This endpoint should only be used for account-based blockchains, e.g., Ethereum.  For UTXO-based blockchains, please refer to [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
 
 A receiving address will be returned along with a reference ID once a successful request is made to this endpoint.
 
@@ -160,7 +162,7 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
 
 ## Register transaction for account-based blockchains and tokens
 
-This endpoint should only be used for account-based blockchains, e.g., `ETH` and `USDT`.  For UTXO-based blockchains, please refer to [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
+This endpoint should only be used for account-based blockchains, e.g., Ethereum.  For UTXO-based blockchains, please refer to [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
 
 After a transaction has been made, send a request to this endpoint in order to register the transaction.  A reference ID, required for this request, is provided in the response from [Request address for account-based blockchains and tokens](#request-address-for-account-based-blockchains-and-tokens).
 
