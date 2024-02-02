@@ -224,7 +224,11 @@ In order to receive status callbacks for an operation, a `callback_url` should b
     "invoice_id": "10e35c16-3ff8-4238-b5b5-34b4da9b4115",
     "timestamp_utc": "2020-01-01 12:45:00.000000+00",
     "status": { 
-        "completed": {}
+        "completed": {
+          "tx_amount": 3.3e-2,
+          "tx_hash": "0x3adf55f2aa4eb878169d28db46722770779922ffd551fcaebe5e903f6e29650c",
+          "tx_fee": 6.0e-4
+          }
     }
 }
 ```

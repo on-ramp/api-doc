@@ -1,7 +1,7 @@
 ---
-title: ON/RAMP payment API v1.4.22
+title: ON/RAMP payment API v1.4.23
 
-version: 1.4.22
+version: 1.4.23
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell: cURL
@@ -34,6 +34,10 @@ Test:
 **[https://stage-api.onramp.ltd/s2s](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.23:
+
+- Include transaction details into crypto egress flow succesfull callback
 
 Changes since v1.4.22:
 
