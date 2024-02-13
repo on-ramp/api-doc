@@ -13,7 +13,7 @@ In order to display the crypto iframe it is as easy as adding the following code
 ```html
 <iframe
   id="crypto-iframe"
-  src="https://api.onramp.ltd"
+  src="https://crypto-iframe.onramp.ltd"
   style="width: 100%; min-width: 320px; min-height: 500px;"
 ></iframe>
 ```
@@ -26,8 +26,8 @@ As it can be seen, there are only three main attributes to deal with:
 
 - `src`: The source of the iframe. There are two options to be used depending on the environment you are integrating with.
 
-  - **production**: [https://api.onramp.ltd](https://api.onramp.ltd)
-  - **stage**: [https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)
+  - **production**: [https://crypto-iframe.onramp.ltd](https://crypto-iframe.onramp.ltd)
+  - **stage**: [https://stage-crypto-iframe.onramp.ltd](https://stage-crypto-iframe.onramp.ltd)
 
 - `style`: Styles to apply to the iframe. Here are the suggested values (This can be achieved by using a class too).
 
