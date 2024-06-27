@@ -157,8 +157,12 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
     "sender_address": "ETHEREUM_ADDRESS_1",
     "chain": "eth",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+    "notify_cancellation_url": "http://mydomain.com/callback/notify/crypto_canceled",
     "email": "example@example.com",
-    "merchant_reference_id": "MERCHANT_REF_ID_1"
+    "merchant_reference_id": "MERCHANT_REF_ID_1",
+    "require_unique_recipient_address": false,
+    "is_fixed_price": false,
+    "use_external_wallet": true
 }'
 ```
 
@@ -172,8 +176,12 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
   "sender_address": "ETHEREUM_ADDRESS_1",
   "chain": "eth",
   "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+  "notify_cancellation_url": "http://mydomain.com/callback/notify/crypto_canceled",
   "email": "example@example.com",
-  "merchant_reference_id": "MERCHANT_REF_ID_1"
+  "merchant_reference_id": "MERCHANT_REF_ID_1",
+  "require_unique_recipient_address": false,
+  "is_fixed_price": false,
+  "use_external_wallet": true
 }
 ```
 > Response JSON
@@ -189,16 +197,20 @@ curl -X POST 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
 
 ### Request JSON Fields
 
-| Field                 | Type    | Description                                                                            | Required |
-| --------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
-| merchant_customer_id  | String  | The merchant customer id.                                                              | Yes      |
-| fiat_amount           | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
-| fiat_currency         | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
-| sender_address        | String  | Blockchain public address of the sender.                                               | Yes      |
-| chain                 | String  | Blockchain symbol.  Possible values: `eth`, `trx`.                                     | Yes      |
-| notify_new_funds_url  | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
-| email                 | Email   | Email of the customer.                                                                 | No       |
-| merchant_reference_id | String  | A reference id for the merchant, e.g., internal transaction id.                        | No       |
+| Field                            | Type    | Description                                                                            | Required |
+| -------------------------------- | --------| -------------------------------------------------------------------------------------- | -------- |
+| merchant_customer_id             | String  | The merchant customer id.                                                              | Yes      |
+| fiat_amount                      | Integer | Amount expected to be paid denominated in cents.                                       | Yes      |
+| fiat_currency                    | String  | Currency identifier following the ISO 4217 standard.                                   | Yes      |
+| sender_address                   | String  | Blockchain public address of the sender.                                               | Yes      |
+| chain                            | String  | Blockchain symbol.  Possible values: `eth`, `trx`.                                     | Yes      |
+| notify_new_funds_url             | Url     | Callback URL to which a request will be sent after the transaction has been confirmed. | Yes      |
+| notify_cancellation_url          | Url     | Callback URL to which a request will be sent after the transaction has been canceled.  | No       |
+| email                            | Email   | Email of the customer.                                                                 | No       |
+| merchant_reference_id            | String  | A reference id for the merchant, e.g., internal transaction id.                        | No       |
+| require_unique_recipient_address | Boolean | `true` if cannot register transaction in the next step. Otherwise, `false`.            | No       |
+| is_fixed_price                   | Boolean | `true` if requires fixed-price processing.  Otherwise, `false`.                        | No       |
+| use_external_wallet              | Boolean | `true` if `is_fixed_price` is `true` or `require_unique_recipient_address` is `true`   | No       |
 
 ### Response JSON Fields
 
@@ -232,7 +244,8 @@ curl -X PATCH 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
     "chain": "eth",
     "tx_hash": "TRANSACTION_HASH_1",
     "tx_amount": 110,
-    "token": "usdt"
+    "token": "usdt",
+    "use_external_wallet": true
 }'
 ```
 
@@ -247,7 +260,8 @@ curl -X PATCH 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
   "chain": "eth",
   "tx_hash": "TRANSACTION_HASH_1",
   "tx_amount": 110,
-  "token": "usdt"
+  "token": "usdt",
+  "use_external_wallet": true
 }
 ```
 > Response JSON
@@ -270,6 +284,7 @@ curl -X PATCH 'https://api.onramp.ltd/blockchain/api/v2/transaction' \
 | tx_hash              | String  | Blockchain transaction hash.                                                             | Yes      |
 | tx_amount            | String  | Amount in token unit sent in the transaction.                                            | Yes      |
 | token                | String  | Token sent in the transaction, e.g., `usdt`, `usdc`. Not required for native coin/token. | No       |
+| use_external_wallet  | Boolean | Must match the value used previously when request address.                               | No       |
 
 ### Response JSON Fields
 
