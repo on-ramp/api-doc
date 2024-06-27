@@ -29,6 +29,38 @@ Follow these steps when using this flow:
 | `usdt`       | `eth`, `trx` |
 | `usdc`       | `eth`, `trx` |
 
+## Crypto ingress base URL
+
+There are 2 sets of base URLs used for crypto ingress flow:
+
+### Main API base URL
+
+Production:
+**[https://api.onramp.ltd](https://api.onramp.ltd)**
+
+Test:
+**[https://stage-api.onramp.ltd](https://stage-api.onramp.ltd)**
+
+
+The above base URLs can be used for all endpoints *except* the legacy crypto endpoint:
+
+`POST /blockchain/api/v1/{chain}/address/new`
+
+
+### Legacy crypto API base URL
+
+Production:
+**[https://crypto.onramp.ltd](https://crypto.onramp.ltd)**
+
+Test:
+**[https://stage-crypto.onramp.ltd](https://stage-crypto.onramp.ltd)**
+
+The above base URLs should only be used for the legacy crypto endpoint:
+
+`POST /blockchain/api/v1/{chain}/address/new`
+
+Please see [Request address for UTXO-based blockchains](#request-address-for-utxo-based-blockchains)
+
 ## Request address for UTXO-based blockchains
 
 This endpoint should only be used for UTXO-based blockchains, e.g., Bitcoin or Bitcoin Cash.  For account-based blockchains, please refer to [Request address for account-based blockchains and tokens](#request-address-for-account-based-blockchains-and-tokens)
@@ -40,7 +72,7 @@ A receiving address will be returned once a successful request is made to this e
 > Example cURL
 
 ```shell
-curl -X POST 'https://api.onramp.ltd/blockchain/api/v1/btc/address/new' \
+curl -X POST 'https://crypto.onramp.ltd/blockchain/api/v1/btc/address/new' \
 -H 'Content-Type: application/json' \
 -H 'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000' \
 -d '{
