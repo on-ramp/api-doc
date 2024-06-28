@@ -129,13 +129,16 @@ Main Parameters:
 
 Main Parameters:
 
-| Field           | Type    | Description                                         | Required |
-| --------------- | ------- | --------------------------------------------------- | -------- |
-| fiat_amount     | Integer | The amount of fiat to get.                          | Yes      |
-| fiat_currency   | String  | The currency of the fiat.                           | Yes      |
-| crypto_currency | String  | The crypto currency to be used.                     | Yes      |
-| token           | String  | The token of the transaction if exists (e.g. usdt). | No       |
-| sender_address  | String  | The address of the sender of the transaction.       | Yes      |
+| Field                            | Type    | Description                                                                                                                           | Required |
+| -------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| fiat_amount                      | Integer | The amount of fiat to get.                                                                                                            | Yes      |
+| fiat_currency                    | String  | The currency of the fiat.                                                                                                             | Yes      |
+| crypto_currency                  | String  | The crypto currency to be used.                                                                                                       | Yes      |
+| token                            | String  | The token of the transaction if exists (e.g. usdt).                                                                                   | No       |
+| sender_address                   | String  | The address of the sender of the transaction.                                                                                         | Yes      |
+| is_fixed_price                   | Boolean | If fix price is enabled, user entered amount and actual deposit is not match, the transaction will be cancel and user will get refund | No       |
+| require_unique_recipient_address | Boolean | True if user select CEX payment                                                                                                       | Yes      |
+| use_external_wallet              | True    | Must be true                                                                                                                          | Yes      |
 
 > **Caution**: To enable the fixed price feature, the merchant must add `is_fixed_price:true` to the payload data of the `/blockchain/api/v2/transaction` endpoint. The iframe does not pass this information automatically.
 
