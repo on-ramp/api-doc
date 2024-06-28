@@ -154,16 +154,17 @@ Main Parameters:
 
 Main Parameters:
 
-| Field           | Type    | Description                                                  | Required |
-| --------------- | ------- | ------------------------------------------------------------ | -------- |
-| fiat_amount     | Integer | The amount of fiat to get.                                   | Yes      |
-| fiat_currency   | String  | The currency of the fiat.                                    | Yes      |
-| crypto_currency | String  | The crypto currency to be used.                              | Yes      |
-| token           | String  | The token of the transaction if exists (e.g. usdt).          | No       |
-| sender_address  | String  | The address of the sender of the transaction.                | Yes      |
-| xref            | String  | The xref received on the `get_address_v2_response` response. | Yes      |
-| tx_hash         | String  | The hash of the transaction the user did.                    | Yes      |
-| tx_amount       | Integer | The amount of the transaction the user did.                  | Yes      |
+| Field               | Type    | Description                                                  | Required |
+| ------------------- | ------- | ------------------------------------------------------------ | -------- |
+| fiat_amount         | Integer | The amount of fiat to get.                                   | Yes      |
+| fiat_currency       | String  | The currency of the fiat.                                    | Yes      |
+| crypto_currency     | String  | The crypto currency to be used.                              | Yes      |
+| token               | String  | The token of the transaction if exists (e.g. usdt).          | No       |
+| sender_address      | String  | The address of the sender of the transaction.                | Yes      |
+| xref                | String  | The xref received on the `get_address_v2_response` response. | Yes      |
+| tx_hash             | String  | The hash of the transaction the user did.                    | Yes      |
+| tx_amount           | Integer | The amount of the transaction the user did.                  | Yes      |
+| use_external_wallet | True    | Must be true                                                 | Yes      |
 
 - `update_address_v2_response` (sent by the merchant)
 
