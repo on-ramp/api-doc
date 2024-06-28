@@ -137,6 +137,8 @@ Main Parameters:
 | token           | String  | The token of the transaction if exists (e.g. usdt). | No       |
 | sender_address  | String  | The address of the sender of the transaction.       | Yes      |
 
+> **Caution**: To enable the fixed price feature, the merchant must add `is_fixed_price:true` to the payload data of the `/blockchain/api/v2/transaction` endpoint. The iframe does not pass this information automatically.
+
 - `get_address_v2_response` (sent by the merchant)
 
 Main Parameters:
