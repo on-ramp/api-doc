@@ -413,6 +413,9 @@
                     <a href="#supported-coins-tokens" class="toc-h2 toc-link" data-title="Supported coins / tokens">Supported coins / tokens</a>
                   </li>
                   <li>
+                    <a href="#crypto-ingress-base-url" class="toc-h2 toc-link" data-title="Crypto ingress base URL">Crypto ingress base URL</a>
+                  </li>
+                  <li>
                     <a href="#request-address-for-utxo-based-blockchains" class="toc-h2 toc-link" data-title="Request address for UTXO-based blockchains">Request address for UTXO-based blockchains</a>
                   </li>
                   <li>
@@ -3181,6 +3184,30 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td><code>eth</code>, <code>trx</code></td>
 </tr>
 </tbody></table>
+<h2 id='crypto-ingress-base-url'>Crypto ingress base URL</h2>
+<p>There are 2 sets of base URLs used for crypto ingress flow:</p>
+<h3 id='main-api-base-url'>Main API base URL</h3>
+<p>Production:
+<strong><a href="https://api.onramp.ltd">https://api.onramp.ltd</a></strong></p>
+
+<p>Test:
+<strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd</a></strong></p>
+
+<p>The above base URLs can be used for all endpoints <em>except</em> the legacy crypto endpoint:</p>
+
+<p><code>POST /blockchain/api/v1/{chain}/address/new</code></p>
+<h3 id='legacy-crypto-api-base-url'>Legacy crypto API base URL</h3>
+<p>Production:
+<strong><a href="https://crypto.onramp.ltd">https://crypto.onramp.ltd</a></strong></p>
+
+<p>Test:
+<strong><a href="https://stage-crypto.onramp.ltd">https://stage-crypto.onramp.ltd</a></strong></p>
+
+<p>The above base URLs should only be used for the legacy crypto endpoint:</p>
+
+<p><code>POST /blockchain/api/v1/{chain}/address/new</code></p>
+
+<p>Please see <a href="#request-address-for-utxo-based-blockchains">Request address for UTXO-based blockchains</a></p>
 <h2 id='request-address-for-utxo-based-blockchains'>Request address for UTXO-based blockchains</h2>
 <p>This endpoint should only be used for UTXO-based blockchains, e.g., Bitcoin or Bitcoin Cash.  For account-based blockchains, please refer to <a href="#request-address-for-account-based-blockchains-and-tokens">Request address for account-based blockchains and tokens</a></p>
 
@@ -3191,7 +3218,7 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <blockquote>
 <p>Example cURL</p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/blockchain/api/v1/btc/address/new'</span> <span class="se">\</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://crypto.onramp.ltd/blockchain/api/v1/btc/address/new'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 00000000-0000-0000-0000-000000000000'</span> <span class="se">\</span>
 <span class="nt">-d</span> <span class="s1">'{
@@ -3331,8 +3358,12 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
     "sender_address": "ETHEREUM_ADDRESS_1",
     "chain": "eth",
     "notify_new_funds_url": "http://mydomain.com/callback/notify/crypto_done",
+    "notify_cancellation_url": "http://mydomain.com/callback/notify/crypto_canceled",
     "email": "example@example.com",
-    "merchant_reference_id": "MERCHANT_REF_ID_1"
+    "merchant_reference_id": "MERCHANT_REF_ID_1",
+    "require_unique_recipient_address": false,
+    "is_fixed_price": false,
+    "use_external_wallet": true
 }'</span>
 </code></pre></div>
 <blockquote>
@@ -3345,8 +3376,12 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
   </span><span class="nl">"sender_address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ETHEREUM_ADDRESS_1"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"notify_new_funds_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_done"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"notify_cancellation_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://mydomain.com/callback/notify/crypto_canceled"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"example@example.com"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"merchant_reference_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_REF_ID_1"</span><span class="w">
+  </span><span class="nl">"merchant_reference_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"MERCHANT_REF_ID_1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"require_unique_recipient_address"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"is_fixed_price"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"use_external_wallet"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -3404,6 +3439,12 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td>Yes</td>
 </tr>
 <tr>
+<td>notify_cancellation_url</td>
+<td>Url</td>
+<td>Callback URL to which a request will be sent after the transaction has been canceled.</td>
+<td>No</td>
+</tr>
+<tr>
 <td>email</td>
 <td>Email</td>
 <td>Email of the customer.</td>
@@ -3413,6 +3454,24 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td>merchant_reference_id</td>
 <td>String</td>
 <td>A reference id for the merchant, e.g., internal transaction id.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>require_unique_recipient_address</td>
+<td>Boolean</td>
+<td><code>true</code> if cannot register transaction in the next step. Otherwise, <code>false</code>.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>is_fixed_price</td>
+<td>Boolean</td>
+<td><code>true</code> if requires fixed-price processing.  Otherwise, <code>false</code>.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>use_external_wallet</td>
+<td>Boolean</td>
+<td><code>true</code> if <code>is_fixed_price</code> is <code>true</code> or <code>require_unique_recipient_address</code> is <code>true</code></td>
 <td>No</td>
 </tr>
 </tbody></table>
@@ -3466,7 +3525,8 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
     "chain": "eth",
     "tx_hash": "TRANSACTION_HASH_1",
     "tx_amount": 110,
-    "token": "usdt"
+    "token": "usdt",
+    "use_external_wallet": true
 }'</span>
 </code></pre></div>
 <blockquote>
@@ -3480,7 +3540,8 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
   </span><span class="nl">"chain"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"tx_hash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"TRANSACTION_HASH_1"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"tx_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">110</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usdt"</span><span class="w">
+  </span><span class="nl">"token"</span><span class="p">:</span><span class="w"> </span><span class="s2">"usdt"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"use_external_wallet"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -3544,6 +3605,12 @@ information. Invalid UUID&#39;s from request are silently skipped.</p>
 <td>token</td>
 <td>String</td>
 <td>Token sent in the transaction, e.g., <code>usdt</code>, <code>usdc</code>. Not required for native coin/token.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>use_external_wallet</td>
+<td>Boolean</td>
+<td>Must match the value used previously when request address.</td>
 <td>No</td>
 </tr>
 </tbody></table>
