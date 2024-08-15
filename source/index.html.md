@@ -18,6 +18,7 @@ includes:
   - crypto_flow
   - quotes
   - egress_crypto_flow
+  - egress_fiat_flow
   - fiat_to_crypto_flow
 
 search: true
