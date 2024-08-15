@@ -455,6 +455,17 @@
               </ul>
           </li>
           <li>
+            <a href="#egress-fiat-flow" class="toc-h1 toc-link" data-title="Egress fiat flow">Egress fiat flow</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-known-user-cards" class="toc-h2 toc-link" data-title="Get known user cards">Get known user cards</a>
+                  </li>
+                  <li>
+                    <a href="#initiate-an-egress-operation" class="toc-h2 toc-link" data-title="Initiate an egress operation">Initiate an egress operation</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#fiat-to-crypto-flow" class="toc-h1 toc-link" data-title="Fiat to Crypto flow">Fiat to Crypto flow</a>
               <ul class="toc-list-h2">
                   <li>
@@ -4565,6 +4576,166 @@ pausing the user payment and prompting manual intervention, potentially delaying
 </span></code></pre></div>
 <p>The <code>status</code> field can have the following values:
     - <code>completed</code>: The payment has been succesfully completed.</p>
+<h1 id='egress-fiat-flow'>Egress fiat flow</h1><h2 id='get-known-user-cards'>Get known user cards</h2>
+<aside class="success"><b><code>GET /s2s/egress/fiat/cards?customer_id=00112233-4455-6677-8899-aabbccddeeff</code></b></aside>
+
+<blockquote>
+<p>Example cURL request</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s1">'https://api.onramp.ltd/s2s/egress/fiat/cards?customer_id=95e147d0-7935-4ca5-9ebd-68e04b1ebc28'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 83d00b66-8dc5-4cda-b8f1-6e608ece6835'</span> <span class="se">\</span>
+</code></pre></div>
+<blockquote>
+<p>Example response</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"67c31893-e56c-401a-8357-d08eae691323"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-07-12T16:27:45.469322961Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"card"</span><span class="p">:</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"iban"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"accountNumber"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"sortCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"c53c92b6-fada-4b77-b6fc-a601943ccf11"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-08-14T11:54:14.41871715Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"card"</span><span class="p">:</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"iban"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"accountNumber"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"sortCode"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div><h3 id='request-query-parameters'>Request query parameters</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>customer_id</td>
+<td>String</td>
+<td>Customer identifier.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h3 id='response-json'>Response JSON</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th> Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>UUID</td>
+<td>Card identifier in our system.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>at</td>
+<td>UTC timestamp</td>
+<td>When the card was used.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>card</td>
+<td>JSON value</td>
+<td>Card information.</td>
+<td>Yes</td>
+</tr>
+</tbody></table>
+<h2 id='initiate-an-egress-operation'>Initiate an egress operation</h2>
+<aside class="success"><b><code>POST /s2s/egress/fiat/create</code></b></aside>
+
+<blockquote>
+<p>Example cURL request</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> POST <span class="s1">'https://api.onramp.ltd/s2s/egress/fiat/create'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s1">'x-xco-authorization: Bearer 83d00b66-8dc5-4cda-b8f1-6e608ece6835'</span> <span class="se">\</span>
+<span class="nt">-d</span> <span class="s1">'{
+    "customer_id": "95e147d0-7935-4ca5-9ebd-68e04b1ebc28",
+    "card_id": "67c31893-e56c-401a-8357-d08eae691323",
+    "fiat_amount": 1500,
+    "fiat_currency": "EUR",
+    "callback_url": "https://example.com",
+    "require_confirmation": true
+}'</span>
+</code></pre></div>
+<blockquote>
+<p>Example response</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3aa38504-d6fe-4d11-9635-563e098ed79c"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='request-json-fields'>Request JSON Fields</h3>
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>customer_id</td>
+<td>String</td>
+<td>Customer identifier.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>card_id</td>
+<td>UUID</td>
+<td>Card identifier in our system.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_currency</td>
+<td>ISO 4217 alpha code</td>
+<td>Currency in which the transaction should occur.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>fiat_amount</td>
+<td>Integer</td>
+<td>Amount, in minor units of the provided fiat_currency.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>callback_url</td>
+<td>URL</td>
+<td>Endpoint to notify when transaction completes.</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>require_confirmation</td>
+<td>Boolean</td>
+<td>Whether the transaction requires manual approval from our side.</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h3 id='confirmation-callback'>Confirmation callback</h3>
+<p>Confirmation callback is performed as a <strong>POST</strong> HTTP request with the following JSON payload:</p>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"reference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3aa38504-d6fe-4d11-9635-563e098ed79c"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w"> </span><span class="err">//</span><span class="w"> </span><span class="err">or</span><span class="w"> </span><span class="s2">"failure"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Response must have a status of <strong>HTTP 200</strong>. Any other status, or failure to process
+the callback, will result in a callback retry with exponential backoff.</p>
 <h1 id='fiat-to-crypto-flow'>Fiat to Crypto flow</h1>
 <p>This section describes the endpoints used in the fiat to crypto flow.</p>
 <h2 id='create-fiat-to-crypto-invoice'>Create Fiat to Crypto Invoice</h2>
