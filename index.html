@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>ON/RAMP payment API v1.4.23</title>
+    <title>ON/RAMP payment API v1.4.24</title>
 
     <style media="screen">
       .highlight table td { padding: 5px; }
@@ -494,6 +494,12 @@
 <p>Test:
 <strong><a href="https://stage-api.onramp.ltd">https://stage-api.onramp.ltd/rpc</a></strong></p>
 <h2 id='changelog'>Changelog</h2>
+<p>Changes since v1.4.24:</p>
+
+<ul>
+<li>Add <code>is_banking</code> paarmeter to ingress flow</li>
+</ul>
+
 <p>Changes since v1.4.23:</p>
 
 <ul>
@@ -760,7 +766,8 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
     "card_holder_last_name": "Doe",
     "card_type": "VISA",
     "order_id": "order-1234",
-    "first_time": true
+    "first_time": true,
+    "is_banking": false
 }'</span>
 </code></pre></div>
 <blockquote>
@@ -807,7 +814,8 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
   </span><span class="nl">"card_holder_last_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Doe"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"card_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VISA"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"order-1234"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"first_time"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="nl">"first_time"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"is_banking"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <blockquote>
@@ -925,6 +933,12 @@ If a user clicks on an expired invoice, they will get redirected back to the mer
 <td>first_time</td>
 <td>Boolean</td>
 <td>Whether the invoice is for a first time deposit.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>is_banking</td>
+<td>Boolean</td>
+<td>Use banking flow instead of credit card.</td>
 <td>No</td>
 </tr>
 </tbody></table>
