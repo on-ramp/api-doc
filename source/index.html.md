@@ -1,5 +1,5 @@
 ---
-title: ON/RAMP payment API v1.4.23
+title: ON/RAMP payment API v1.4.24
 
 version: 1.4.23
 
@@ -42,6 +42,10 @@ Test:
 **[https://stage-api.onramp.ltd/rpc](https://stage-api.onramp.ltd)**
 
 ## Changelog
+
+Changes since v1.4.24:
+
+- Add `is_banking` paarmeter to ingress flow
 
 Changes since v1.4.23:
 
