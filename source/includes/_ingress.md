@@ -137,7 +137,7 @@ curl -X POST 'https://api.onramp.ltd/rpc/create_ingress_invoice' \
 | card_holder_first_name | String          | Credit card cardholder first name to be used to attempt the payment. **Not needed for bank payments**                                                                      | No       |
 | card_holder_last_name  | String          | Credit card cardholder last name to attempt the payment. **Not needed for bank payments**                                                                                  | No       |
 | card_type              | String          | Credit card type to be used to attempt the payment. Please consult our integration team for supported values before using this parameter. **Not needed for bank payments** | No       |
-| order_id               | String          | Merchant order id. Used to link back ingress opeartion when exporitng reports via backoffice.                                                                              | No       |
+| order_id               | String          | Merchant order id. Used to link back to ingress operations when exporting reports via backoffice.                                                                          | No       |
 | first_time             | Boolean         | Whether the invoice is for a first time deposit.                                | No       |
 | is_banking             | Boolean         | Use banking flow instead of credit card.                                | No       |
 
